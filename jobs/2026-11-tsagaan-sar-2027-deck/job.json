@@ -1,0 +1,68 @@
+{
+  "type": "deck",
+  "title": "Pitch deck",
+  "client": "Tsagaan Sar 2027 campaign",
+  "owner": "BO",
+  "created": "2026-11-11T09:00:00Z",
+  "due": "2026-11-20",
+  "stage": 2,
+  "approved": false,
+  "waitingOn": null,
+  "rounds": {
+    "used": 1,
+    "quoted": 2
+  },
+  "hours": {
+    "used": 14,
+    "budget": 24
+  },
+  "preview": {
+    "color": "#7A1F2B",
+    "title": "Хүнд барааг хөнгөн захиал",
+    "subtitle": "Үндсэн санаа, зорилго, хүрэх үр дүн"
+  },
+  "comments": [
+    {
+      "where": "Page 2",
+      "text": "Can the title be shorter?",
+      "done": false
+    },
+    {
+      "where": "Page 4",
+      "text": "Use our product photo here, attached.",
+      "done": false
+    },
+    {
+      "where": "General",
+      "text": "Love the color direction.",
+      "done": false
+    }
+  ],
+  "qa": [
+    {
+      "name": "Өө Үү glyphs",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Mongolian spelling",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Em dashes",
+      "status": "fail",
+      "note": "1 found on page 3"
+    },
+    {
+      "name": "Client rules",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Contrast",
+      "status": "pass",
+      "note": "OK"
+    }
+  ]
+}

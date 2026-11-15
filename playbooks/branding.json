@@ -1,0 +1,26 @@
+{
+  "label": "Branding",
+  "short": "Identity, brandbook",
+  "stages": [
+    "Positioning",
+    "Identity directions",
+    "Brandbook pages",
+    "Mockups, handover"
+  ],
+  "files": [
+    "Brandbook PDF",
+    "AI-ready PDF",
+    "Assets"
+  ],
+  "template": "brandbook-landscape",
+  "defaultDays": 30,
+  "rounds": 3,
+  "hours": 60,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}

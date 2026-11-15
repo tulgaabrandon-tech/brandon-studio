@@ -1,0 +1,26 @@
+{
+  "label": "Logo",
+  "short": "Mark, wordmark",
+  "stages": [
+    "Brief and references",
+    "Sketch directions",
+    "Refine one direction",
+    "Logo sheet and files"
+  ],
+  "files": [
+    "SVG",
+    "PNG",
+    "Logo sheet"
+  ],
+  "template": "logo-sheet",
+  "defaultDays": 14,
+  "rounds": 2,
+  "hours": 16,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}

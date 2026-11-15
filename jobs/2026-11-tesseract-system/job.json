@@ -1,0 +1,58 @@
+{
+  "type": "system",
+  "title": "Design system",
+  "client": "Tesseract",
+  "owner": "BO",
+  "created": "2026-11-14T09:00:00Z",
+  "due": "2026-12-02",
+  "stage": 2,
+  "approved": false,
+  "waitingOn": null,
+  "rounds": {
+    "used": 3,
+    "quoted": 2
+  },
+  "hours": {
+    "used": 22,
+    "budget": 24
+  },
+  "preview": {
+    "color": "#101014",
+    "title": "Tesseract tokens",
+    "subtitle": "Өнгө, үсэг, зай"
+  },
+  "comments": [
+    {
+      "where": "Tokens",
+      "text": "Can the accent be brighter in dark mode?",
+      "done": false
+    }
+  ],
+  "qa": [
+    {
+      "name": "Өө Үү glyphs",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Mongolian spelling",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Em dashes",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Client rules",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Contrast",
+      "status": "pass",
+      "note": "OK"
+    }
+  ]
+}

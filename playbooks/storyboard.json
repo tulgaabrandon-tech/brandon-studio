@@ -1,0 +1,25 @@
+{
+  "label": "Storyboard",
+  "short": "TVC, social video",
+  "stages": [
+    "Script, key message",
+    "Shot list",
+    "Frames",
+    "Client review, PDF"
+  ],
+  "files": [
+    "PDF",
+    "PNG frames"
+  ],
+  "template": "storyboard-16x9",
+  "defaultDays": 10,
+  "rounds": 2,
+  "hours": 20,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "BrandOn Studio",
+  "signoff": { "Brief": false, "Draft": false, "Review": true, "Deliver": true },
+  "team": [
+    { "id": "BO", "name": "BrandOn", "role": "Owner" },
+    { "id": "D2", "name": "Designer 2", "role": "Designer" },
+    { "id": "D3", "name": "Designer 3", "role": "Designer" }
+  ]
+}

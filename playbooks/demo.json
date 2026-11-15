@@ -1,0 +1,26 @@
+{
+  "label": "Web demo",
+  "short": "Prototype, landing",
+  "stages": [
+    "Flow and screens",
+    "Claude builds it",
+    "Polish pass",
+    "Live link, QR"
+  ],
+  "files": [
+    "Live link",
+    "QR",
+    "Source"
+  ],
+  "template": "demo-shell",
+  "defaultDays": 10,
+  "rounds": 2,
+  "hours": 16,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}

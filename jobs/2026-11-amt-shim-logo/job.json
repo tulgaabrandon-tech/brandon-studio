@@ -1,0 +1,52 @@
+{
+  "type": "logo",
+  "title": "Logo",
+  "client": "амт шим",
+  "owner": "D2",
+  "created": "2026-11-12T09:00:00Z",
+  "due": "2026-11-22",
+  "stage": 1,
+  "approved": false,
+  "waitingOn": null,
+  "rounds": {
+    "used": 0,
+    "quoted": 2
+  },
+  "hours": {
+    "used": 5,
+    "budget": 16
+  },
+  "preview": {
+    "color": "#1B1D22",
+    "title": "амт шим",
+    "subtitle": "Үгийн тэмдэг"
+  },
+  "comments": [],
+  "qa": [
+    {
+      "name": "Өө Үү glyphs",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Mongolian spelling",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Em dashes",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Client rules",
+      "status": "fail",
+      "note": "Name written with capitals on sheet 2"
+    },
+    {
+      "name": "Contrast",
+      "status": "pass",
+      "note": "OK"
+    }
+  ]
+}

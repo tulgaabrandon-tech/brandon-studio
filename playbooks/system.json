@@ -1,0 +1,26 @@
+{
+  "label": "Design system",
+  "short": "Tokens, components",
+  "stages": [
+    "Audit and inputs",
+    "Tokens",
+    "Components",
+    "Docs page"
+  ],
+  "files": [
+    "tokens.json",
+    "CSS",
+    "Docs"
+  ],
+  "template": "tokens-starter",
+  "defaultDays": 21,
+  "rounds": 2,
+  "hours": 24,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}

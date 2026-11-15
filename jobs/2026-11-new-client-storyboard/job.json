@@ -1,0 +1,52 @@
+{
+  "type": "storyboard",
+  "title": "Storyboard",
+  "client": "[New client]",
+  "owner": "D3",
+  "created": "2026-11-13T09:00:00Z",
+  "due": "2026-11-28",
+  "stage": 0,
+  "approved": false,
+  "waitingOn": "client",
+  "rounds": {
+    "used": 0,
+    "quoted": 2
+  },
+  "hours": {
+    "used": 1,
+    "budget": 20
+  },
+  "preview": {
+    "color": "#2B2D33",
+    "title": "30 секундын TVC",
+    "subtitle": "Зураг төлөвлөлт"
+  },
+  "comments": [],
+  "qa": [
+    {
+      "name": "Өө Үү glyphs",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Mongolian spelling",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Em dashes",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Client rules",
+      "status": "pass",
+      "note": "OK"
+    },
+    {
+      "name": "Contrast",
+      "status": "pass",
+      "note": "OK"
+    }
+  ]
+}

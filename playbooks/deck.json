@@ -1,0 +1,26 @@
+{
+  "label": "Deck",
+  "short": "Pitch, sales, report",
+  "stages": [
+    "Brief and story outline",
+    "Claude drafts slides in HTML",
+    "Art direction pass",
+    "Client review, export"
+  ],
+  "files": [
+    "HTML",
+    "PPTX",
+    "PDF"
+  ],
+  "template": "deck-pitch",
+  "defaultDays": 7,
+  "rounds": 2,
+  "hours": 12,
+  "qa": [
+    "Өө Үү glyphs",
+    "Mongolian spelling",
+    "Em dashes",
+    "Client rules",
+    "Contrast"
+  ]
+}
