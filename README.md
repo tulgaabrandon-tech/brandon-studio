@@ -4,6 +4,10 @@ Internal studio tool for Brand On Creative House. Jobs and playbooks for decks, 
 
 ## Start
 
+On Windows: double-click `start-studio.bat`. It installs on the first run and opens the tool in your browser.
+
+Or from a terminal:
+
 ```
 npm install
 npm run dev
