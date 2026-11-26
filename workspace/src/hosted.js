@@ -140,6 +140,7 @@ function runRecurring(){
 
 // ================= Export to spreadsheet =================
 function exportCsv(){
+  if(window.claude && !S.hosted){ toast(L('Could not download here. Open the hosted version to export.')); return; }
   var rows=[[L('Client'),L('Project'),L('Task'),L('Who'),L('Status'),L('Due'),L('Versions'),L('Last decision')]];
   S.tasks.forEach(function(t){ var p=project(t.project), v=last(t); rows.push([p.client,p.name,t.title,person(t.who).name,L(STATUS[t.status]),t.due,t.versions.length,v&&v.decision?L(v.decision==='approved'?'Approved':'Sent back with notes'):'']); });
   var csv='﻿'+rows.map(function(r){ return r.map(function(c){ c=String(c==null?'':c); return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c; }).join(','); }).join('\n');
