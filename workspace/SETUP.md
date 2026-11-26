@@ -102,6 +102,13 @@ Finance has an **Upload** tab (Оруулах). Drop in bank statements (.xlsx o
 - Receipt photos are read by Claude on the Claude page and matched to the expense waiting for a receipt. On your own hosting you choose the expense yourself.
 - Old .xls files need saving as .xlsx first.
 
+### Jobs, clients and periods
+
+- **Ажил, борлуулалт** (Jobs and sales): every job shows contract, final amount, received, owed, its own costs and profit. If a contract is amended or cancelled mid-way, open the job, set **Өөрчилсөн** or **Цуцалсан** and enter the amount actually agreed: the difference shows separately instead of hiding inside "owed". Link costs (freelancers, camera rental, travel, shoot meals) to the job from the job itself, from a transaction, or in bulk with **Шалгаад холбох**.
+- **Харилцагч** (Clients): sales, received, owed, profit, work types and VAT status per company, plus purchases where the supplier has or hasn't filed VAT for us.
+- Reports, jobs and clients switch between month, quarter, half year and year.
+- Weekly bank uploads: rows already filed are skipped; rows after the last filed day come in ticked, each with a category and job you can change.
+
 ### On the Claude page
 
 The finance collections are readable only by **Editors** and the owner. Share the page as **Editor** with Suvdaa, Tulgaa and Nomin, and as **Contributor** with everyone else: Contributors can use the studio but get no finance data, even with developer tools. The first person to open Finance sets the finance code by typing it twice. Editors can also change the page itself, so keep that list short.

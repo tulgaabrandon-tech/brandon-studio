@@ -98,7 +98,7 @@ function catFromLabel(label, type){
   return best;
 }
 var FRULES=[
-  [/шимтгэл|fee|хураамж/i,'fees','out'], [/kass|касс/i,'cash','out'], [/цалин|tsalin|salary/i,'salary','out'], [/нийгмийн даатгал|ндш|6441556 брэнд/i,'ndsh','out'],
+  [/(камер|тоног|линз|гэрэл|студи|төхөөрөмж|equipment|camera)[^,;]{0,24}(түрээс|turees|rent)/i,'production','out'], [/шимтгэл|fee|хураамж/i,'fees','out'], [/kass|касс/i,'cash','out'], [/цалин|tsalin|salary/i,'salary','out'], [/нийгмийн даатгал|ндш|6441556 брэнд/i,'ndsh','out'],
   [/татвар|tatvar|нөат|ebarimt/i,'tax','out'], [/turees|түрээс/i,'rent','out'], [/зээл .*төлөв|зээл бэлэн бусаар|даатгалын гэрээ/i,'loan','out'], [/кредит бэлэн бусаар|credit card/i,'card','out'],
   [/сөх|цахилгаан|6104409|дулаан|ус хангамж/i,'utilities','out'], [/unitel|mobicom|skytel|gmobile|univision|интернэт/i,'phone','out'], [/google|adobe|figma|apple\.com|canva|openai|anthropic|claude|webflow|domain|hosting|envato|freepik|capcut/i,'software','out'],
   [/facebook|meta platforms|boost|бүүст/i,'boost','out'], [/ubcab|taxi|такси|зогсоол|parking|хүргэлт|delivery/i,'taxi','out'], [/petrovis|shunkhlai|шунхлай|magnai|бензин|шатахуун|ai-?9/i,'fuel','out'],
@@ -155,6 +155,8 @@ function parseSheet(sh, file, out){
         if(/^(нийт|total|эхний үлдэгдэл|эцсийн үлдэгдэл)/i.test(nrm(note))) continue;
         var type=inn&&!outv?'in':'out', amt=type==='in'?inn:outv;
         var it={file:file, date:date, type:type, amount:Math.round(amt*100)/100, note:note, hint:cHint>=0?row[cHint]:'', client:cClient>=0&&row[cClient]?String(row[cClient]).trim():'', reg:cReg>=0&&row[cReg]?String(row[cReg]).replace(/\.0$/,''):'', work:cWork>=0&&row[cWork]?String(row[cWork]):''};
+        if(!it.client){ var cp=bankParty(note); if(cp) it.client=cp; }
+        if(!it.reg){ var rg=/РД[:\s-]?(\d{7})/i.exec(note); if(rg) it.reg=rg[1]; }
         var tag=cTag>=0?String(row[cTag]||''):''; if(/НӨАТ шивсэн/i.test(tag)) it.vat='done'; else if(/НӨАТ шивэх/i.test(tag)) it.vat='todo'; if(/Баримт шивүүлсэн/i.test(tag)) it.receipt='done'; else if(/Баримт шивүүлэх/i.test(tag)) it.receipt='todo';
         out.items.push(it); n++;
       }
@@ -189,6 +191,12 @@ function parsePayroll(sh, hi){
   return list.length?{month:m, rows:list, on:true}:null;
 }
 
+// The other side of a bank transfer, from text like "05-(5038118583-МОБИКОМ КОРПОРАЦИ)-> 04-(410080779-БРЭНД ОН ...)"
+function bankParty(note){
+  var re=/\((?:MN)?\d{6,}-\s*([^()]+?)\s*\)/g, m, out='';
+  while((m=re.exec(note))){ if(!/БРЭНД ОН|BRAND ON/i.test(m[1])) { out=m[1].trim(); break; } }
+  return out;
+}
 // ---------- the flow ----------
 function fupFiles(fileList){
   var files=Array.prototype.slice.call(fileList||[]); if(!files.length) return;
@@ -205,8 +213,8 @@ function fupFiles(fileList){
     else FUP.notes.push(n+': '+F('танихгүй файл','not a file I know'));
   });
   Promise.all(jobs).then(function(){
-    var learned=fLearn(), seen={}, perMonth={};
-    FIN.data.fin_tx.forEach(function(t){ var mm=monthOf(t.date); perMonth[mm]=(perMonth[mm]||0)+1; });
+    var learned=fLearn(), seen={}, perMonth={}, lastDay={};
+    FIN.data.fin_tx.forEach(function(t){ var mm=monthOf(t.date); perMonth[mm]=(perMonth[mm]||0)+1; if(!lastDay[mm]||t.date>lastDay[mm]) lastDay[mm]=t.date; });
     FIN.data.fin_tx.forEach(function(t){ var k=t.date+'|'+(t.type==='move'?'out':t.type)+'|'+Math.round(+t.amount); seen[k]=(seen[k]||0)+1; });
     out.items.sort(function(a,b){ return a.date.localeCompare(b.date); });
     // The same payment can sit in the studio sheet and in the bank statement: count each date, amount and direction once across all files
@@ -218,7 +226,9 @@ function fupFiles(fileList){
       pf[k]=(pf[k]||0)+1;
       if(pf[k]<=(seen[k]||0)) it.dup=true; else seen[k]=pf[k];
       // A month that is already filed is left unticked: the bank statement and the studio sheet record the same money in different detail
-      if(!it.dup && (perMonth[it.date.slice(0,7)]||0)>=10) it.covered=true;
+      // Weekly uploads: rows after the last filed day are new; rows inside an already filed stretch are left unticked
+      if(!it.dup && (perMonth[it.date.slice(0,7)]||0)>=10 && it.date<=lastDay[it.date.slice(0,7)]) it.covered=true;
+      if(it.type!=='move' && !OVERHEAD[it.cat]) it.deal=suggestDeal(it.note+' '+(it.client||''), it.date);
       it.on=!it.dup && !it.covered;
     });
     out.deals.forEach(function(d){ d.dup=FIN.data.fin_deals.some(function(x){ return monthOf(x.date)===d.month && Math.round(+x.amount)===d.amount && Math.round(+x.received||0)===d.received; }) || out.deals.indexOf(d)>out.deals.findIndex(function(y){ return y.month===d.month && y.amount===d.amount && y.received===d.received && nrm(y.client)===nrm(d.client); }); d.on=!d.dup; });
@@ -269,7 +279,7 @@ function fupMatch(r){
 function fupCommit(){
   var tx=FUP.items.filter(function(it){ return it.on; }), deals=FUP.deals.filter(function(d){ return d.on; }), pays=FUP.pays.filter(function(p){ return p.on; });
   var docs=[], now=new Date().toISOString();
-  tx.forEach(function(it){ docs.push(['fin_tx',{id:newId('f'), created:now, type:it.type, amount:it.amount, cat:it.cat, note:it.note, date:it.date, account:'bank', client:it.client||'', reg:it.reg||'', work:it.work||'', deal:'', vat:it.type==='in'?(it.vat||'none'):'none', receipt:it.type==='out'?(it.receipt||'none'):'none', by:S.me, src:'upload'}]); });
+  tx.forEach(function(it){ docs.push(['fin_tx',{id:newId('f'), created:now, type:it.type, amount:it.amount, cat:it.cat, note:it.note, date:it.date, account:'bank', client:it.client||'', reg:it.reg||'', work:it.work||'', deal:it.type==='move'?'':(it.deal||''), vat:it.type==='in'?(it.vat||'none'):'none', receipt:it.type==='out'?(it.receipt||'none'):'none', by:S.me, src:'upload'}]); });
   deals.forEach(function(d){ docs.push(['fin_deals',{id:newId('d'), created:now, client:d.client, title:'', amount:d.amount, received:d.received, date:d.month+'-01', work:'', reg:'', project:'', src:'upload'}]); });
   pays.forEach(function(p){
     var rows=p.rows.map(function(r){ var s=FIN.data.fin_staff.filter(function(x){ return nrm(x.name)===nrm(r.name); })[0];
@@ -309,11 +319,13 @@ function finUpload(){
   if(FUP.deals.length) h+='<div class="rows fup-list">'+FUP.deals.map(function(d,i){ return '<label class="fup-r'+(d.dup?' dup':'')+'"><input type="checkbox" data-fup="deal" data-i="'+i+'"'+(d.on?' checked':'')+'><span class="fup-d">'+esc(d.month)+'</span><span class="rw-m"><b>'+esc(d.client)+'</b><span class="muted">'+esc(F('Борлуулалт','Sale'))+' · '+esc(F('орсон ','received '))+esc(money(d.received))+(d.dup?' · '+esc(F('өмнө бүртгэгдсэн','already filed')):'')+'</span></span><span class="tx-amt">'+esc(money(d.amount))+'</span></label>'; }).join('')+'</div>';
   if(it.length){
     var opts=function(t,cur){ var cats=t==='in'?FIN_IN:t==='out'?FIN_OUT:[FIN_MOVE]; return cats.map(function(c){ return '<option value="'+c.k+'"'+(c.k===cur?' selected':'')+'>'+esc(LANG==='mn'?c.mn:c.en)+'</option>'; }).join(''); };
+    var dl=FIN.data.fin_deals.filter(function(d){ return d.status!=='cancelled'; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }).slice(0,60);
+    var jobOpts=function(cur){ return '<option value="">'+esc(F('Ажилгүй','No job'))+'</option>'+dl.map(function(d){ return '<option value="'+esc(d.id)+'"'+(d.id===cur?' selected':'')+'>'+esc(d.client+' · '+dshort(d.date))+'</option>'; }).join(''); };
     var month='', rows='';
     it.forEach(function(x,i){
       if(x.date.slice(0,7)!==month){ month=x.date.slice(0,7); var dd=fromIso(month+'-01'); rows+='<div class="day-sep">'+esc(LANG==='mn'?dd.getFullYear()+' оны '+(dd.getMonth()+1)+'-р сар':MON_EN[dd.getMonth()]+' '+dd.getFullYear())+'</div>'; }
       rows+='<div class="fup-r'+(x.dup?' dup':x.covered?' cov':'')+'"><input type="checkbox" data-fup="tx" data-i="'+i+'"'+(x.on?' checked':'')+' aria-label="'+esc(F('Нэмэх','Add'))+'"><span class="fup-d">'+esc(x.date.slice(5))+'</span><span class="rw-m"><b title="'+esc(x.note)+'">'+esc(x.note||'(утгагүй)')+'</b><span class="muted">'+(x.dup?esc(F('Өмнө бүртгэгдсэн','Already filed'))+' · ':'')+(x.client?esc(x.client)+' · ':'')+esc(x.file)+'</span></span>'+
-        '<select class="input sm fup-c'+(x.sure?'':' unsure')+'" data-fupcat="'+i+'" aria-label="'+esc(F('Ангилал','Category'))+'">'+opts(x.type,x.cat)+'</select>'+(x.sure?'':'<span class="chip warn" title="'+esc(F('Таамаглал, шалгана уу','A guess, please check'))+'">?</span>')+
+        '<select class="input sm fup-c'+(x.sure?'':' unsure')+'" data-fupcat="'+i+'" aria-label="'+esc(F('Ангилал','Category'))+'">'+opts(x.type,x.cat)+'</select>'+(x.type==='move'?'<span class="fup-j"></span>':'<select class="input sm fup-j" data-fupdeal="'+i+'" aria-label="'+esc(F('Аль ажил','Which job'))+'">'+jobOpts(x.deal)+'</select>')+(x.sure?'':'<span class="chip warn" title="'+esc(F('Таамаглал, шалгана уу','A guess, please check'))+'">?</span>')+
         '<span class="tx-amt '+(x.type==='in'?'pos':'')+'">'+(x.type==='in'?'+':'-')+esc(money(x.amount))+'</span></div>';
     });
     h+='<div class="rows fup-list">'+rows+'</div>';
@@ -343,6 +355,7 @@ document.addEventListener('change', function(e){
   var el=e.target;
   if(el.id==='fupin'){ fupFiles(el.files); el.value=''; return; }
   if(el.dataset && el.dataset.fup){ var list=el.dataset.fup==='tx'?FUP.items:el.dataset.fup==='deal'?FUP.deals:FUP.pays; list[+el.dataset.i].on=el.checked; render(); return; }
+  if(el.dataset && el.dataset.fupdeal!=null){ FUP.items[+el.dataset.fupdeal].deal=el.value; return; }
   if(el.dataset && el.dataset.fupcat!=null){ var x=FUP.items[+el.dataset.fupcat]; x.cat=el.value; x.sure=2; if(x.cat==='cash') x.type='move'; render(); return; }
   if(el.dataset && el.dataset.fuprc!=null && el.value){ fupReceiptApply(+el.dataset.fuprc, el.value); return; }
 });

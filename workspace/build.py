@@ -7,7 +7,7 @@ src=lambda f: open(os.path.join(here,'src',f),encoding='utf-8').read()
 css=src('style.css')
 claude=len(sys.argv)>1 and sys.argv[1]=='claude'
 # The hosted build carries no sample artwork or sample projects: it starts with the team only.
-files=['i18n.js','art.js','core.js','sample.js','hosted.js','finance.js','fupload.js','icons.js','views.js','actions.js'] if claude else ['i18n.js','core.js','hosted.js','finance.js','fupload.js','icons.js','views.js','actions.js']
+files=['i18n.js','art.js','core.js','sample.js','hosted.js','finance.js','fupload.js','fjobs.js','icons.js','views.js','actions.js'] if claude else ['i18n.js','core.js','hosted.js','finance.js','fupload.js','fjobs.js','icons.js','views.js','actions.js']
 NOSAMPLE="window.BO_HOSTED=true;\nfunction sampleSet(){ return {projects:[],tasks:[],ann:[],events:[]}; }\nfunction startDemo(){ S.mode='setup'; render(); }\n"
 js="(function(){\n'use strict';\n"+('' if claude else NOSAMPLE)+''.join(src(f)+'\n' for f in files)+"document.documentElement.lang=LANG;\nboot();\n})();\n"
 head_extra='' if claude else ('<meta name="theme-color" content="#DA1F34">\n<link rel="manifest" href="manifest.webmanifest">\n<link rel="icon" href="icon-192.png">\n<link rel="apple-touch-icon" href="icon-192.png">\n<meta name="apple-mobile-web-app-capable" content="yes">\n'
