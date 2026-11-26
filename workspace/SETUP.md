@@ -91,6 +91,21 @@ The Finance section has its own login, so the money is protected by the database
 2. If you used `supabase/schema.sql` from before this step was added, run it again. It's safe to run twice. It adds the `finance` table and Nomin.
 3. Who sees the Finance section is set in **Team settings** (the lock button next to each name). They still need the finance code to open it, and it locks again after 15 quiet minutes or when someone switches person.
 
+4. To load the 2026 numbers, open **SQL Editor**, paste the private file `brandon-finance-2026-import.sql` (sent in chat, never kept in this repo) and press **Run**. It is safe to run twice.
+
+### Upload (both versions)
+
+Finance has an **Upload** tab (Оруулах). Drop in bank statements (.xlsx or .csv), the monthly finance sheets, salary sheets or receipt photos, several at once:
+- Transactions are sorted into the studio's categories from their description, the bank's label and what was filed before. Guesses are marked **?** so you can check them.
+- Anything with the same date, amount and direction as something already filed is skipped. A month that is already filed comes in unticked, because the bank statement and the studio sheet hold the same money in different detail.
+- Salary sheets become that month's payroll. Client sales tables become sales.
+- Receipt photos are read by Claude on the Claude page and matched to the expense waiting for a receipt. On your own hosting you choose the expense yourself.
+- Old .xls files need saving as .xlsx first.
+
+### On the Claude page
+
+The finance collections are readable only by **Editors** and the owner. Share the page as **Editor** with Suvdaa, Tulgaa and Nomin, and as **Contributor** with everyone else: Contributors can use the studio but get no finance data, even with developer tools. The first person to open Finance sets the finance code by typing it twice. Editors can also change the page itself, so keep that list short.
+
 ## 8. Google Sheets, kept up to date
 
 1. Create a new Google Sheet, for example **BrandOn Санхүү 2026 (автомат)**.

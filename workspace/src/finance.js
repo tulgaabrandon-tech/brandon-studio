@@ -35,7 +35,8 @@ var FIN_OUT=[
   {k:'cat', mn:'Муурны зардал', en:'Office cat', c:'#D97706'},
   {k:'print', mn:'Хэвлэл', en:'Printing', c:'#57534E'},
   {k:'donation', mn:'Хандив тусламжийн зардал', en:'Donations', c:'#BE185D'},
-  {k:'staff_loan', mn:'Ажилчдад зээлсэн', en:'Loans to staff', c:'#78716C', nopl:true}
+  {k:'staff_loan', mn:'Ажилчдад зээлсэн', en:'Loans to staff', c:'#78716C', nopl:true},
+  {k:'fund', mn:'Фонд татан авалт', en:'Staff fund payout', c:'#A16207', nopl:true}
 ];
 var FIN_MOVE={k:'cash', mn:'Касс руу шилжүүлэг', en:'Move to cash', c:'#A8A49C'};
 function fcat(k){ return FIN_IN.concat(FIN_OUT,[FIN_MOVE]).filter(function(c){ return c.k===k; })[0] || {k:k, mn:k, en:k, c:'#8A8F99'}; }
@@ -55,23 +56,40 @@ function hasFinance(){ return !!me().finance; }
 function fpersist(col,obj){ if(!FDB) return; var path=col+'/'+obj.id, data=body(obj); chains[path]=(chains[path]||Promise.resolve()).then(function(){ return FDB.doc(path).set(data); }).catch(function(){ toast(L('Could not save. Check your connection.')); }); }
 function fadd(col,obj){ FIN.data[col].push(obj); fpersist(col,obj); return obj; }
 function fdel(col,id){ FIN.data[col]=FIN.data[col].filter(function(x){ return x.id!==id; }); if(FDB){ var path=col+'/'+id; chains[path]=(chains[path]||Promise.resolve()).then(function(){ return FDB.doc(path).delete(); }).catch(function(){}); } }
+var FUNSUB=[];
 function fstart(){
+  FUNSUB.forEach(function(u){ try{ u(); }catch(e){} }); FUNSUB=[];
   FCOLS.forEach(function(col){
-    FDB.collection(col).onSnapshot(function(snap){ FIN.data[col]=snap.docs.map(function(x){ var o=clone(x.data()); o.id=x.id; return o; }); softRender(); }, function(){ toast(F('Санхүүгийн мэдээлэл ачаалж чадсангүй.','Could not load finance data.')); });
+    var u=FDB.collection(col).onSnapshot(function(snap){ FIN.data[col]=snap.docs.map(function(x){ var o=clone(x.data()); o.id=x.id; return o; }); softRender(); }, function(){ toast(F('Санхүүгийн мэдээлэл ачаалж чадсангүй.','Could not load finance data.')); });
+    if(typeof u==='function') FUNSUB.push(u);
   });
 }
 // Unlock: on own hosting the code is the password of a separate finance login, so the database itself guards the money.
+// On the Claude page the finance collections are readable only by Editors and the owner (database rules), and the code is a second lock on this device.
+function finHash(code){ return sha('brandon-fin:'+code); }
 function unlockFinance(code){
   if(S.hosted && CFG.financeEmail){
     FSB=FSB||window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey, {auth:{persistSession:false, storageKey:'bo-fin'}});
     return FSB.auth.signInWithPassword({email:CFG.financeEmail, password:code}).then(function(r){ if(r.error) throw r.error; FDB=supaDB(FSB,'finance'); FIN.unlocked=true; FIN.lastUse=Date.now(); fstart(); render(); });
   }
   if(S.hosted) return Promise.reject(new Error('Finance login is not set up yet. See SETUP.md, part 7.'));
-  // Everywhere else the finance section is a preview with made-up numbers. Real money stays on your own hosting.
-  if(code!=='0000') return Promise.reject(new Error('wrong'));
-  FIN.preview=true; FIN.unlocked=true; FIN.lastUse=Date.now(); FDB=null; FIN.data=financeSample(); render(); return Promise.resolve();
+  if(S.mode!=='live' || !DB) return Promise.reject(new Error('offline'));
+  var ref=DB.doc('fin_meta/lock');
+  return Promise.all([ref.get(), finHash(code)]).then(function(r){
+    var snap=r[0], h=r[1];
+    if(!snap.exists){ // first time: the code typed twice becomes the finance code
+      if(FIN.firstCode==null){ FIN.firstCode=h; throw new Error('confirm'); }
+      if(FIN.firstCode!==h){ FIN.firstCode=null; throw new Error('mismatch'); }
+      FIN.firstCode=null; return ref.set({hash:h, by:S.me, at:new Date().toISOString()});
+    }
+    if(snap.data().hash!==h) throw new Error('wrong');
+  }).then(function(){ FDB=DB; FIN.unlocked=true; FIN.lastUse=Date.now(); fstart(); render(); }, function(e){
+    var m=String(e&&(e.code||e.message)||'');
+    if(/confirm|mismatch|wrong/.test(m)) throw e;
+    throw new Error('denied');
+  });
 }
-function lockFinance(){ FIN.unlocked=false; FDB=null; FIN.data={fin_tx:[], fin_deals:[], fin_staff:[], fin_payroll:[], fin_plan:[], fin_meta:[]}; if(FSB) FSB.auth.signOut().catch(function(){}); }
+function lockFinance(){ FIN.unlocked=false; FDB=null; FIN.firstCode=null; FUP.items=[]; FIN.data={fin_tx:[], fin_deals:[], fin_staff:[], fin_payroll:[], fin_plan:[], fin_meta:[]}; FUNSUB.forEach(function(u){ try{ u(); }catch(e){} }); FUNSUB=[]; if(FSB) FSB.auth.signOut().catch(function(){}); }
 // Lock after 15 quiet minutes
 setInterval(function(){ if(FIN.unlocked && Date.now()-FIN.lastUse>15*60000){ lockFinance(); if(S.view==='finance') render(); } }, 30000);
 document.addEventListener('pointerdown', function(){ if(FIN.unlocked) FIN.lastUse=Date.now(); }, true);
@@ -83,42 +101,49 @@ function txYear(y){ return FIN.data.fin_tx.filter(function(t){ return String(t.d
 function sumBy(list, type, plOnly){ return list.filter(function(t){ return t.type===type && (!plOnly || !fcat(t.cat).nopl); }).reduce(function(s,t){ return s+(+t.amount||0); },0); }
 function plan(){ var y=FIN.month.slice(0,4); return FIN.data.fin_plan.filter(function(p){ return p.id===y; })[0] || {id:y, sales:{}, budget:{}, opening:0}; }
 function balanceAt(m){ // cash on hand at the end of month m
-  var p=plan(), y=m.slice(0,4), bal=+p.opening||0;
-  FIN.data.fin_tx.forEach(function(t){ if(String(t.date).slice(0,4)===y && monthOf(t.date)<=m){ if(t.type==='in') bal+=+t.amount; if(t.type==='out') bal-=+t.amount; } });
+  // Starts from the latest bank statement balance (start of a month) at or before m, then adds the ledger
+  var p=plan(), y=m.slice(0,4), cp=p.checkpoints||{}, from=y+'-01', bal=+p.opening||0;
+  Object.keys(cp).sort().forEach(function(k){ if(k<=m && k>=from){ from=k; bal=+cp[k]; } });
+  FIN.data.fin_tx.forEach(function(t){ var tm=monthOf(t.date); if(tm>=from && tm<=m){ if(t.type==='in') bal+=+t.amount; if(t.type==='out') bal-=+t.amount; } });
   return bal;
 }
-function dealPaid(d){ return FIN.data.fin_tx.filter(function(t){ return t.type==='in' && t.deal===d.id; }).reduce(function(s,t){ return s+(+t.amount||0); },0); }
+function dealPaid(d){ return (+d.received||0)+FIN.data.fin_tx.filter(function(t){ return t.type==='in' && t.deal===d.id; }).reduce(function(s,t){ return s+(+t.amount||0); },0); }
 function salesBooked(m){ return FIN.data.fin_deals.filter(function(d){ return monthOf(d.date)===m; }).reduce(function(s,d){ return s+(+d.amount||0); },0); }
 function salesYear(y){ return FIN.data.fin_deals.filter(function(d){ return String(d.date).slice(0,4)===y; }).reduce(function(s,d){ return s+(+d.amount||0); },0); }
-function receivables(){ return FIN.data.fin_deals.map(function(d){ return {d:d, left:(+d.amount||0)-dealPaid(d)}; }).filter(function(x){ return x.left>0.5; }).sort(function(a,b){ return b.left-a.left; }); }
+// What each client still owes: everything booked minus everything received, per client, so a payment logged in a later month still counts
+function receivables(){
+  var by={};
+  FIN.data.fin_deals.forEach(function(d){ var k=d.client||'?', o=by[k]=by[k]||{left:0, d:d}; o.left+=(+d.amount||0)-dealPaid(d); if(String(d.date)>=String(o.d.date)) o.d=d; });
+  return Object.keys(by).map(function(k){ return by[k]; }).filter(function(x){ return x.left>0.5; }).sort(function(a,b){ return b.left-a.left; });
+}
 // Mongolian payroll, as in the studio's salary sheets: employee НДШ 11.5%, ХХОАТ 10% after НДШ minus the bracket credit, company НДШ 12.5%
 function hhoatCredit(g){ if(g<=500000) return 20000; if(g<=1000000) return 18000; if(g<=1500000) return 16000; if(g<=2000000) return 14000; if(g<=2500000) return 12000; if(g<=3000000) return 10000; if(g<=3500000) return 8000; if(g<=4000000) return 6000; if(g<=4500000) return 4000; if(g<=5000000) return 2000; return 0; }
 function payCalc(r){
-  var gross=(+r.base||0)*((+r.days||21)/21)+(+r.bonus||0), rep=+r.reported||0;
+  var wd=+r.wd||21, gross=(+r.base||0)*((+r.days||wd)/wd)+(+r.bonus||0), rep=+r.reported||0;
   var ndsh=Math.round(rep*0.115), hh=rep?Math.max(0, Math.round((rep-ndsh)*0.1)-hhoatCredit(rep)):0, comp=Math.round(rep*0.125);
   var ded=ndsh+hh+(+r.fund||0)+(+r.owed||0)+(+r.advance||0);
   return {gross:Math.round(gross), ndsh:ndsh, hhoat:hh, company:comp, deductions:ded, net:Math.round(gross-ded)};
 }
 function payrollFor(m){ return FIN.data.fin_payroll.filter(function(p){ return p.id===m; })[0]; }
-function staffSorted(){ return FIN.data.fin_staff.slice().sort(function(a,b){ return (a.order||0)-(b.order||0); }); }
+function staffSorted(){ return FIN.data.fin_staff.slice().sort(function(a,b){ return (a.left?1:0)-(b.left?1:0) || (a.order||0)-(b.order||0); }); }
 
 // ---------- views ----------
 function vFinance(){
   if(!hasFinance()) return '<div class="empty" style="margin-top:40px">'+esc(F('Санхүү зөвхөн эрхтэй хүмүүст харагдана.','Finance is only for people with access.'))+'</div>';
   if(!FIN.unlocked) return finGate();
-  var y=FIN.month.slice(0,4), m=FIN.month, tabs=[['overview',F('Тойм','Overview')],['tx',F('Гүйлгээ','Transactions')],['sales',F('Борлуулалт','Sales')],['reports',F('Тайлан','Reports')],['payroll',F('Цалин','Payroll')],['plan',F('Төлөвлөгөө','Plan')]];
+  var y=FIN.month.slice(0,4), m=FIN.month, tabs=[['overview',F('Тойм','Overview')],['upload',F('Оруулах','Upload')],['tx',F('Гүйлгээ','Transactions')],['sales',F('Борлуулалт','Sales')],['reports',F('Тайлан','Reports')],['payroll',F('Цалин','Payroll')],['plan',F('Төлөвлөгөө','Plan')]];
   var dt=fromIso(m+'-01');
-  var h='<header class="fin-head"><div><div class="eyebrow">'+esc(F('Санхүү','Finance'))+(FIN.preview?' · <span class="red">'+esc(F('Жишээ тоо','Sample numbers'))+'</span>':'')+'</div><h1 class="display">'+esc(F('Мөнгө','Money'))+'</h1></div>'+
+  var h='<header class="fin-head"><div><div class="eyebrow">'+esc(F('Санхүү','Finance'))+'</div><h1 class="display">'+esc(F('Мөнгө','Money'))+'</h1></div>'+
     '<div class="ph-tools"><div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх сар','Previous month'))+'">'+ICON.back+'</button><b class="fmonth">'+esc(LANG==='mn'?dt.getFullYear()+' оны '+(dt.getMonth()+1)+'-р сар':MON_EN[dt.getMonth()]+' '+dt.getFullYear())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараа сар','Next month'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
-  if(FIN.preview) h+='<div class="fin-note">'+esc(F('Энэ бол жишээ тоотой урьдчилсан харагдац. Жинхэнэ санхүү зөвхөн өөрийн хостинг дээр, тусдаа нууц кодоор хамгаалагдана.','This is a preview with made-up numbers. Real finance lives only on your own hosting, behind its own code.'))+'</div>';
   h+='<nav class="seg fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav>';
-  var V={overview:finOverview, tx:finTx, sales:finSales, reports:finReports, payroll:finPayroll, plan:finPlan};
+  var V={overview:finOverview, upload:finUpload, tx:finTx, sales:finSales, reports:finReports, payroll:finPayroll, plan:finPlan};
   return h+(V[FIN.tab]||finOverview)();
 }
 function finGate(){
   return '<div class="fin-gate"><span class="fin-lock">'+ICON.lock+'</span><h1 class="h2">'+esc(F('Санхүү','Finance'))+'</h1><p class="lede" style="text-align:center;margin-top:8px">'+esc(F('Санхүүгийн кодоо оруулна уу. 15 минут хөдөлгөөнгүй бол автоматаар түгжигдэнэ.','Enter the finance code. It locks again after 15 quiet minutes.'))+'</p>'+
     '<form data-form="fincode" class="fin-gate-f"><label class="sr" for="fcode">'+esc(F('Санхүүгийн код','Finance code'))+'</label><input class="input" id="fcode" type="password" autocomplete="off" placeholder="'+esc(F('Санхүүгийн код','Finance code'))+'"><button class="btn primary xl" type="submit">'+esc(F('Нээх','Open'))+'</button></form><p class="err" id="fcerr" role="alert"></p>'+
-    (S.hosted?'':'<p class="muted s13">'+esc(F('Урьдчилсан харагдацад 0000 гэж оруулна уу.','For the preview, type 0000.'))+'</p>')+'</div>';
+    (FIN.firstCode!=null?'<p class="muted s13">'+esc(F('Анх удаа нээж байна. Шинэ кодоо дахин оруулж батална уу.','First time here. Type the new code again to confirm it.'))+'</p>':'')+
+    (!S.hosted&&S.mode!=='live'?'<p class="muted s13">'+esc(F('Санхүү зөвхөн хуваалцсан Claude хуудас эсвэл өөрийн хостинг дээр нээгдэнэ.','Finance opens only on the shared Claude page or your own hosting.'))+'</p>':'')+'</div>';
 }
 function statTile(label, val, sub, cls){ return '<div class="stat'+(cls?' '+cls:'')+'"><span>'+esc(label)+'</span><b>'+esc(val)+'</b>'+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
 function finOverview(){
@@ -129,7 +154,7 @@ function finOverview(){
     '<div class="big-num">'+esc(moneyShort(booked))+'<span> / '+esc(moneyShort(target))+'</span></div>'+wavy(target?booked/target:0, target?Math.round(booked/target*100)+'%':F('Төлөвлөгөө алга','No target'))+
     '<p class="muted s13" style="margin:14px 0 0">'+esc(F('Оны эхнээс: ','Year to date: '))+'<b>'+esc(moneyShort(yt))+'</b> / '+esc(moneyShort(yTarget))+(yTarget?' ('+Math.round(yt/yTarget*100)+'%)':'')+'</p></section>';
   var rec=receivables(), recSum=rec.reduce(function(s,x){ return s+x.left; },0);
-  h+='<section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Авлага','Owed to us'))+'</h3><b>'+esc(money(recSum))+'</b></div>'+(rec.length?'<div class="mini-rows">'+rec.slice(0,5).map(function(x){ return '<button class="mini" data-act="fdeal" data-id="'+esc(x.d.id)+'"><span><b>'+esc(x.d.client)+'</b><em>'+esc(x.d.title||'')+'</em></span><span class="amt">'+esc(money(x.left))+'</span></button>'; }).join('')+'</div>':'<p class="muted">'+esc(F('Бүх төлбөр орж ирсэн.','Everything is paid.'))+'</p>')+'</section></div>';
+  h+='<section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Авлага','Owed to us'))+'</h3><b>'+esc(money(recSum))+'</b></div>'+(rec.length?'<div class="mini-rows">'+rec.slice(0,5).map(function(x){ return '<button class="mini" data-act="fdeal" data-id="'+esc(x.d.id)+'"><span><b>'+esc(x.d.client)+'</b><em>'+esc(x.d.title||md(fromIso(x.d.date)))+'</em></span><span class="amt">'+esc(money(x.left))+'</span></button>'; }).join('')+'</div>':'<p class="muted">'+esc(F('Бүх төлбөр орж ирсэн.','Everything is paid.'))+'</p>')+'</section></div>';
   // budget burn
   var outs={}; list.filter(function(t){ return t.type==='out'; }).forEach(function(t){ outs[t.cat]=(outs[t.cat]||0)+(+t.amount||0); });
   var rows=Object.keys(outs).sort(function(a,b){ return outs[b]-outs[a]; }).slice(0,7);
@@ -250,7 +275,7 @@ function finModal(md){
   if(md.kind==='fstaff'){
     var st=staffSorted();
     return '<h2>'+esc(F('Ажилтнууд','Staff'))+'</h2><p class="muted s13" style="margin:-8px 0 0">'+esc(F('Цалингийн хүснэгт эндээс эхлэнэ. Нэр, данс зөвхөн санхүүд харагдана.','Payroll starts from here. Names and accounts are visible in finance only.'))+'</p>'+
-      '<div class="staff-list">'+st.map(function(s){ return '<div class="staff-r"><input class="input sm" data-st="'+esc(s.id)+'" data-f="name" value="'+esc(s.name)+'" placeholder="'+esc(F('Нэр','Name'))+'"><input class="input sm" data-st="'+esc(s.id)+'" data-f="position" value="'+esc(s.position||'')+'" placeholder="'+esc(F('Албан тушаал','Position'))+'"><input class="input sm" data-st="'+esc(s.id)+'" data-f="base" value="'+esc(s.base||'')+'" placeholder="'+esc(F('Үндсэн цалин','Base'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="reported" value="'+esc(s.reported||'')+'" placeholder="'+esc(F('НДШ-д тайлагнах','Reported'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="fund" value="'+esc(s.fund||'')+'" placeholder="'+esc(F('Фонд','Fund'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="account" value="'+esc(s.account||'')+'" placeholder="'+esc(F('Банк, данс','Bank, account'))+'"><label class="fixrow mini-check"><input type="checkbox" data-st="'+esc(s.id)+'" data-f="bonus"'+(s.bonus?' checked':'')+'><span>'+esc(F('Бонус','Bonus'))+'</span></label><button class="icon-btn sm" data-act="fstaffdel" data-id="'+esc(s.id)+'" aria-label="'+esc(L('Remove'))+'">'+ICON.x+'</button></div>'; }).join('')+'</div>'+
+      '<div class="staff-list">'+st.map(function(s){ return '<div class="staff-r"><input class="input sm" data-st="'+esc(s.id)+'" data-f="name" value="'+esc(s.name)+'" placeholder="'+esc(F('Нэр','Name'))+'"><input class="input sm" data-st="'+esc(s.id)+'" data-f="position" value="'+esc(s.position||'')+'" placeholder="'+esc(F('Албан тушаал','Position'))+'"><input class="input sm" data-st="'+esc(s.id)+'" data-f="base" value="'+esc(s.base||'')+'" placeholder="'+esc(F('Үндсэн цалин','Base'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="reported" value="'+esc(s.reported||'')+'" placeholder="'+esc(F('НДШ-д тайлагнах','Reported'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="fund" value="'+esc(s.fund||'')+'" placeholder="'+esc(F('Фонд','Fund'))+'" inputmode="numeric"><input class="input sm" data-st="'+esc(s.id)+'" data-f="account" value="'+esc(s.account||'')+'" placeholder="'+esc(F('Банк, данс','Bank, account'))+'"><label class="fixrow mini-check"><input type="checkbox" data-st="'+esc(s.id)+'" data-f="bonus"'+(s.bonus?' checked':'')+'><span>'+esc(F('Бонус','Bonus'))+'</span></label><label class="fixrow mini-check"><input type="checkbox" data-st="'+esc(s.id)+'" data-f="left"'+(s.left?' checked':'')+'><span>'+esc(F('Гарсан','Left'))+'</span></label><button class="icon-btn sm" data-act="fstaffdel" data-id="'+esc(s.id)+'" aria-label="'+esc(L('Remove'))+'">'+ICON.x+'</button></div>'; }).join('')+'</div>'+
       '<button class="lnk" data-act="fstaffadd" style="align-self:flex-start">'+esc(F('+ Ажилтан нэмэх','+ Add a person'))+'</button><div class="m-a"><button class="btn primary" data-act="fstaffsave">'+esc(L('Save'))+'</button></div>';
   }
   return '';
@@ -264,6 +289,7 @@ function keepFin(){
 }
 // ---------- actions ----------
 function finAction(a,b,id){
+  if(a.indexOf('fup')===0) return fupAction(a,b);
   var md=S.modal;
   if(a==='fmonth'){ var dd=fromIso(FIN.month+'-01'); dd.setMonth(dd.getMonth()+(+b.dataset.d)); FIN.month=iso(dd).slice(0,7); render(); return true; }
   if(a==='ftab'){ FIN.tab=b.dataset.t; if(FIN.tab!=='tx') FIN.filter='all'; render(); return true; }
@@ -295,7 +321,7 @@ function finAction(a,b,id){
   if(a==='fstaffadd'){ keepFin(); FIN.data.fin_staff.push({id:newId('s'), name:'', position:'', base:0, reported:0, fund:0, order:FIN.data.fin_staff.length+1}); renderModal(); return true; }
   if(a==='fstaffdel'){ keepFin(); var sd=FIN.data.fin_staff.filter(function(x){return x.id===id;})[0]; fdel('fin_staff',id); renderModal(); toast(F('Хаслаа','Removed'), function(){ fadd('fin_staff',sd); renderModal(); }); return true; }
   if(a==='fstaffsave'){ keepFin(); FIN.data.fin_staff=FIN.data.fin_staff.filter(function(s){ return (s.name||'').trim(); }); FIN.data.fin_staff.forEach(function(s){ fpersist('fin_staff',s); }); S.modal=null; render(); toast(F('Хадгаллаа','Saved')); return true; }
-  if(a==='fpaymake'){ var prev=payrollFor(prevMonth(FIN.month)); var rows=staffSorted().map(function(s){ var pr=prev&&prev.rows.filter(function(r){return r.staff===s.id;})[0]; return {staff:s.id, base:+s.base||0, days:21, bonus:0, reported:+s.reported||0, fund:+s.fund||0, owed:0, advance:pr?0:0}; }); fadd('fin_payroll',{id:FIN.month, rows:rows, paid:false}); render(); return true; }
+  if(a==='fpaymake'){ var prev=payrollFor(prevMonth(FIN.month)); var rows=staffSorted().filter(function(s){ return !s.left; }).map(function(s){ var pr=prev&&prev.rows.filter(function(r){return r.staff===s.id;})[0]; return {staff:s.id, base:+s.base||0, days:21, bonus:0, reported:+s.reported||0, fund:+s.fund||0, owed:0, advance:pr?+pr.advance||0:0, wd:pr?+pr.wd||21:21}; }); fadd('fin_payroll',{id:FIN.month, rows:rows, paid:false}); render(); return true; }
   if(a==='fpaydone'){ var pr2=payrollFor(FIN.month), tot=pr2.rows.reduce(function(s,r){ return s+payCalc(r).net; },0), comp=pr2.rows.reduce(function(s,r){ var c=payCalc(r); return s+c.company+c.ndsh; },0); pr2.paid=true; fpersist('fin_payroll',pr2);
     fadd('fin_tx',{id:newId('f'), created:new Date().toISOString(), type:'out', amount:tot, cat:'salary', note:F(FIN.month.slice(5)+'-р сарын цалин','Salaries '+FIN.month), date:iso(TODAY), account:'bank', client:'', reg:'', deal:'', vat:'none', receipt:'none', by:S.me});
     render(); toast(F('Цалинг зарлагад бүртгэлээ. НДШ ('+money(comp)+') төлөхдөө тусад нь бүртгээрэй.','Salaries are logged as spending. Log social insurance ('+money(comp)+') when you pay it.')); return true; }
@@ -314,16 +340,3 @@ document.addEventListener('input', function(e){
   if(e.target.id==='fq'){ FIN.q=e.target.value; var pos=e.target.selectionStart; render(); var x=$('#fq'); if(x){ x.focus(); x.setSelectionRange(pos,pos); } return; }
   if(e.target.id==='fa'||e.target.id==='da'||(e.target.classList&&e.target.classList.contains('cell'))){ var v=e.target.value.replace(/[^\d]/g,''); e.target.value=v?v.replace(/\B(?=(\d{3})+(?!\d))/g,','):''; }
 });
-
-// ---------- preview data (made up, never real) ----------
-function financeSample(){
-  var y=iso(TODAY).slice(0,4), m=iso(TODAY).slice(0,7), pm=prevMonth(m), id=0;
-  function T(date,type,cat,amount,note,extra){ return Object.assign({id:'px'+(id++), date:date, type:type, cat:cat, amount:amount, note:note, account:'bank', client:'', reg:'', deal:'', vat:'none', receipt:'none', by:'suvdaa', created:date}, extra||{}); }
-  var deals=[{id:'pd1', client:'Жишээ ХХК', title:'Брэнд айдентити', amount:18000000, date:m+'-03', work:'Брэндинг'},{id:'pd2', client:'Туршилт Фүүдс', title:'Сошиал, 3 сар', amount:9000000, date:m+'-08', work:'Сошиал'},{id:'pd3', client:'Демо Кофе', title:'Цэсний дизайн', amount:4500000, date:pm+'-20', work:'Бусад'}];
-  var tx=[T(m+'-04','in','sales',9000000,'Жишээ ХХК 50% урьдчилгаа',{deal:'pd1',client:'Жишээ ХХК',vat:'todo'}),T(m+'-10','in','sales',3000000,'Туршилт Фүүдс 1-р сар',{deal:'pd2',client:'Туршилт Фүүдс',vat:'done'}),T(pm+'-25','in','sales',4500000,'Демо Кофе бүтэн төлбөр',{deal:'pd3',client:'Демо Кофе',vat:'done'}),
-    T(m+'-05','out','rent',3500000,'Оффисын түрээс'),T(m+'-06','out','production',650000,'Камер түрээс',{receipt:'todo'}),T(m+'-07','out','software',420000,'Програм хангамжийн төлбөр'),T(m+'-12','out','food',180000,'Багийн хоол'),T(m+'-14','out','salary',6000000,'Урьдчилгаа цалин'),T(m+'-15','out','fees',2400,'Банкны шимтгэл'),T(m+'-15','move','cash',500000,'Касс'),T(pm+'-28','out','salary',9000000,'Сүүл цалин')];
-  var staff=[{id:'ps1',name:'Ажилтан А',position:'Төслийн менежер',base:2500000,reported:2000000,fund:200000,order:1,bonus:true},{id:'ps2',name:'Ажилтан Б',position:'График дизайнер',base:2300000,reported:1500000,fund:200000,order:2,bonus:true},{id:'ps3',name:'Ажилтан В',position:'Видеограф',base:2000000,reported:1000000,fund:0,order:3,bonus:true}];
-  var sales={}; [20,35,40,40,55,65,40,45,55,60,65,80].forEach(function(v,i){ sales[i+1]=v*1e6; });
-  var budget={salary:220e6, rent:42e6, ndsh:15e6, production:53e6, tax:90e6, loan:86e6, mgmt:30e6, utilities:4.5e6, food:4e6, events:11e6, travel:20e6, software:4e6, phone:1.2e6, office:1.5e6, fees:150000};
-  return {fin_tx:tx, fin_deals:deals, fin_staff:staff, fin_payroll:[], fin_plan:[{id:y, sales:sales, budget:budget, opening:12000000}], fin_meta:[]};
-}

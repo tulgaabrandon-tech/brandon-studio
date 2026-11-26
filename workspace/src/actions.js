@@ -264,7 +264,10 @@ document.addEventListener('input', function(e){
 document.addEventListener('error', function(e){ var el=e.target; if(el && el.hasAttribute && el.hasAttribute('data-fallback')) el.remove(); }, true);
 document.addEventListener('submit', function(e){
   var f=e.target.closest('[data-form]'); if(!f) return; e.preventDefault();
-  if(f.dataset.form==='fincode'){ var code=$('#fcode').value; if(!code){ $('#fcode').focus(); return; } unlockFinance(code).catch(function(){ $('#fcerr').textContent=F('Код буруу байна.','That code is not right.'); $('#fcode').value=''; $('#fcode').focus(); }); return; }
+  if(f.dataset.form==='fincode'){ var code=$('#fcode').value; if(!code){ $('#fcode').focus(); return; } unlockFinance(code).catch(function(e){ var m=String(e&&e.message||'');
+    if(m==='confirm'){ render(); setTimeout(function(){ var x=$('#fcode'); if(x) x.focus(); },30); return; }
+    var msg=m==='mismatch'?F('Хоёр код таарсангүй. Дахин эхэлнэ үү.','The two codes did not match. Start again.'):m==='denied'?F('Энэ хуудсан дээр санхүү харах эрх танд алга. Эзэмшигч таныг Editor болгох хэрэгтэй.','You cannot read finance on this page. The owner needs to make you an Editor.'):m==='offline'?F('Санхүү энд нээгдэхгүй.','Finance does not open here.'):F('Код буруу байна.','That code is not right.');
+    if(m==='mismatch') render(); var er=$('#fcerr'); if(er) er.textContent=msg; var x=$('#fcode'); if(x){ x.value=''; x.focus(); } }); return; }
   if(f.dataset.form==='studio'){ var pw=$('#spw').value; if(!pw){ $('#spw').focus(); return; } $('#lerr').textContent=''; studioLogin(pw).catch(function(){ $('#lerr').textContent=L('That password is not right.'); }); return; }
   if(f.dataset.form==='ann'){ var ti=$('#at').value.trim(), tx=$('#ax').value.trim(); if(!ti){ $('#aerr').textContent=L('Give it a title.'); $('#at').focus(); return; }
     add('ann',{id:newId('a'), by:S.me, date:iso(TODAY), title:ti, text:tx, aud:S.aud, seen:{}}); render(); toast(L('Announced. It shows at the top of everyone\'s page.')); return; }

@@ -698,3 +698,30 @@ button.mini:hover{background:var(--surface-2)}
 @media (max-width:860px){.fin-stats{grid-template-columns:1fr 1fr}.fin-grid{grid-template-columns:1fr}.plan-grid,.plan-grid.wide{grid-template-columns:1fr 1fr}.bonus{grid-template-columns:1fr 1fr}.staff-r{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.two{grid-template-columns:1fr}.fin-stats .stat b{font-size:26px}.rep .bar-col{display:none}}
 .paytab td:first-child{min-width:150px}
+
+/* ---------- finance upload ---------- */
+.dropz{margin-top:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:40px 24px;border:2px dashed var(--line-strong,var(--line));border-radius:24px;background:var(--surface);cursor:pointer;transition:border-color .2s,background .2s,transform .35s var(--spring)}
+.dropz:hover,.dropz:focus-within{border-color:var(--ink)}
+.dropz.over{border-color:var(--red);background:var(--red-soft,var(--surface-2));transform:scale(1.01)}
+.dropz b{font-size:18px}
+.dropz .muted{max-width:520px;font-size:14px}
+.dz-ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--surface-2);box-shadow:var(--soft-out,none)}
+.dz-ic svg{width:26px;height:26px}
+.dropz.over .dz-ic{border-radius:50%;background:var(--red);color:#fff}
+.fup-busy{display:flex;align-items:center;gap:12px;margin-top:16px;font-weight:600}
+.loader.sm{width:22px;height:22px}
+.fup-sum{position:sticky;top:76px;z-index:3;display:flex;align-items:center;gap:10px;margin-top:20px;padding:14px 16px}
+.fup-sum>div{flex:1;display:flex;flex-direction:column;gap:2px}
+.fup-list{margin-top:12px}
+.fup-r{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border-bottom:1px solid var(--line)}
+.fup-r:last-child{border-bottom:0}
+.fup-r.dup{opacity:.5}
+.fup-r.cov .rw-m b{color:var(--muted)}
+.fup-r input[type=checkbox]{width:18px;height:18px;accent-color:var(--red);flex:none}
+.fup-d{width:64px;white-space:nowrap;flex:none;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.fup-r .rw-m{flex:1;min-width:0}
+.fup-r .rw-m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fup-r .fup-c{width:220px;flex:none}
+.fup-c.unsure{border-color:var(--warn)}
+.fup-rc select{max-width:280px}
+@media (max-width:720px){.fup-r{flex-wrap:wrap}.fup-c{width:100%;order:5}.fup-sum{top:8px}}
