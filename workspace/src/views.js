@@ -52,6 +52,7 @@ function weekDays(off){ var out=[]; var s=d(off||0); var mon=new Date(s); mon.se
 function render(){
   document.body.classList.toggle('dark', S.dark);
   var root=$('#root');
+  if(S.mode==='setup'){ root.innerHTML='<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'; return; }
   if(S.mode==='login'){ root.innerHTML=vLogin(); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
   if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ root.innerHTML=vLoading(); renderModal(); renderPalette(); return; }
   if(!S.me){ root.innerHTML = S.people.length ? vPick() : vSetup(); renderModal(); renderPalette(); return; }

@@ -530,10 +530,6 @@ body.dark img.sample{filter:grayscale(1) contrast(.6) brightness(.8);opacity:.7}
 .person{background:var(--bg);border:0;box-shadow:var(--soft-up-lg);transition:transform .45s var(--spring-fast),box-shadow .3s}
 .person:hover{transform:translateY(-4px);box-shadow:var(--soft-up-lg);border:0}
 .person:active{transform:scale(.98);box-shadow:var(--soft-in)}
-/* expressive "cookie" avatar shape on the first page */
-.person .av-lg{position:relative;isolation:isolate;background:transparent!important;border-radius:0;box-shadow:none}
-.person .av-lg::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--c);-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M100.00%2050.00%20L99.82%2051.74%20L99.31%2053.45%20L98.50%2055.10%20L97.46%2056.67%20L96.29%2058.16%20L95.07%2059.58%20L93.89%2060.94%20L92.85%2062.29%20L91.99%2063.64%20L91.35%2065.05%20L90.93%2066.54%20L90.72%2068.13%20L90.66%2069.83%20L90.68%2071.63%20L90.70%2073.50%20L90.64%2075.40%20L90.43%2077.27%20L89.99%2079.05%20L89.28%2080.69%20L88.30%2082.14%20L87.05%2083.36%20L85.55%2084.33%20L83.87%2085.08%20L82.07%2085.62%20L80.21%2086.00%20L78.37%2086.31%20L76.59%2086.60%20L74.92%2086.95%20L73.39%2087.44%20L72.00%2088.11%20L70.73%2088.98%20L69.54%2090.06%20L68.40%2091.33%20L67.26%2092.72%20L66.07%2094.17%20L64.81%2095.58%20L63.44%2096.87%20L61.96%2097.96%20L60.37%2098.76%20L58.68%2099.24%20L56.94%2099.37%20L55.17%2099.16%20L53.40%2098.64%20L51.67%2097.90%20L50.00%2097.00%20L48.39%2096.04%20L46.84%2095.13%20L45.34%2094.33%20L43.86%2093.72%20L42.36%2093.33%20L40.82%2093.18%20L39.22%2093.25%20L37.53%2093.48%20L35.76%2093.82%20L33.93%2094.17%20L32.05%2094.44%20L30.17%2094.55%20L28.33%2094.42%20L26.60%2094.02%20L25.00%2093.30%20L23.58%2092.28%20L22.36%2090.98%20L21.34%2089.45%20L20.49%2087.77%20L19.79%2086.00%20L19.17%2084.24%20L18.58%2082.54%20L17.94%2080.96%20L17.19%2079.54%20L16.29%2078.28%20L15.21%2077.18%20L13.94%2076.20%20L12.50%2075.30%20L10.93%2074.41%20L9.30%2073.50%20L7.68%2072.50%20L6.17%2071.38%20L4.85%2070.10%20L3.78%2068.68%20L3.02%2067.10%20L2.59%2065.41%20L2.49%2063.62%20L2.69%2061.80%20L3.12%2059.96%20L3.71%2058.16%20L4.38%2056.41%20L5.01%2054.73%20L5.54%2053.11%20L5.88%2051.54%20L6.00%2050.00%20L5.88%2048.46%20L5.54%2046.89%20L5.01%2045.27%20L4.38%2043.59%20L3.71%2041.84%20L3.12%2040.04%20L2.69%2038.20%20L2.49%2036.38%20L2.59%2034.59%20L3.02%2032.90%20L3.78%2031.32%20L4.85%2029.90%20L6.17%2028.62%20L7.68%2027.50%20L9.30%2026.50%20L10.93%2025.59%20L12.50%2024.70%20L13.94%2023.80%20L15.21%2022.82%20L16.29%2021.72%20L17.19%2020.46%20L17.94%2019.04%20L18.58%2017.46%20L19.17%2015.76%20L19.79%2014.00%20L20.49%2012.23%20L21.34%2010.55%20L22.36%209.02%20L23.58%207.72%20L25.00%206.70%20L26.60%205.98%20L28.33%205.58%20L30.17%205.45%20L32.05%205.56%20L33.93%205.83%20L35.76%206.18%20L37.53%206.52%20L39.22%206.75%20L40.82%206.82%20L42.36%206.67%20L43.86%206.28%20L45.34%205.67%20L46.84%204.87%20L48.39%203.96%20L50.00%203.00%20L51.67%202.10%20L53.40%201.36%20L55.17%200.84%20L56.94%200.63%20L58.68%200.76%20L60.37%201.24%20L61.96%202.04%20L63.44%203.13%20L64.81%204.42%20L66.07%205.83%20L67.26%207.28%20L68.40%208.67%20L69.54%209.94%20L70.73%2011.02%20L72.00%2011.89%20L73.39%2012.56%20L74.92%2013.05%20L76.59%2013.40%20L78.37%2013.69%20L80.21%2014.00%20L82.07%2014.38%20L83.87%2014.92%20L85.55%2015.67%20L87.05%2016.64%20L88.30%2017.86%20L89.28%2019.31%20L89.99%2020.95%20L90.43%2022.73%20L90.64%2024.60%20L90.70%2026.50%20L90.68%2028.37%20L90.66%2030.17%20L90.72%2031.87%20L90.93%2033.46%20L91.35%2034.95%20L91.99%2036.36%20L92.85%2037.71%20L93.89%2039.06%20L95.07%2040.42%20L96.29%2041.84%20L97.46%2043.33%20L98.50%2044.90%20L99.31%2046.55%20L99.82%2048.26Z%22/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M100.00%2050.00%20L99.82%2051.74%20L99.31%2053.45%20L98.50%2055.10%20L97.46%2056.67%20L96.29%2058.16%20L95.07%2059.58%20L93.89%2060.94%20L92.85%2062.29%20L91.99%2063.64%20L91.35%2065.05%20L90.93%2066.54%20L90.72%2068.13%20L90.66%2069.83%20L90.68%2071.63%20L90.70%2073.50%20L90.64%2075.40%20L90.43%2077.27%20L89.99%2079.05%20L89.28%2080.69%20L88.30%2082.14%20L87.05%2083.36%20L85.55%2084.33%20L83.87%2085.08%20L82.07%2085.62%20L80.21%2086.00%20L78.37%2086.31%20L76.59%2086.60%20L74.92%2086.95%20L73.39%2087.44%20L72.00%2088.11%20L70.73%2088.98%20L69.54%2090.06%20L68.40%2091.33%20L67.26%2092.72%20L66.07%2094.17%20L64.81%2095.58%20L63.44%2096.87%20L61.96%2097.96%20L60.37%2098.76%20L58.68%2099.24%20L56.94%2099.37%20L55.17%2099.16%20L53.40%2098.64%20L51.67%2097.90%20L50.00%2097.00%20L48.39%2096.04%20L46.84%2095.13%20L45.34%2094.33%20L43.86%2093.72%20L42.36%2093.33%20L40.82%2093.18%20L39.22%2093.25%20L37.53%2093.48%20L35.76%2093.82%20L33.93%2094.17%20L32.05%2094.44%20L30.17%2094.55%20L28.33%2094.42%20L26.60%2094.02%20L25.00%2093.30%20L23.58%2092.28%20L22.36%2090.98%20L21.34%2089.45%20L20.49%2087.77%20L19.79%2086.00%20L19.17%2084.24%20L18.58%2082.54%20L17.94%2080.96%20L17.19%2079.54%20L16.29%2078.28%20L15.21%2077.18%20L13.94%2076.20%20L12.50%2075.30%20L10.93%2074.41%20L9.30%2073.50%20L7.68%2072.50%20L6.17%2071.38%20L4.85%2070.10%20L3.78%2068.68%20L3.02%2067.10%20L2.59%2065.41%20L2.49%2063.62%20L2.69%2061.80%20L3.12%2059.96%20L3.71%2058.16%20L4.38%2056.41%20L5.01%2054.73%20L5.54%2053.11%20L5.88%2051.54%20L6.00%2050.00%20L5.88%2048.46%20L5.54%2046.89%20L5.01%2045.27%20L4.38%2043.59%20L3.71%2041.84%20L3.12%2040.04%20L2.69%2038.20%20L2.49%2036.38%20L2.59%2034.59%20L3.02%2032.90%20L3.78%2031.32%20L4.85%2029.90%20L6.17%2028.62%20L7.68%2027.50%20L9.30%2026.50%20L10.93%2025.59%20L12.50%2024.70%20L13.94%2023.80%20L15.21%2022.82%20L16.29%2021.72%20L17.19%2020.46%20L17.94%2019.04%20L18.58%2017.46%20L19.17%2015.76%20L19.79%2014.00%20L20.49%2012.23%20L21.34%2010.55%20L22.36%209.02%20L23.58%207.72%20L25.00%206.70%20L26.60%205.98%20L28.33%205.58%20L30.17%205.45%20L32.05%205.56%20L33.93%205.83%20L35.76%206.18%20L37.53%206.52%20L39.22%206.75%20L40.82%206.82%20L42.36%206.67%20L43.86%206.28%20L45.34%205.67%20L46.84%204.87%20L48.39%203.96%20L50.00%203.00%20L51.67%202.10%20L53.40%201.36%20L55.17%200.84%20L56.94%200.63%20L58.68%200.76%20L60.37%201.24%20L61.96%202.04%20L63.44%203.13%20L64.81%204.42%20L66.07%205.83%20L67.26%207.28%20L68.40%208.67%20L69.54%209.94%20L70.73%2011.02%20L72.00%2011.89%20L73.39%2012.56%20L74.92%2013.05%20L76.59%2013.40%20L78.37%2013.69%20L80.21%2014.00%20L82.07%2014.38%20L83.87%2014.92%20L85.55%2015.67%20L87.05%2016.64%20L88.30%2017.86%20L89.28%2019.31%20L89.99%2020.95%20L90.43%2022.73%20L90.64%2024.60%20L90.70%2026.50%20L90.68%2028.37%20L90.66%2030.17%20L90.72%2031.87%20L90.93%2033.46%20L91.35%2034.95%20L91.99%2036.36%20L92.85%2037.71%20L93.89%2039.06%20L95.07%2040.42%20L96.29%2041.84%20L97.46%2043.33%20L98.50%2044.90%20L99.31%2046.55%20L99.82%2048.26Z%22/%3E%3C/svg%3E") center/contain no-repeat;transition:transform .7s var(--spring-slow)}
-.person:hover .av-lg::before{transform:rotate(60deg) scale(1.06)}
 .mark{background:var(--bg);border:0;box-shadow:var(--soft-up)}
 
 /* ---- neumorphic switch (theme) ---- */
@@ -597,7 +593,7 @@ body.dark img.sample{filter:grayscale(1) contrast(.6) brightness(.8);opacity:.7}
 .wall .wimg{aspect-ratio:1/1}
 .rows{border:0;box-shadow:var(--sh-1),0 0 0 1px var(--line)}
 @media (max-width:640px){.fab-w{right:16px;bottom:16px}.page{padding:32px 16px 140px}.sec{margin-top:56px}}
-@media (prefers-reduced-motion:reduce){.person:hover .av-lg::before{transform:none}}
+
 /* v7: questions, delivery, project basics, PIN */
 .thread{display:flex;flex-direction:column;gap:12px;max-height:46vh;overflow:auto;padding:4px 2px}
 .msg{display:flex;gap:10px;align-items:flex-end;max-width:85%}
@@ -614,6 +610,10 @@ body.dark img.sample{filter:grayscale(1) contrast(.6) brightness(.8);opacity:.7}
 @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 @media (max-width:640px){.pinfo{grid-template-columns:1fr}.modal [style*="grid-template-columns:repeat(2"]{grid-template-columns:1fr!important}}
 
+/* expressive arch avatar (M3 shape): rounded top, flat base; morphs to a circle on hover */
+.person .av-lg{border-radius:50% 50% 14px 14px;box-shadow:inset 0 -6px 12px rgba(0,0,0,.12);transition:border-radius .6s var(--spring-slow),transform .6s var(--spring-slow)}
+.person:hover .av-lg{border-radius:50%;transform:scale(1.04)}
+
 </style>
 </head>
 <body>
@@ -624,6 +624,9 @@ body.dark img.sample{filter:grayscale(1) contrast(.6) brightness(.8);opacity:.7}
 <script>
 (function(){
 'use strict';
+window.BO_HOSTED=true;
+function sampleSet(){ return {projects:[],tasks:[],ann:[],events:[]}; }
+function startDemo(){ S.mode='setup'; render(); }
 // ================= Language: Mongolian by default, English on request =================
 var LANG = (function(){ try { return localStorage.getItem('bo.lang') || 'mn'; } catch(e){ return 'mn'; } })();
 var MN = {
@@ -860,6 +863,7 @@ var MN = {
   "month":"Сар",
   "Every week":"Долоо хоног бүр",
   "Every month":"Сар бүр",
+  "Almost ready":"Бараг бэлэн","BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.":"BrandOn Studio мэдээллийн сантайгаа хараахан холбогдоогүй байна. SETUP.md-ийн дагуу тохируулсны дараа студи энд нээгдэнэ.",
   'Removed {name}':'{name}-г хаслаа', 'Write a name.':'Нэр бичнэ үү.', 'Reset sign-in':'Нэвтрэлтийг цэвэрлэх'
 };
 function L(en, vars){
@@ -873,21 +877,6 @@ var MON_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','D
 function dow(x){ return (LANG==='mn'?DOW_MN:DOW_EN)[x.getDay()]; }
 function dowLong(x){ return (LANG==='mn'?DOWL_MN:DOWL_EN)[x.getDay()]; }
 function md(x){ return LANG==='mn' ? (x.getMonth()+1)+'/'+x.getDate() : MON_EN[x.getMonth()]+' '+x.getDate(); }
-
-// Sample artwork for demo mode, drawn as SVG
-function svg(w,h,body){ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">'+body+'</svg>'); }
-var ART = {
-  logo: svg(1200,800,'<rect width="1200" height="800" fill="#F4F1EA"/><g font-family="Arial Black,Arial" font-weight="900" text-anchor="middle"><g transform="translate(220,360)"><circle r="130" fill="#2B6E5B"/><text y="48" font-size="150" fill="#F4F1EA">P</text></g><g transform="translate(600,360)"><rect x="-130" y="-130" width="260" height="260" rx="60" fill="#E2573B"/><text y="48" font-size="150" fill="#fff">P</text></g><g transform="translate(980,360)"><path d="M-120 130V-130h120a100 100 0 010 200h-120" fill="none" stroke="#1B1D22" stroke-width="44"/></g><text x="220" y="600" font-size="34" fill="#1B1D22">A</text><text x="600" y="600" font-size="34" fill="#1B1D22">B</text><text x="980" y="600" font-size="34" fill="#1B1D22">C</text></g>'),
-  kv: svg(1200,1500,'<rect width="1200" height="1500" fill="#7A1F2B"/><circle cx="600" cy="620" r="360" fill="#9C2A38"/><circle cx="600" cy="620" r="250" fill="#C9A44C"/><g fill="#F6E7C8" font-family="Arial Black,Arial" font-weight="900" text-anchor="middle"><text x="600" y="1080" font-size="92">ХҮНД БАРААГ</text><text x="600" y="1190" font-size="92">ХӨНГӨН ЗАХИАЛ</text><text x="600" y="1320" font-size="38" font-weight="400" font-family="Arial">Цагаан сар 2027</text></g>'),
-  posts: svg(1200,800,'<rect width="1200" height="800" fill="#EEF0EA"/><g font-family="Arial Black,Arial" font-weight="900"><rect x="60" y="60" width="340" height="340" rx="24" fill="#3D7A3A"/><text x="230" y="250" text-anchor="middle" font-size="44" fill="#fff">Шинэ талх</text><rect x="430" y="60" width="340" height="340" rx="24" fill="#F2C14E"/><circle cx="600" cy="230" r="110" fill="#E58B3A"/><rect x="800" y="60" width="340" height="340" rx="24" fill="#1F3D1E"/><text x="970" y="250" text-anchor="middle" font-size="40" fill="#F2C14E">-30%</text><rect x="60" y="430" width="340" height="310" rx="24" fill="#F2C14E"/><rect x="430" y="430" width="340" height="310" rx="24" fill="#3D7A3A"/><text x="600" y="600" text-anchor="middle" font-size="40" fill="#fff">Өглөөний</text><rect x="800" y="430" width="340" height="310" rx="24" fill="#E58B3A"/></g>'),
-  puree: svg(1200,800,'<rect width="1200" height="800" fill="#FBF6EE"/><g font-family="Arial Black,Arial" font-weight="900" text-anchor="middle">'+[['#8DB580','#F3E3C3',220,'A'],['#E8A87C','#FFF1E0',600,'B'],['#C9B6E4','#F6F0FF',980,'C']].map(function(c){ return '<g transform="translate('+c[2]+',360)"><circle r="150" fill="'+c[1]+'"/><circle r="110" fill="'+c[0]+'"/><text y="22" font-size="64" fill="#fff">mam</text><text y="250" font-size="34" fill="#555">'+c[3]+'</text></g>'; }).join('')+'</g>'),
-  edit: svg(1600,900,'<rect width="1600" height="900" fill="#151517"/><rect width="1600" height="900" fill="#3A1B20" opacity=".6"/><circle cx="800" cy="450" r="90" fill="#fff" opacity=".9"/><path d="M775 405l70 45-70 45z" fill="#151517"/><text x="60" y="840" font-size="34" font-family="Arial" fill="#fff">Teaser 15s, rough cut</text>'),
-  menu: svg(1200,1500,'<rect width="1200" height="1500" fill="#5B4636"/><rect x="120" y="120" width="960" height="1260" fill="#F2E6D8"/><text x="600" y="330" text-anchor="middle" font-family="Georgia,serif" font-size="110" fill="#5B4636">NOMAD</text><text x="600" y="410" text-anchor="middle" font-family="Arial" font-weight="700" letter-spacing="14" font-size="34" fill="#A0826A">COFFEE</text><g fill="#5B4636" font-family="Arial" font-size="36">'+[0,1,2,3,4].map(function(i){ return '<rect x="220" y="'+(560+i*130)+'" width="'+(420-i*30)+'" height="22" rx="11" opacity=".75"/><rect x="860" y="'+(560+i*130)+'" width="120" height="22" rx="11" opacity=".45"/>'; }).join('')+'</g><circle cx="600" cy="1240" r="60" fill="none" stroke="#5B4636" stroke-width="10"/>'),
-  pack: svg(1200,1500,'<rect width="1200" height="1500" fill="#FCE9D6"/><path d="M380 260h440l60 120v900a60 60 0 0 1-60 60H380a60 60 0 0 1-60-60V380z" fill="#8DB580"/><rect x="380" y="200" width="440" height="80" rx="20" fill="#E08A1E"/><circle cx="600" cy="760" r="170" fill="#FBF6EE"/><text x="600" y="790" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="96" fill="#8DB580">mam</text><text x="600" y="1080" text-anchor="middle" font-family="Arial" font-weight="700" font-size="44" fill="#FBF6EE">ЛООЛЬ + АЛИМ</text>'),
-  sign: svg(1200,1500,'<rect width="1200" height="1500" fill="#1C1C1C"/><rect x="0" y="980" width="1200" height="520" fill="#2B6E5B"/><rect x="250" y="300" width="700" height="700" rx="110" fill="#E8553B"/><text x="600" y="840" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="520" fill="#fff">P</text><text x="600" y="1220" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" letter-spacing="20" font-size="90" fill="#F4F1EA">PARADOX</text>'),
-  school: svg(1200,1500,'<rect width="1200" height="1500" fill="#F3F5FA"/><circle cx="600" cy="640" r="330" fill="#1F3F7A"/><text x="600" y="760" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="330" fill="#F3F5FA">III</text><path d="M330 1060h540" stroke="#C9A44C" stroke-width="16"/><text x="600" y="1180" text-anchor="middle" font-family="Arial" font-weight="700" letter-spacing="8" font-size="48" fill="#1F3F7A">ОРХОН АЙМАГ</text>'),
-  reel: svg(1200,1500,'<rect width="1200" height="1500" fill="#3D7A3A"/><circle cx="600" cy="660" r="300" fill="#E8A23B"/><path d="M470 560c0-70 60-110 130-60 70-50 130-10 130 60 0 100-130 170-130 170S470 660 470 560z" fill="#fff"/><text x="600" y="1150" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="120" fill="#F2D2A0">HAIRAN</text><circle cx="1040" cy="160" r="70" fill="rgba(255,255,255,.9)"/><path d="M1020 125l55 35-55 35z" fill="#3D7A3A"/>')
-};
 
 // ================= Dates =================
 var TODAY = (function(){ var x=new Date(); x.setHours(0,0,0,0); return x; })();
@@ -997,6 +986,7 @@ function maybeSeed(){
 function boot(){
   render();
   if(CFG.supabaseUrl && window.supabase){ bootHosted(); return; }
+  if(window.BO_HOSTED){ S.mode='setup'; render(); return; }
   var c=window.claude;
   if(!c || typeof c.use!=='function'){ startDemo(); return; }
   Promise.all([c.use('db'), c.use('user')]).then(function(r){
@@ -1009,65 +999,6 @@ function boot(){
       startLive();
     });
   }).catch(startDemo);
-}
-
-// ================= Sample data (demo, and the starter set in live) =================
-function sampleSet(){
-  var tasks=[];
-  function T(o){ o.id=o.id||('s_t'+(tasks.length+1)); o.versions=o.versions||[]; o.by=o.by||'suvdaa'; o.created=o.created||iso(d(-10)); o.brief=o.brief||''; o.shoot=o.shoot||''; o.sample=true; tasks.push(o); }
-  function V(files,note,by,off,comments,decision){ return {files:files, note:note||'', by:by, date:iso(d(off||0)), comments:comments||[], decision:decision||null, decidedAt:decision?iso(d((off||0)+1)):null}; }
-  function img(k,name){ return {kind:'image', url:ART[k], name:name}; }
-  var projects=[
-    {id:'s_paradox', pm:'suvdaa', client:'Paradox Food Hall', name:'Brand identity', color:'#2B6E5B'},
-    {id:'s_puree', pm:'suvdaa', client:'Kids puree', name:'Logo and packaging', color:'#E08A1E'},
-    {id:'s_tsagaan', pm:'reka', client:'Tsagaan Sar 2027', name:'Campaign TVC and social', color:'#7A1F2B'},
-    {id:'s_hairan', pm:'reka', client:'Hairan', name:'November social', color:'#3D7A3A'},
-    {id:'s_nomad', pm:'suvdaa', client:'Nomad Coffee', name:'Menu redesign', color:'#5B4636'},
-    {id:'s_iii', pm:'reka', client:'Orkhon III school', name:'Logo identity', color:'#1F3F7A'}
-  ];
-  projects.forEach(function(p){ p.sample=true; p.created=iso(d(-20)); });
-  T({project:'s_paradox', title:'Logo directions', who:'tulgaa', due:iso(d(0)), status:'doing', brief:'Food hall for a young crowd. Bold, playful, must work on signage.',
-    versions:[V([img('logo','paradox-logo-v1.png')],'Three directions: A friendly round, B bold square, C minimal line.','tulgaa',-3,[{by:'suvdaa',text:'B is the one. Make the P more open.',x:50,y:44,file:0},{by:'suvdaa',text:'Test B small, like a favicon.',x:52,y:80,file:0}],'changes')]});
-  T({project:'s_paradox', title:'Signage mockup', who:'tulgaa', due:iso(d(-9)), status:'done', versions:[V([img('sign','paradox-sign.png')],'Night view of the entrance sign.','tulgaa',-10,[],'approved')]});
-  T({project:'s_paradox', title:'Brandbook: color and type pages', who:'khongoroo', due:iso(d(4)), status:'todo', brief:'After logo approval. Use the client color brief.'});
-  T({project:'s_puree', title:'Logo color variations', who:'khongoroo', due:iso(d(1)), status:'review', brief:'Softer, more natural colors. Friendly for kids.',
-    versions:[V([img('puree','puree-colors-v2.png')],'Three softer palettes after the client said v1 felt too loud. I like A.','khongoroo',0)]});
-  T({project:'s_puree', title:'Pouch packaging mockup', who:'tulgaa', due:iso(d(5)), status:'todo'});
-  T({project:'s_puree', title:'Pouch front, first pass', who:'khongoroo', due:iso(d(-4)), status:'done', versions:[V([img('pack','pouch-front.png')],'','khongoroo',-5,[],'approved')]});
-  T({project:'s_hairan', title:'Week 4 posts (6)', who:'khongoroo', due:iso(d(-1)), status:'review', by:'reka', versions:[V([img('posts','hairan-week4.png')],'Six posts for week 4. The discount post is the Friday one.','khongoroo',-1)]});
-  T({project:'s_hairan', title:'Bakery reels x3', who:'tumku', due:iso(d(3)), status:'todo', by:'reka'});
-  T({project:'s_hairan', title:'Reel: morning bake', who:'tumku', due:iso(d(-3)), status:'done', by:'reka', versions:[V([img('reel','hairan-reel.png')],'','tumku',-3,[],'approved')]});
-  T({project:'s_tsagaan', title:'TVC shoot: family table', who:'jerry', due:iso(d(2)), status:'todo', by:'reka', shoot:'Studio 2, Sukhbaatar'});
-  T({project:'s_tsagaan', title:'Campaign key visual', who:'tulgaa', due:iso(d(-1)), status:'review', by:'reka', versions:[V([img('kv','tsagaan-kv.png')],'Poster ratio 4:5. The gold circle reads as the table from above.','tulgaa',0)]});
-  T({project:'s_tsagaan', title:'Teaser edit 15s', who:'tumku', due:iso(d(-2)), status:'review', by:'reka', versions:[V([img('edit','teaser-poster.png')],'Rough cut. Music is temp.','tumku',0)]});
-  T({project:'s_nomad', title:'Menu cover', who:'tulgaa', due:iso(d(-6)), status:'done', versions:[V([img('menu','nomad-menu.png')],'','tulgaa',-6,[],'approved')]});
-  T({project:'s_nomad', title:'Menu inside spread', who:'khongoroo', due:iso(d(8)), status:'todo'});
-  T({project:'s_iii', title:'Logo book A4', who:'tulgaa', due:iso(d(-2)), status:'done', by:'reka', versions:[V([img('school','iii-logo.png')],'','tulgaa',-2,[],'approved')]});
-  var ann=[
-    {id:'s_a1', by:'suvdaa', date:iso(d(0)), title:'Бүх ажлаа BrandOn Studio-гоор илгээнэ', text:'Өнөөдрөөс эхлэн дизайн, видеогоо Telegram-аар биш энд Drive холбоосоор илгээж хянуулна. Засвар зураг дээр нь шууд ирнэ.', aud:'all', seen:{}},
-    {id:'s_a2', by:'reka', date:iso(d(-1)), title:'Баасан гарагийн багийн оройн хоол', text:'Баасан 18:00, Цагаан сарын зураг авалтын дараа. Ирж чадахгүй бол Пүрэв гараг гэхэд хэлээрэй.', aud:'all', seen:{khongoroo:true}}
-  ];
-  var events=[
-    {id:'s_e1', date:iso(d(0)), time:'10:00', title:'Долоо хоногийн уулзалт', kind:'meeting', who:'all', place:'Оффис'},
-    {id:'s_e2', date:iso(d(1)), time:'15:00', title:'Paradox: логоны танилцуулга', kind:'meeting', who:['suvdaa','tulgaa'], place:'Paradox оффис'},
-    {id:'s_e3', date:iso(d(1)), time:'', title:'Kids puree: өнгө илгээх', kind:'deadline', who:['khongoroo']},
-    {id:'s_e4', date:iso(d(1)), time:'14:00', title:'Цагаан сар: зураг авалтын жагсаалт', kind:'meeting', who:['reka','jerry','tumku'], place:'Студи'},
-    {id:'s_e5', date:iso(d(3)), time:'', title:'Khongoroo чөлөөтэй', kind:'off', who:['khongoroo']},
-    {id:'s_e6', date:iso(d(2)), time:'18:00', title:'Багийн оройн хоол', kind:'meeting', who:'all', place:'Модерн Номадс'},
-    {id:'s_e7', date:iso(d(-1)), time:'11:00', title:'Hairan: сарын тайлан', kind:'meeting', who:['reka'], place:'Hairan'}
-  ];
-  ann.concat(events).forEach(function(x){ x.sample=true; });
-  return {projects:projects, tasks:tasks, ann:ann, events:events};
-}
-function startDemo(){
-  S.mode='demo'; S.ready=true;
-  S.people=[
-    {id:'suvdaa', name:'Suvdaa', role:'pm', color:'#DA1F34'}, {id:'reka', name:'Reka', role:'pm', color:'#B5532A'},
-    {id:'tulgaa', name:'Tulgaa', role:'designer', color:'#2F5DA8'}, {id:'khongoroo', name:'Khongoroo', role:'designer', color:'#7A4FB0'},
-    {id:'jerry', name:'Jerry', role:'video', color:'#1F7A5A'}, {id:'tumku', name:'Tumku', role:'video', color:'#8A6D00'}
-  ];
-  var s=sampleSet(); S.projects=s.projects; S.tasks=s.tasks; S.ann=s.ann; S.events=s.events;
-  render();
 }
 
 // ================= Lookups =================
@@ -1351,6 +1282,7 @@ function weekDays(off){ var out=[]; var s=d(off||0); var mon=new Date(s); mon.se
 function render(){
   document.body.classList.toggle('dark', S.dark);
   var root=$('#root');
+  if(S.mode==='setup'){ root.innerHTML='<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'; return; }
   if(S.mode==='login'){ root.innerHTML=vLogin(); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
   if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ root.innerHTML=vLoading(); renderModal(); renderPalette(); return; }
   if(!S.me){ root.innerHTML = S.people.length ? vPick() : vSetup(); renderModal(); renderPalette(); return; }

@@ -234,6 +234,7 @@ var MN = {
   "month":"Сар",
   "Every week":"Долоо хоног бүр",
   "Every month":"Сар бүр",
+  "Almost ready":"Бараг бэлэн","BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.":"BrandOn Studio мэдээллийн сантайгаа хараахан холбогдоогүй байна. SETUP.md-ийн дагуу тохируулсны дараа студи энд нээгдэнэ.",
   'Removed {name}':'{name}-г хаслаа', 'Write a name.':'Нэр бичнэ үү.', 'Reset sign-in':'Нэвтрэлтийг цэвэрлэх'
 };
 function L(en, vars){
