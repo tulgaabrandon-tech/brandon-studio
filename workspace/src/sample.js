@@ -49,8 +49,9 @@ function sampleSet(){
 function startDemo(){
   S.mode='demo'; S.ready=true;
   S.people=[
-    {id:'suvdaa', name:'Suvdaa', role:'pm', color:'#DA1F34'}, {id:'reka', name:'Reka', role:'pm', color:'#B5532A'},
-    {id:'tulgaa', name:'Tulgaa', role:'designer', color:'#2F5DA8'}, {id:'khongoroo', name:'Khongoroo', role:'designer', color:'#7A4FB0'},
+    {id:'nomin', name:'Nomin', role:'exec', color:'#141414', finance:true},
+    {id:'suvdaa', name:'Suvdaa', role:'pm', color:'#DA1F34', finance:true}, {id:'reka', name:'Reka', role:'pm', color:'#B5532A'},
+    {id:'tulgaa', name:'Tulgaa', role:'designer', color:'#2F5DA8', finance:true}, {id:'khongoroo', name:'Khongoroo', role:'designer', color:'#7A4FB0'},
     {id:'jerry', name:'Jerry', role:'video', color:'#1F7A5A'}, {id:'tumku', name:'Tumku', role:'video', color:'#8A6D00'}
   ];
   var s=sampleSet(); S.projects=s.projects; S.tasks=s.tasks; S.ann=s.ann; S.events=s.events;

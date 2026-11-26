@@ -23,5 +23,8 @@ var ICON={
   send:ic('<path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>'),
   chat:ic('<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>'),
   download:ic('<path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/>'),
+  lock:ic('<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/>'),
+  up:ic('<path d="M12 19V5M6 11l6-6 6 6"/>'),
+  sheet:ic('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/>'),
   link:ic('<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>')
 };

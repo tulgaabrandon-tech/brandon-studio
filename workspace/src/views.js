@@ -13,7 +13,7 @@ function sentence(t){
   if(t.status==='review') return L('Waiting for {name} to review',{name:pmOf(t).name});
   return L('Approved');
 }
-function home(){ return isPM()?'needs':'home'; }
+function home(){ return isExec()?'dash':isPM()?'needs':'home'; }
 function greeting(){
   var h=new Date().getHours();
   if(h>=5&&h<11) return L('Good morning');
@@ -57,7 +57,9 @@ function render(){
   if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ root.innerHTML=vLoading(); renderModal(); renderPalette(); return; }
   if(!S.me){ root.innerHTML = S.people.length ? vPick() : vSetup(); renderModal(); renderPalette(); return; }
   if(!S.view) S.view=home();
-  if(!isPM() && ['home','review'].indexOf(S.view)<0) S.view='home';
+  var allowed=isExec()?['dash','projects','project','review','finance']:isPM()?null:['home','review','finance'];
+  if(allowed && allowed.indexOf(S.view)<0) S.view=home();
+  if(S.view==='finance' && !hasFinance()) S.view=home();
   if(S.ready && isPM() && !S.recurDone){ S.recurDone=true; setTimeout(runRecurring,400); }
   var entering = S.lastView!==S.view+'|'+S.me; S.lastView=S.view+'|'+S.me;
   if(S.view==='review'){ root.innerHTML=vReview(); renderModal(); renderPalette(); return; }
@@ -66,17 +68,20 @@ function render(){
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
   if(S.slow) h+='<div class="demo-bar warn">'+esc(L("Can't reach the data yet. Check your connection."))+'</div>';
   h+='<header class="topbar"><div class="bar-in"><button class="brand" data-act="go" data-v="'+home()+'" aria-label="BrandOn Studio"><span class="mark">'+LOGO+'</span><b>BrandOn <span>Studio</span></b></button>';
-  if(pm){
-    var n=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===S.me;}).length;
-    var tabs=[['needs',L('Review'),n],['projects',L('Projects'),0],['agency',L('Agency'),0]];
+  var tabs=null;
+  if(pm){ var n=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===S.me;}).length; tabs=[['needs',L('Review'),n],['projects',L('Projects'),0],['agency',L('Agency'),0]]; }
+  else if(isExec()) tabs=[['dash',L('Dashboard'),0],['projects',L('Projects'),0]];
+  else if(hasFinance()) tabs=[['home',L('My work'),0]];
+  if(tabs && hasFinance()) tabs.push(['finance',L('Finance'),0]);
+  if(tabs){
     h+='<nav class="tabs" aria-label="Main">'+tabs.map(function(x){ var cur=S.view===x[0]||(S.view==='project'&&x[0]==='projects'); return '<button data-act="go" data-v="'+x[0]+'"'+(cur?' aria-current="page"':'')+'>'+esc(x[1])+(x[2]?'<span class="count">'+x[2]+'</span>':'')+'</button>'; }).join('')+'</nav>';
   }
   h+='<div class="bar-r"><button class="search" data-act="palette" aria-label="'+esc(L('Search'))+'">'+ICON.search+'<span>'+esc(L('Search or jump to'))+'</span><kbd>'+(IS_MAC?'⌘':'Ctrl')+' K</kbd></button>'+
     '<button class="icon-btn" data-act="switch" title="'+esc(L('Switch person'))+'" aria-label="'+esc(L('Switch person'))+'">'+ICON.swap+'</button>'+
     '<div class="menu-w"><button class="userbtn" data-act="menu" aria-haspopup="true" aria-expanded="'+S.menu+'">'+av(u)+'<span class="hide-s">'+esc(u.name)+'</span>'+ICON.down+'</button>'+(S.menu?vMenu():'')+'</div></div></div></header>';
-  var V={home:vHome, needs:vNeeds, projects:vProjects, project:vProject, agency:vAgency, settings:vSettings};
-  h+='<main class="page'+(entering?' enter':'')+'">'+(V[S.view]||vHome)()+'</main>';
-  if(!S.readonly) h+=fabHtml();
+  var V={home:vHome, needs:vNeeds, projects:vProjects, project:vProject, agency:vAgency, settings:vSettings, finance:vFinance, dash:vDash};
+  h+='<main class="page'+(entering?' enter':'')+(S.view==='finance'?' wide':'')+'">'+(V[S.view]||vHome)()+'</main>';
+  if(!S.readonly) h+=(S.view==='finance'?(FIN.unlocked?'<div class="fab-w"><button class="fab" data-act="ftxnew" aria-label="'+esc(F('Гүйлгээ нэмэх','Add transaction'))+'">'+ICON.plus+'</button></div>':''):(isExec()?'':fabHtml()));
   root.innerHTML=h;
   renderModal(); renderPalette();
 }
@@ -101,12 +106,13 @@ function vMenu(){
 function langSeg(){ return '<div class="seg" role="group" aria-label="'+esc(L('Language'))+'"><button data-act="lang" data-l="mn" aria-pressed="'+(LANG==='mn')+'">Монгол</button><button data-act="lang" data-l="en" aria-pressed="'+(LANG==='en')+'">English</button></div>'; }
 function vLoading(){ return '<div class="login" style="justify-content:center"><div class="login-h"><div class="loader" role="progressbar" aria-label="'+esc(L('Loading'))+'"></div><p class="muted">'+esc(L(S.slow?"Can't reach the data yet. Check your connection.":'Loading'))+'</p></div></div>'; }
 function vPick(){
-  var groups=[['pm','Project managers'],['designer','Designers'],['video','Video team']], k=0;
+  var groups=[['exec','Management'],['pm','Project managers'],['designer','Designers'],['video','Video team']], k=0;
   var grid='<div class="people">'+groups.map(function(g){
     var ps=S.people.filter(function(p){return p.role===g[0];}); if(!ps.length) return '';
     return '<div class="group-l">'+esc(L(g[1]))+'</div>'+ps.map(function(p){
       k++; var load='';
-      if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip red">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
+      if(p.role==='exec'){ load='<span class="chip">'+esc(L('Agency overview'))+'</span>'; }
+      else if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip red">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
       else { var a=active(p.id), ch=S.tasks.filter(function(t){return t.who===p.id&&changesAsked(t);}).length; load='<span class="chip">'+esc(L('{n} active',{n:a}))+'</span>'+(ch?'<span class="chip red">'+esc(L('{n} to fix',{n:ch}))+'</span>':''); }
       return '<button class="person" data-act="pick" data-id="'+esc(p.id)+'">'+av(p,true)+'<div style="min-width:0"><b>'+esc(p.name)+'</b><div class="muted">'+esc(L(ROLES[p.role]))+'</div><div class="load">'+load+'</div></div>'+(k<10?'<kbd>'+k+'</kbd>':'')+'</button>';
     }).join('');
@@ -312,6 +318,27 @@ function wavy(frac, label){
   return '<div class="wavy" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(frac*100)+'" aria-label="'+esc(label)+'"><svg viewBox="0 0 '+w+' 14" preserveAspectRatio="none" aria-hidden="true"><line class="track" x1="'+(fw+8)+'" y1="7" x2="'+w+'" y2="7" stroke-width="4" stroke-linecap="round"/>'+(fw>0?'<clipPath id="wc"><rect x="0" y="0" width="'+fw+'" height="14"/></clipPath><path class="fill" d="'+d+'" fill="none" stroke-width="4" stroke-linecap="round" clip-path="url(#wc)" stroke-dasharray="1000 0"/>':'')+'</svg><b>'+esc(label)+'</b></div>';
 }
 
+// ================= Management dashboard (Nomin) =================
+function vDash(){
+  var act=S.projects.filter(function(p){ return !p.archived && !p.delivered; }), rev=S.tasks.filter(function(t){return t.status==='review';}).length;
+  var late=S.tasks.filter(function(t){return t.status!=='done'&&days(t.due)<0;}).length, st=weekStats();
+  var h='<header><div class="eyebrow">'+esc(today())+'</div><h1 class="display">'+esc(greeting())+', '+esc(me().name)+'<span class="dot">.</span></h1><p class="lede">'+esc(L('Here is how the agency is doing today.'))+'</p></header>';
+  h+=annBlock();
+  h+='<div class="fin-stats">'+statTile(L('Active projects'), String(act.length), '')+statTile(L('Waiting for review'), String(rev), '')+statTile(L('Running late'), String(late), '', late?'neg':'')+statTile(L('Approved this week'), String(st.approved), '', 'ink')+'</div>';
+  var people=S.people.filter(function(p){ return p.role==='designer'||p.role==='video'||p.role==='pm'; });
+  var maxA=Math.max(1,Math.max.apply(null,people.map(function(p){ return p.role==='pm'?S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length:active(p.id); })));
+  h+='<div class="sec"><h3>'+esc(L('Team'))+'</h3><span class="muted">'+esc(L('What everyone is on'))+'</span></div><div class="rows">'+people.map(function(p){
+    var n=p.role==='pm'?S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length:active(p.id);
+    var cur=S.tasks.filter(function(t){ return t.who===p.id&&(t.status==='doing'||t.status==='todo'); }).sort(function(a,b){return rank(a)-rank(b);})[0];
+    return '<div class="rw">'+av(p)+'<span class="rw-m"><b>'+esc(p.name)+'</b><span class="muted">'+esc(p.role==='pm'?L('{n} to review',{n:n}):cur?cur.title+' · '+project(cur.project).client:L('Nothing to do right now. New tasks show up here.'))+'</span></span><div class="load-bar hide-s"><i style="width:'+Math.round(n/maxA*100)+'%"></i></div><span class="chip">'+esc(p.role==='pm'?n:L('{n} active',{n:n}))+'</span></div>';
+  }).join('')+'</div>';
+  if(act.length) h+='<div class="sec"><h3>'+esc(L('Projects'))+'</h3><span class="muted">'+act.length+'</span></div>'+projRows(act);
+  if(hasFinance()) h+='<div class="sec"><h3>'+esc(L('Finance'))+'</h3></div><button class="card fin-link" data-act="go" data-v="finance"><span class="fin-lock">'+ICON.lock+'</span><span class="rw-m"><b>'+esc(L('Open finance'))+'</b><span class="muted">'+esc(L('Money in and out, sales against the plan, payroll'))+'</span></span>'+ICON.arrow+'</button>';
+  h+=agendaBlock();
+  h+=wallBlock();
+  return h;
+}
+
 // ================= Agency (PM) =================
 function vAgency(){
   var h='<header><div class="eyebrow">'+esc(today())+'</div><h1 class="display">'+esc(L('Agency'))+'</h1><p class="lede">'+esc(L('Tell everyone something, and plan the week in one place.'))+'</p></header>';
@@ -334,9 +361,9 @@ function vAgency(){
 function vSettings(){
   var h='<button class="btn ghost sm back" data-act="back">'+ICON.back+esc(L('Back'))+'</button><header><h1 class="display">'+esc(L('Team settings'))+'</h1></header>';
   h+='<div class="sec"><h3>'+esc(L('Team'))+'</h3><span class="muted">'+S.people.length+'</span></div><div class="rows">'+S.people.map(function(p){
-    return '<div class="rw">'+av(p)+'<span class="rw-m"><b>'+esc(p.name)+'</b><span class="muted">'+esc(L(ROLES[p.role]))+(tgOn()?' · '+esc(p.tgChat?L('Telegram connected'):L('Telegram not connected')):'')+(S.hosted?' · '+esc(p.pinHash?L('PIN set'):L('No PIN yet')):'')+'</span></span>'+(S.readonly?'':(S.hosted&&p.pinHash?'<button class="btn ghost sm" data-act="resetpin" data-id="'+esc(p.id)+'">'+esc(L('Reset PIN'))+'</button>':'')+(p.id===S.me?'':'<button class="btn ghost sm" data-act="rmperson" data-id="'+esc(p.id)+'">'+esc(L('Remove'))+'</button>'))+'</div>';
+    return '<div class="rw">'+av(p)+'<span class="rw-m"><b>'+esc(p.name)+'</b><span class="muted">'+esc(L(ROLES[p.role]))+(tgOn()?' · '+esc(p.tgChat?L('Telegram connected'):L('Telegram not connected')):'')+(S.hosted?' · '+esc(p.pinHash?L('PIN set'):L('No PIN yet')):'')+'</span></span>'+(hasFinance()&&!S.readonly?'<button class="btn ghost sm'+(p.finance?' on':'')+'" data-act="finaccess" data-id="'+esc(p.id)+'" aria-pressed="'+(!!p.finance)+'">'+ICON.lock+esc(p.finance?L('Finance access'):L('No finance'))+'</button>':'')+(S.readonly?'':(S.hosted&&p.pinHash?'<button class="btn ghost sm" data-act="resetpin" data-id="'+esc(p.id)+'">'+esc(L('Reset PIN'))+'</button>':'')+(p.id===S.me?'':'<button class="btn ghost sm" data-act="rmperson" data-id="'+esc(p.id)+'">'+esc(L('Remove'))+'</button>'))+'</div>';
   }).join('')+'</div>';
-  if(!S.readonly) h+='<form data-form="person" class="card addp"><b>'+esc(L('Add a person'))+'</b><div class="addp-r"><label class="sr" for="np">'+esc(L('Name'))+'</label><input class="input" id="np" placeholder="'+esc(L('Name'))+'"><div class="chips" role="group" aria-label="'+esc(L('Role'))+'">'+['designer','video','pm'].map(function(r){ return '<button type="button" class="pick" data-act="prole" data-r="'+r+'" aria-pressed="'+((S.prole||'designer')===r)+'">'+esc(L(ROLES[r]))+'</button>'; }).join('')+'</div><button class="btn primary" type="submit">'+ICON.plus+esc(L('Add a person'))+'</button></div><p class="err" id="perr" role="alert"></p></form>';
+  if(!S.readonly) h+='<form data-form="person" class="card addp"><b>'+esc(L('Add a person'))+'</b><div class="addp-r"><label class="sr" for="np">'+esc(L('Name'))+'</label><input class="input" id="np" placeholder="'+esc(L('Name'))+'"><div class="chips" role="group" aria-label="'+esc(L('Role'))+'">'+['designer','video','pm','exec'].map(function(r){ return '<button type="button" class="pick" data-act="prole" data-r="'+r+'" aria-pressed="'+((S.prole||'designer')===r)+'">'+esc(L(ROLES[r]))+'</button>'; }).join('')+'</div><button class="btn primary" type="submit">'+ICON.plus+esc(L('Add a person'))+'</button></div><p class="err" id="perr" role="alert"></p></form>';
   var nSample=['projects','tasks','ann','events'].reduce(function(n,c){ return n+S[c].filter(function(x){return x.sample;}).length; },0);
   if(nSample && !S.readonly) h+='<div class="sec"><h3>'+esc(L('Sample data'))+'</h3></div><div class="card addp"><p style="margin:0">'+esc(L('The tool came with {n} sample items so you can see how it feels. Clear them when the team starts for real.',{n:nSample}))+'</p><div><button class="btn" data-act="clearsample">'+ICON.x+esc(L('Clear sample data'))+'</button></div></div>';
   h+='<div class="sec"><h3>'+esc(L('Backup'))+'</h3></div><div class="card addp"><p style="margin:0">'+esc(L('Download every task as a spreadsheet. Do it once a month and keep it in Drive.'))+'</p><div><button class="btn" data-act="export">'+ICON.download+esc(L('Export to spreadsheet'))+'</button></div></div>';
@@ -357,6 +384,7 @@ function palItems(){
     {g:'Actions', icon:ICON.swap, label:L('Switch person'), run:'switch'}
   ].filter(Boolean);
   if(isPM()) [['needs','Review'],['projects','Projects'],['agency','Agency']].forEach(function(x){ acts.push({g:'Go to', icon:ICON.arrow, label:L(x[1]), run:'go', arg:x[0]}); });
+  if(hasFinance()) acts.push({g:'Go to', icon:ICON.lock, label:L('Finance'), run:'go', arg:'finance'});
   acts.forEach(function(a){ if(m(a.label)) out.push(a); });
   var tasks=S.tasks.filter(function(t){ return (isPM()||t.who===S.me) && (m(t.title)||m(project(t.project).client)); }).slice(0,8);
   tasks.forEach(function(t){ out.push({g:'Tasks', icon:'<span class="pdot" style="background:'+esc(project(t.project).color)+'"></span>', label:t.title, sub:project(t.project).client+' · '+L(STATUS[t.status]), run:t.versions.length?'openreview':'info', arg:t.id}); });

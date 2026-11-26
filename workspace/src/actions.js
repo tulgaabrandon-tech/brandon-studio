@@ -55,6 +55,7 @@ function renderModal(){
       '<p class="err" id="perr2" role="alert"></p><div class="m-a">'+(md.id?'<button class="btn ghost" data-act="rmproj" style="margin-right:auto">'+esc(L('Delete project'))+'</button><button class="btn ghost" data-act="archive">'+esc(L(project(md.id).archived?'Restore from archive':'Archive'))+'</button>':'')+'<button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="saveproj">'+esc(L(md.id?'Save':'Create'))+'</button></div>';
   }
   if(md.kind==='pin'){ body=pinBody(md); }
+  if(md.kind.charAt(0)==='f' && md.kind!=='fx'){ var fb=finModal(md); if(fb) body=fb; }
   if(md.kind==='thread'){
     var tt=task(md.id), th=tt.thread||[], other=isPM()?person(tt.who):pmOf(tt);
     body='<h2>'+esc(L('Questions'))+'</h2><p class="muted s13" style="margin:-10px 0 0">'+esc(tt.title)+' · '+esc(project(tt.project).client)+'</p>'+
@@ -82,6 +83,7 @@ function renderModal(){
 // Keep what's typed when a modal re-renders
 function keep(){
   var md=S.modal; if(!md) return;
+  if(md.kind==='ftx'||md.kind==='fdeal'||md.kind==='fstaff'){ keepFin(); return; }
   var g=function(id){ var e=document.getElementById(id); return e?e.value:undefined; };
   if(md.kind==='submit'){ md.links=Array.prototype.map.call(document.querySelectorAll('[data-link]'),function(e){return e.value;}); md.note=g('sn'); md.fixes={}; Array.prototype.forEach.call(document.querySelectorAll('[data-fix]'),function(e){ if(e.checked) md.fixes[e.dataset.fix]=true; }); }
   if(md.kind==='task'){ md.title=g('tt'); if(g('tp')!=null) md.project=g('tp'); if(g('tb')!=null) md.brief=g('tb'); if(g('tshootp')!=null) md.shoot=g('tshootp'); var sh=$('#tshoot'); if(sh) md.shootOn=sh.checked; }
@@ -118,9 +120,11 @@ document.addEventListener('click', function(e){
   if(!b){ if(e.target.id==='modal') closeModal(); return; }
   if(b.disabled) return;
   var a=b.dataset.act, id=b.dataset.id, t=id?task(id):null;
+  if(a.charAt(0)==='f' && finAction(a,b,id)) return;
+  if(a==='finaccess'){ var fp=person(id); fp.finance=!fp.finance; persist('people',fp); render(); return; }
   // sign in
   if(a==='pick'){ S.palette=null; if(S.hosted && S.remember!==id){ openModal({kind:'pin', id:id}); focusPin(); return; } enterAs(id); return; }
-  if(a==='switch'){ if(S.hosted){ S.remember=null; try{ localStorage.removeItem('bo.me'); }catch(x){} } S.me=null; S.menu=false; S.view=null; S.modal=null; S.trail=[]; S.pending=null; S.marking=false; S.compare=false; render(); window.scrollTo({top:0}); return; }
+  if(a==='switch'){ lockFinance(); if(S.hosted){ S.remember=null; try{ localStorage.removeItem('bo.me'); }catch(x){} } S.me=null; S.menu=false; S.view=null; S.modal=null; S.trail=[]; S.pending=null; S.marking=false; S.compare=false; render(); window.scrollTo({top:0}); return; }
   if(a==='join'){ openModal({kind:'join'}); return; }
   if(a==='jrole'){ keep(); S.modal.role=b.dataset.r; renderModal(); return; }
   if(a==='savejoin'){ keep(); var nm=(S.modal.name||'').trim(); if(!nm){ $('#jerr').textContent=L('Write a name.'); return; }
@@ -260,6 +264,7 @@ document.addEventListener('input', function(e){
 document.addEventListener('error', function(e){ var el=e.target; if(el && el.hasAttribute && el.hasAttribute('data-fallback')) el.remove(); }, true);
 document.addEventListener('submit', function(e){
   var f=e.target.closest('[data-form]'); if(!f) return; e.preventDefault();
+  if(f.dataset.form==='fincode'){ var code=$('#fcode').value; if(!code){ $('#fcode').focus(); return; } unlockFinance(code).catch(function(){ $('#fcerr').textContent=F('Код буруу байна.','That code is not right.'); $('#fcode').value=''; $('#fcode').focus(); }); return; }
   if(f.dataset.form==='studio'){ var pw=$('#spw').value; if(!pw){ $('#spw').focus(); return; } $('#lerr').textContent=''; studioLogin(pw).catch(function(){ $('#lerr').textContent=L('That password is not right.'); }); return; }
   if(f.dataset.form==='ann'){ var ti=$('#at').value.trim(), tx=$('#ax').value.trim(); if(!ti){ $('#aerr').textContent=L('Give it a title.'); $('#at').focus(); return; }
     add('ann',{id:newId('a'), by:S.me, date:iso(TODAY), title:ti, text:tx, aud:S.aud, seen:{}}); render(); toast(L('Announced. It shows at the top of everyone\'s page.')); return; }

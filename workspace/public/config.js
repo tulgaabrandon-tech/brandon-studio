@@ -5,5 +5,6 @@ window.BO_CONFIG = {
   supabaseAnonKey: "",   // Supabase > Project Settings > API > anon public key
   studioEmail: "studio@brand-on.mn", // the one studio account you create in Supabase > Authentication
   botUsername: "",       // your Telegram bot's username without @, e.g. BrandOnStudioBot
+  financeEmail: "finance@brand-on.mn", // the separate finance login; its password is the finance code
   sampleData: false      // true loads sample projects on first open
 };

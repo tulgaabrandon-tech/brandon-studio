@@ -2,7 +2,7 @@
 
 About 30 minutes, once. Everything here is free at the size of Brand On.
 
-You will make three free accounts: **Supabase** (the database), **Telegram BotFather** (the bot) and **Vercel** (the website). Keep this page open and go step by step.
+You will make three free accounts: **Supabase** (the database), **Telegram BotFather** (the bot) and **Vercel** (the website). The finance part also uses a Google Sheet you already have access to. Keep this page open and go step by step.
 
 ---
 
@@ -79,6 +79,38 @@ Each person, once:
 That's it. New tasks, sent work, notes, approvals, questions and announcements now arrive in Telegram, with a button that opens the right task.
 
 ---
+
+## 7. Finance login (Suvdaa, Tulgaa, Nomin)
+
+The Finance section has its own login, so the money is protected by the database itself. People who only know the studio password can't see it, even with developer tools.
+
+1. In Supabase open **Authentication > Users > Add user > Create new user**.
+   - Email: `finance@brand-on.mn`
+   - Password: this is the **finance code**. At least 8 characters. Share it only with Suvdaa, Tulgaa and Nomin.
+   - Tick **Auto Confirm User**.
+2. If you used `supabase/schema.sql` from before this step was added, run it again. It's safe to run twice. It adds the `finance` table and Nomin.
+3. Who sees the Finance section is set in **Team settings** (the lock button next to each name). They still need the finance code to open it, and it locks again after 15 quiet minutes or when someone switches person.
+
+## 8. Google Sheets, kept up to date
+
+1. Create a new Google Sheet, for example **BrandOn Санхүү 2026 (автомат)**.
+2. In it, open **Extensions > Apps Script**. Delete what's there, paste everything from `google-sheets/Code.gs`.
+3. On the line `var TOKEN = 'change-me';` replace `change-me` with a secret word you invent. Press **Save**.
+4. Press **Deploy > New deployment**, type **Web app**.
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+   - Press **Deploy**, allow access, and copy the **Web app URL**.
+5. In Supabase: **Edge Functions > Deploy a new function > Via Editor**, name it `sheets`, paste `supabase/functions/sheets/index.ts`, deploy.
+6. **Edge Functions > Secrets**, add:
+   - `SHEETS_URL`: the Web app URL from step 4
+   - `SHEETS_TOKEN`: the same secret word from step 3
+7. **Database > Webhooks > Create a new hook**:
+   - Name: `sheets-sync`, Table: `finance`, Events: **Insert**, **Update**, **Delete**
+   - Type: **Supabase Edge Functions**, function `sheets`, method `POST`
+
+Now every change in Finance rewrites five tabs in that sheet within a few seconds: **Гүйлгээ** (all transactions, in the same columns as your old sheets), **Борлуулалт** (sales and what's still owed), **Сар бүр** (every category by month, with the sales plan), **Төсөв** (budget against spending) and **Цалин** (payroll with all the taxes). The Finance overview shows when the last copy went through.
+
+Don't type in those five tabs: the next update replaces them. Add your own tabs next to them for notes or extra formulas.
 
 ### If something goes wrong
 

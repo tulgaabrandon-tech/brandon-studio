@@ -23,7 +23,7 @@ function dueLabel(s){
 function nextFriday(){ var n=(5-TODAY.getDay()+7)%7; return n===0?7:n; }
 
 // ================= State =================
-var ROLES = { pm:'Project manager', designer:'Graphic designer', video:'Videographer' };
+var ROLES = { pm:'Project manager', designer:'Graphic designer', video:'Videographer', exec:'Management' };
 var STATUS = { todo:'Not started', doing:'In progress', review:'Needs feedback', done:'Completed' };
 var KINDS = { meeting:{label:'Meeting',color:'#2F5DA8'}, shoot:{label:'Shoot',color:'#1F7A5A'}, deadline:{label:'Deadline',color:'#DA1F34'}, off:{label:'Day off',color:'#8A8F99'} };
 var COLORS = ['#DA1F34','#2F5DA8','#7A4FB0','#1F7A5A','#B5532A','#8A6D00','#2B6E5B','#C2410C'];
@@ -133,7 +133,8 @@ function task(id){ return S.tasks.filter(function(t){return t.id===id;})[0]; }
 function me(){ return person(S.me); }
 function isPM(){ return me().role==='pm'; }
 function pmOf(t){ var p=project(t.project); return person(p.pm); }
-function crew(){ return S.people.filter(function(p){return p.role!=='pm';}); }
+function crew(){ return S.people.filter(function(p){return p.role==='designer'||p.role==='video';}); }
+function isExec(){ return me().role==='exec'; }
 function initials(n){ return String(n||'?').split(/[\s-]+/).map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase(); }
 function av(p,lg){ var col=esc(p.color||'#8A8F99'); return '<span class="'+(lg?'av-lg':'av')+'" style="background:'+col+';--c:'+col+'" title="'+esc(p.name)+'">'+esc(initials(p.name))+'</span>'; }
 var TONE={todo:'',doing:'warn',review:'red',done:'ok'};

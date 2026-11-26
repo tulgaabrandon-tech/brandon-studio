@@ -235,6 +235,9 @@ var MN = {
   "Every week":"Долоо хоног бүр",
   "Every month":"Сар бүр",
   "Almost ready":"Бараг бэлэн","BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.":"BrandOn Studio мэдээллийн сантайгаа хараахан холбогдоогүй байна. SETUP.md-ийн дагуу тохируулсны дараа студи энд нээгдэнэ.",
+  "Management":"Удирдлага","Dashboard":"Самбар","My work":"Миний ажил","Finance":"Санхүү","Agency overview":"Агентлагийн тойм","Finance access":"Санхүүгийн эрхтэй","No finance":"Санхүүгүй",
+  "Here is how the agency is doing today.":"Агентлагийн өнөөдрийн байдал.","Active projects":"Идэвхтэй төсөл","Approved this week":"Энэ долоо хоногт батлагдсан","What everyone is on":"Хэн юун дээр ажиллаж байна",
+  "Open finance":"Санхүү нээх","Money in and out, sales against the plan, payroll":"Орлого, зарлага, борлуулалтын гүйцэтгэл, цалин",
   'Removed {name}':'{name}-г хаслаа', 'Write a name.':'Нэр бичнэ үү.', 'Reset sign-in':'Нэвтрэлтийг цэвэрлэх'
 };
 function L(en, vars){

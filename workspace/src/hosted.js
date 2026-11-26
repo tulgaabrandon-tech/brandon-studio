@@ -1,18 +1,19 @@
 // ================= Own hosting: Supabase store with the same API the app already uses =================
 var CFG = window.BO_CONFIG || {};
 function deepMerge(a,b){ Object.keys(b).forEach(function(k){ var v=b[k]; if(v&&typeof v==='object'&&!Array.isArray(v)&&a[k]&&typeof a[k]==='object'&&!Array.isArray(a[k])) deepMerge(a[k],v); else a[k]=v; }); return a; }
-function supaDB(sb){
+function supaDB(sb, table){
+  table=table||'docs';
   var cache={}, listeners={};
   function snap(col){ var m=cache[col]||{}; return {docs:Object.keys(m).map(function(id){ var v=m[id]; return {id:id, exists:true, data:function(){ return v; }, metadata:{fromCache:false}}; }), metadata:{fromCache:false, hasPendingWrites:false}}; }
   function emit(col){ (listeners[col]||[]).forEach(function(l){ l(snap(col)); }); }
   function chk(r){ if(r && r.error){ var e=r.error; throw {code:(e.code==='42501'||/permission|policy/i.test(e.message||''))?'invalid_argument':'unavailable', message:e.message}; } return r; }
-  sb.channel('docs-live').on('postgres_changes', {event:'*', schema:'public', table:'docs'}, function(p){
+  sb.channel(table+'-live').on('postgres_changes', {event:'*', schema:'public', table:table}, function(p){
     var r=(p.new&&p.new.col)?p.new:p.old; if(!r||!r.col) return;
     cache[r.col]=cache[r.col]||{};
     if(p.eventType==='DELETE') delete cache[r.col][r.id]; else cache[r.col][r.id]=p.new.data;
     emit(r.col);
   }).subscribe();
-  function load(col){ return sb.from('docs').select('id,data').eq('col',col).then(function(r){ chk(r); cache[col]={}; (r.data||[]).forEach(function(x){ cache[col][x.id]=x.data; }); emit(col); }); }
+  function load(col){ return sb.from(table).select('id,data').eq('col',col).then(function(r){ chk(r); cache[col]={}; (r.data||[]).forEach(function(x){ cache[col][x.id]=x.data; }); emit(col); }); }
   function split(path){ var i=path.indexOf('/'); return [path.slice(0,i), path.slice(i+1)]; }
   function row(col,id,data){ return {col:col, id:id, data:data, updated_at:new Date().toISOString()}; }
   return {
@@ -20,11 +21,11 @@ function supaDB(sb){
     doc:function(path){
       var p=split(path), col=p[0], id=p[1];
       return {
-        get:function(){ return sb.from('docs').select('data').eq('col',col).eq('id',id).maybeSingle().then(function(r){ chk(r); var v=r.data&&r.data.data; return {exists:!!v, data:function(){ return v; }}; }); },
-        set:function(data){ (cache[col]=cache[col]||{})[id]=data; return sb.from('docs').upsert(row(col,id,data)).then(chk); },
-        update:function(data){ var cur=clone((cache[col]||{})[id]||{}); deepMerge(cur,data); (cache[col]=cache[col]||{})[id]=cur; return sb.from('docs').upsert(row(col,id,cur)).then(chk); },
-        delete:function(){ if(cache[col]) delete cache[col][id]; return sb.from('docs').delete().eq('col',col).eq('id',id).then(chk); },
-        acquire:function(){ return sb.from('docs').insert(row('locks', col+':'+id, {at:new Date().toISOString()})).then(function(r){ return {acquired:!r.error}; }); }
+        get:function(){ return sb.from(table).select('data').eq('col',col).eq('id',id).maybeSingle().then(function(r){ chk(r); var v=r.data&&r.data.data; return {exists:!!v, data:function(){ return v; }}; }); },
+        set:function(data){ (cache[col]=cache[col]||{})[id]=data; return sb.from(table).upsert(row(col,id,data)).then(chk); },
+        update:function(data){ var cur=clone((cache[col]||{})[id]||{}); deepMerge(cur,data); (cache[col]=cache[col]||{})[id]=cur; return sb.from(table).upsert(row(col,id,cur)).then(chk); },
+        delete:function(){ if(cache[col]) delete cache[col][id]; return sb.from(table).delete().eq('col',col).eq('id',id).then(chk); },
+        acquire:function(){ return sb.from(table).insert(row('locks', col+':'+id, {at:new Date().toISOString()})).then(function(r){ return {acquired:!r.error}; }); }
       };
     }
   };
