@@ -7,6 +7,7 @@
   --line:rgba(20,20,20,.08); --line-2:rgba(20,20,20,.15);
   --red:#DA1F34; --red-ink:#B3172A; --red-soft:#FBE8EA; --red-glow:rgba(218,31,52,.28);
   --ok:#1D7552; --ok-soft:#E3F2EA; --warn:#8F5B00; --warn-soft:#FAEFD9;
+  --info:#2F5DA8; --info-soft:#E7EEF9;
   --r-s:10px; --r:14px; --r-l:22px; --r-xl:28px;
   --sh-1:0 1px 2px rgba(20,20,20,.05);
   --sh-2:0 1px 2px rgba(20,20,20,.04),0 10px 30px -14px rgba(20,20,20,.18);
@@ -24,6 +25,7 @@ body.dark{
   --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
   --red:#E8273D; --red-ink:#FF6B7C; --red-soft:rgba(232,39,61,.16); --red-glow:rgba(232,39,61,.35);
   --ok:#4CC08C; --ok-soft:rgba(76,192,140,.14); --warn:#E5B04A; --warn-soft:rgba(229,176,74,.14);
+  --info:#86A9EC; --info-soft:rgba(134,169,236,.14);
   --sh-1:0 1px 0 rgba(255,255,255,.03);
   --sh-2:0 1px 0 rgba(255,255,255,.04),0 14px 34px -16px rgba(0,0,0,.6);
   --sh-pop:0 30px 80px -20px rgba(0,0,0,.7);
@@ -775,3 +777,41 @@ button.mini:hover{background:var(--surface-2)}
 .btn.xl:active{border-radius:22px}.btn.sm:active{border-radius:14px}
 .icon-btn:active{border-radius:16px;transform:scale(.96)}
 .fab-item:active{border-radius:22px;transform:scale(.98)}
+
+/* ---------- colour meaning ----------
+   green  = money in, done, paid, approved (gain, safety)
+   amber  = waiting, owed, needs a look (caution, not danger)
+   red    = overdue, lost, cancelled, and the one main action (urgency)
+   blue   = in progress, meetings, information (calm, trust)
+   ink    = ordinary facts and ordinary spending (spending is normal, not an alarm) */
+.chip.info{background:var(--info-soft);color:var(--info)}
+.owed{color:var(--warn)}
+.fin-stats .stat.in b{color:var(--ok)}
+.fin-stats .stat.pos b{color:var(--ok)}
+.fin-stats .stat.neg b{color:var(--red-ink)}
+.rep .owed span.muted{color:var(--muted)}
+
+/* ---------- period bar (finance) ---------- */
+.per-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px}
+.per-bar .plan-nav b{min-width:150px;text-align:center}
+.per-range{display:flex;align-items:center;gap:8px}
+.per-range .input{width:170px}
+
+/* ---------- month calendar ---------- */
+.mon{border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);overflow:hidden}
+.mon-h{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.mon-h span{padding:10px 12px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mon-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mon-d{min-height:118px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.mon-d:nth-child(7n){border-right:0}
+.mon-d.out{background:var(--surface-2)}
+.mon-d.out .mon-n,.mon-d.past .mon-e{opacity:.55}
+.mon-n{display:flex}
+.mon-n button,.mon-n span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:none;border:0;cursor:pointer;transition:background-color .2s ease}
+.mon-n button:hover{background:var(--sunk)}
+.mon-d.today .mon-n button,.mon-d.today .mon-n span{background:var(--ink);color:var(--bg)}
+.mon-e{display:block;width:100%;text-align:left;font:inherit;font-size:12px;font-weight:600;line-height:1.3;padding:4px 6px 4px 8px;border:0;border-left:3px solid var(--k);border-radius:6px;background:color-mix(in srgb,var(--k) 10%,transparent);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:background-color .2s ease}
+.mon-e:hover{background:color-mix(in srgb,var(--k) 18%,transparent)}
+.mon-more{align-self:flex-start;font:inherit;font-size:12px;font-weight:700;color:var(--muted);background:none;border:0;padding:2px 4px;cursor:pointer}
+.mon-more:hover{color:var(--ink)}
+@media (max-width:760px){.mon-d{min-height:70px;padding:4px}.mon-e{font-size:0;height:6px;padding:0;border-left-width:0;background:var(--k)}.mon-h span{padding:8px 4px;text-align:center;font-size:10px}.mon-n button,.mon-n span{width:26px;height:26px;font-size:12px}}

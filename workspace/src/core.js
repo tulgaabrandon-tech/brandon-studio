@@ -25,8 +25,10 @@ function nextFriday(){ var n=(5-TODAY.getDay()+7)%7; return n===0?7:n; }
 // ================= State =================
 var ROLES = { pm:'Project manager', designer:'Graphic designer', video:'Videographer', exec:'Management' };
 var STATUS = { todo:'Not started', doing:'In progress', review:'Needs feedback', done:'Completed' };
-var KINDS = { meeting:{label:'Meeting',color:'#2F5DA8'}, shoot:{label:'Shoot',color:'#1F7A5A'}, deadline:{label:'Deadline',color:'#DA1F34'}, off:{label:'Day off',color:'#8A8F99'} };
-var COLORS = ['#DA1F34','#2F5DA8','#7A4FB0','#1F7A5A','#B5532A','#8A6D00','#2B6E5B','#C2410C'];
+// Event colours carry meaning: blue talks (calm, trust), orange makes (energy), red is a hard line (urgency), sage rests (calm)
+var KINDS = { meeting:{label:'Meeting',color:'#2F5DA8'}, shoot:{label:'Shoot',color:'#C2410C'}, deadline:{label:'Deadline',color:'#DA1F34'}, off:{label:'Day off',color:'#5E8C76'} };
+// Project identity colours avoid red and the status greens and ambers, so a project dot is never mistaken for an alert or a state
+var COLORS = ['#3B5BA9','#7A4FB0','#2B6E5B','#9D4E8A','#4F46E5','#0F766E','#6B4F3A','#5B6575'];
 var S = {
   mode:'loading', me:null, uid:null, view:null, project:null, task:null, ver:null, modal:null, pending:null, marking:false, compare:false,
   dark:(function(){ try{ return localStorage.getItem('bo.dark')==='1'; }catch(e){ return false; } })(),

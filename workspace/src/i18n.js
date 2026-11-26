@@ -58,7 +58,7 @@ var MN = {
   'Message. Everyone sees it at the top of their page until they tap Got it.':'Агуулга. Хүн бүр "Ойлголоо" дартал нүүрнийхээ дээд хэсэгт харна.',
   'Designers':'Дизайнерууд', 'Video team':'Видео баг', 'Announce':'Зарлах', '{a}/{b} seen':'{a}/{b} харсан',
   'Announced. It shows at the top of everyone\'s page.':'Зарлалаа. Хүн бүрийн нүүрний дээд хэсэгт гарна.', 'Give it a title.':'Гарчиг бичнэ үү.', 'Announcement deleted':'Зар устлаа',
-  'Planner':'Хуваарь', 'This week':'Энэ долоо хоног', 'Add to planner':'Хуваарьт нэмэх', 'Previous week':'Өмнөх долоо хоног', 'Next week':'Дараа долоо хоног',
+  'Planner':'Хуваарь', 'Week':'7 хоног', 'Month':'Сар', 'View':'Харагдац', 'Previous month':'Өмнөх сар', 'Next month':'Дараа сар', 'This month':'Энэ сар', '+{n} more':'+{n} бусад', 'This week':'Энэ долоо хоног', 'Add to planner':'Хуваарьт нэмэх', 'Previous week':'Өмнөх долоо хоног', 'Next week':'Дараа долоо хоног',
   'Meeting':'Уулзалт', 'Shoot':'Зураг авалт', 'Deadline':'Хугацаа', 'Day off':'Чөлөө',
   'Shoots come in from tasks by themselves':'Зураг авалт ажлаас өөрөө орж ирнэ',
   'What':'Юу', 'e.g. Client meeting':'жишээ нь: Захиалагчтай уулзалт', 'Kind':'Төрөл', 'Day':'Өдөр', 'Time':'Цаг', 'Place':'Хаана', 'Who':'Хэн',

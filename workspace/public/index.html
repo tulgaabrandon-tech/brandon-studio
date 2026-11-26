@@ -23,6 +23,7 @@
   --line:rgba(20,20,20,.08); --line-2:rgba(20,20,20,.15);
   --red:#DA1F34; --red-ink:#B3172A; --red-soft:#FBE8EA; --red-glow:rgba(218,31,52,.28);
   --ok:#1D7552; --ok-soft:#E3F2EA; --warn:#8F5B00; --warn-soft:#FAEFD9;
+  --info:#2F5DA8; --info-soft:#E7EEF9;
   --r-s:10px; --r:14px; --r-l:22px; --r-xl:28px;
   --sh-1:0 1px 2px rgba(20,20,20,.05);
   --sh-2:0 1px 2px rgba(20,20,20,.04),0 10px 30px -14px rgba(20,20,20,.18);
@@ -40,6 +41,7 @@ body.dark{
   --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
   --red:#E8273D; --red-ink:#FF6B7C; --red-soft:rgba(232,39,61,.16); --red-glow:rgba(232,39,61,.35);
   --ok:#4CC08C; --ok-soft:rgba(76,192,140,.14); --warn:#E5B04A; --warn-soft:rgba(229,176,74,.14);
+  --info:#86A9EC; --info-soft:rgba(134,169,236,.14);
   --sh-1:0 1px 0 rgba(255,255,255,.03);
   --sh-2:0 1px 0 rgba(255,255,255,.04),0 14px 34px -16px rgba(0,0,0,.6);
   --sh-pop:0 30px 80px -20px rgba(0,0,0,.7);
@@ -792,6 +794,44 @@ button.mini:hover{background:var(--surface-2)}
 .icon-btn:active{border-radius:16px;transform:scale(.96)}
 .fab-item:active{border-radius:22px;transform:scale(.98)}
 
+/* ---------- colour meaning ----------
+   green  = money in, done, paid, approved (gain, safety)
+   amber  = waiting, owed, needs a look (caution, not danger)
+   red    = overdue, lost, cancelled, and the one main action (urgency)
+   blue   = in progress, meetings, information (calm, trust)
+   ink    = ordinary facts and ordinary spending (spending is normal, not an alarm) */
+.chip.info{background:var(--info-soft);color:var(--info)}
+.owed{color:var(--warn)}
+.fin-stats .stat.in b{color:var(--ok)}
+.fin-stats .stat.pos b{color:var(--ok)}
+.fin-stats .stat.neg b{color:var(--red-ink)}
+.rep .owed span.muted{color:var(--muted)}
+
+/* ---------- period bar (finance) ---------- */
+.per-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px}
+.per-bar .plan-nav b{min-width:150px;text-align:center}
+.per-range{display:flex;align-items:center;gap:8px}
+.per-range .input{width:170px}
+
+/* ---------- month calendar ---------- */
+.mon{border:1px solid var(--line);border-radius:var(--r-l);background:var(--surface);overflow:hidden}
+.mon-h{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--line)}
+.mon-h span{padding:10px 12px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mon-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mon-d{min-height:118px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px;min-width:0}
+.mon-d:nth-child(7n){border-right:0}
+.mon-d.out{background:var(--surface-2)}
+.mon-d.out .mon-n,.mon-d.past .mon-e{opacity:.55}
+.mon-n{display:flex}
+.mon-n button,.mon-n span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:none;border:0;cursor:pointer;transition:background-color .2s ease}
+.mon-n button:hover{background:var(--sunk)}
+.mon-d.today .mon-n button,.mon-d.today .mon-n span{background:var(--ink);color:var(--bg)}
+.mon-e{display:block;width:100%;text-align:left;font:inherit;font-size:12px;font-weight:600;line-height:1.3;padding:4px 6px 4px 8px;border:0;border-left:3px solid var(--k);border-radius:6px;background:color-mix(in srgb,var(--k) 10%,transparent);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:background-color .2s ease}
+.mon-e:hover{background:color-mix(in srgb,var(--k) 18%,transparent)}
+.mon-more{align-self:flex-start;font:inherit;font-size:12px;font-weight:700;color:var(--muted);background:none;border:0;padding:2px 4px;cursor:pointer}
+.mon-more:hover{color:var(--ink)}
+@media (max-width:760px){.mon-d{min-height:70px;padding:4px}.mon-e{font-size:0;height:6px;padding:0;border-left-width:0;background:var(--k)}.mon-h span{padding:8px 4px;text-align:center;font-size:10px}.mon-n button,.mon-n span{width:26px;height:26px;font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -865,7 +905,7 @@ var MN = {
   'Message. Everyone sees it at the top of their page until they tap Got it.':'Агуулга. Хүн бүр "Ойлголоо" дартал нүүрнийхээ дээд хэсэгт харна.',
   'Designers':'Дизайнерууд', 'Video team':'Видео баг', 'Announce':'Зарлах', '{a}/{b} seen':'{a}/{b} харсан',
   'Announced. It shows at the top of everyone\'s page.':'Зарлалаа. Хүн бүрийн нүүрний дээд хэсэгт гарна.', 'Give it a title.':'Гарчиг бичнэ үү.', 'Announcement deleted':'Зар устлаа',
-  'Planner':'Хуваарь', 'This week':'Энэ долоо хоног', 'Add to planner':'Хуваарьт нэмэх', 'Previous week':'Өмнөх долоо хоног', 'Next week':'Дараа долоо хоног',
+  'Planner':'Хуваарь', 'Week':'7 хоног', 'Month':'Сар', 'View':'Харагдац', 'Previous month':'Өмнөх сар', 'Next month':'Дараа сар', 'This month':'Энэ сар', '+{n} more':'+{n} бусад', 'This week':'Энэ долоо хоног', 'Add to planner':'Хуваарьт нэмэх', 'Previous week':'Өмнөх долоо хоног', 'Next week':'Дараа долоо хоног',
   'Meeting':'Уулзалт', 'Shoot':'Зураг авалт', 'Deadline':'Хугацаа', 'Day off':'Чөлөө',
   'Shoots come in from tasks by themselves':'Зураг авалт ажлаас өөрөө орж ирнэ',
   'What':'Юу', 'e.g. Client meeting':'жишээ нь: Захиалагчтай уулзалт', 'Kind':'Төрөл', 'Day':'Өдөр', 'Time':'Цаг', 'Place':'Хаана', 'Who':'Хэн',
@@ -1086,8 +1126,10 @@ function nextFriday(){ var n=(5-TODAY.getDay()+7)%7; return n===0?7:n; }
 // ================= State =================
 var ROLES = { pm:'Project manager', designer:'Graphic designer', video:'Videographer', exec:'Management' };
 var STATUS = { todo:'Not started', doing:'In progress', review:'Needs feedback', done:'Completed' };
-var KINDS = { meeting:{label:'Meeting',color:'#2F5DA8'}, shoot:{label:'Shoot',color:'#1F7A5A'}, deadline:{label:'Deadline',color:'#DA1F34'}, off:{label:'Day off',color:'#8A8F99'} };
-var COLORS = ['#DA1F34','#2F5DA8','#7A4FB0','#1F7A5A','#B5532A','#8A6D00','#2B6E5B','#C2410C'];
+// Event colours carry meaning: blue talks (calm, trust), orange makes (energy), red is a hard line (urgency), sage rests (calm)
+var KINDS = { meeting:{label:'Meeting',color:'#2F5DA8'}, shoot:{label:'Shoot',color:'#C2410C'}, deadline:{label:'Deadline',color:'#DA1F34'}, off:{label:'Day off',color:'#5E8C76'} };
+// Project identity colours avoid red and the status greens and ambers, so a project dot is never mistaken for an alert or a state
+var COLORS = ['#3B5BA9','#7A4FB0','#2B6E5B','#9D4E8A','#4F46E5','#0F766E','#6B4F3A','#5B6575'];
 var S = {
   mode:'loading', me:null, uid:null, view:null, project:null, task:null, ver:null, modal:null, pending:null, marking:false, compare:false,
   dark:(function(){ try{ return localStorage.getItem('bo.dark')==='1'; }catch(e){ return false; } })(),
@@ -1424,42 +1466,44 @@ function F(mn,en){ return LANG==='mn'?mn:en; }
 // Categories use the exact names from Brand On's sheets, so exports line up with the old files.
 var FIN_IN=[
   {k:'sales', mn:'Үйл ажиллагааны орлого', en:'Client payments', c:'#1D7552'},
-  {k:'boost_in', mn:'Бүүст орлого', en:'Boost income', c:'#2F5DA8'},
-  {k:'other_in', mn:'Бусад орлого', en:'Other income', c:'#7A4FB0'},
-  {k:'loan_in', mn:'Түр зээл', en:'Short-term loan', c:'#8A6D00', nopl:true}
+  {k:'boost_in', mn:'Бүүст орлого', en:'Boost income', c:'#2E8B57'},
+  {k:'other_in', mn:'Бусад орлого', en:'Other income', c:'#4F9A7B'},
+  {k:'loan_in', mn:'Түр зээл', en:'Short-term loan', c:'#A16207', nopl:true}
 ];
 var FIN_OUT=[
-  {k:'salary', mn:'Цалингийн зардал', en:'Salaries', c:'#DA1F34'},
-  {k:'production', mn:'Үйл ажиллагааны зардал', en:'Production costs', c:'#B5532A'},
-  {k:'rent', mn:'Түрээсийн зардал', en:'Rent', c:'#2F5DA8'},
-  {k:'ndsh', mn:'НДШ-ийн зардал', en:'Social insurance', c:'#7A4FB0'},
+  {k:'salary', mn:'Цалингийн зардал', en:'Salaries', c:'#2F5DA8'},
+  {k:'production', mn:'Үйл ажиллагааны зардал', en:'Production costs', c:'#C2410C'},
+  {k:'rent', mn:'Түрээсийн зардал', en:'Rent', c:'#475569'},
+  {k:'ndsh', mn:'НДШ-ийн зардал', en:'Social insurance', c:'#5079C2'},
   {k:'tax', mn:'Татвар', en:'Tax', c:'#5B4636'},
-  {k:'loan', mn:'Удирдлагын зардал-зээл төлөлт', en:'Loan repayment', c:'#8A6D00'},
-  {k:'mgmt', mn:'Удирдлагын зардал', en:'Management costs', c:'#1F7A5A'},
-  {k:'utilities', mn:'Ашиглалтын зардал - ус дулаан, цахилгаан, СӨХ', en:'Utilities', c:'#2B6E5B'},
-  {k:'software', mn:'Вирус програм, вэбсайт', en:'Software and websites', c:'#3B67B3'},
-  {k:'phone', mn:'Харилцаа холбоо /утас, интернэт/', en:'Phone and internet', c:'#6C6A66'},
-  {k:'food', mn:'Хоолны зардал', en:'Food', c:'#C2410C'},
-  {k:'events', mn:'Баяр, хүлээн авалтын зардал', en:'Parties and hosting', c:'#A62D7A'},
-  {k:'travel', mn:'Аяллын зардал', en:'Travel', c:'#0F766E'},
-  {k:'fuel', mn:'Шатахууны зардал', en:'Fuel', c:'#9A6200'},
-  {k:'taxi', mn:'Такси. зогсоол', en:'Taxi and parking', c:'#8A8F99'},
-  {k:'boost', mn:'Бүүст зардал', en:'Boosts', c:'#3B82F6'},
-  {k:'fees', mn:'Банкны шимтгэл', en:'Bank fees', c:'#A8A49C'},
-  {k:'card', mn:'Кредит карт төлөлт', en:'Credit card', c:'#6B21A8'},
-  {k:'office', mn:'Оффис зардал', en:'Office supplies', c:'#475569'},
-  {k:'cleaning', mn:'Цэвэрлэгээ ариутгалын зардал', en:'Cleaning', c:'#0EA5E9'},
-  {k:'training', mn:'Сургалтын зардал', en:'Training', c:'#16A34A'},
-  {k:'assets', mn:'Үндсэн хөрөнгө', en:'Equipment', c:'#1E293B'},
-  {k:'repair_assets', mn:'Засварын зардал Үндсэн хөрөнгө', en:'Equipment repair', c:'#334155'},
-  {k:'repair_office', mn:'Засварын зардал Оффис', en:'Office repair', c:'#64748B'},
-  {k:'cat', mn:'Муурны зардал', en:'Office cat', c:'#D97706'},
-  {k:'print', mn:'Хэвлэл', en:'Printing', c:'#57534E'},
-  {k:'donation', mn:'Хандив тусламжийн зардал', en:'Donations', c:'#BE185D'},
-  {k:'staff_loan', mn:'Ажилчдад зээлсэн', en:'Loans to staff', c:'#78716C', nopl:true},
-  {k:'fund', mn:'Фонд татан авалт', en:'Staff fund payout', c:'#A16207', nopl:true}
+  {k:'loan', mn:'Удирдлагын зардал-зээл төлөлт', en:'Loan repayment', c:'#6F5440'},
+  {k:'mgmt', mn:'Удирдлагын зардал', en:'Management costs', c:'#334155'},
+  {k:'utilities', mn:'Ашиглалтын зардал - ус дулаан, цахилгаан, СӨХ', en:'Utilities', c:'#5B6575'},
+  {k:'software', mn:'Вирус програм, вэбсайт', en:'Software and websites', c:'#3F5E7A'},
+  {k:'phone', mn:'Харилцаа холбоо /утас, интернэт/', en:'Phone and internet', c:'#64748B'},
+  {k:'food', mn:'Хоолны зардал', en:'Food', c:'#7A4FB0'},
+  {k:'events', mn:'Баяр, хүлээн авалтын зардал', en:'Parties and hosting', c:'#9461C4'},
+  {k:'travel', mn:'Аяллын зардал', en:'Travel', c:'#6A4CA0'},
+  {k:'fuel', mn:'Шатахууны зардал', en:'Fuel', c:'#6B7C93'},
+  {k:'taxi', mn:'Такси. зогсоол', en:'Taxi and parking', c:'#8A97A8'},
+  {k:'boost', mn:'Бүүст зардал', en:'Boosts', c:'#4F46E5'},
+  {k:'fees', mn:'Банкны шимтгэл', en:'Bank fees', c:'#8A7560'},
+  {k:'card', mn:'Кредит карт төлөлт', en:'Credit card', c:'#7A5C48'},
+  {k:'office', mn:'Оффис зардал', en:'Office supplies', c:'#6B7686'},
+  {k:'cleaning', mn:'Цэвэрлэгээ ариутгалын зардал', en:'Cleaning', c:'#7C8796'},
+  {k:'training', mn:'Сургалтын зардал', en:'Training', c:'#0F766E'},
+  {k:'assets', mn:'Үндсэн хөрөнгө', en:'Equipment', c:'#9A3412'},
+  {k:'repair_assets', mn:'Засварын зардал Үндсэн хөрөнгө', en:'Equipment repair', c:'#B4532A'},
+  {k:'repair_office', mn:'Засварын зардал Оффис', en:'Office repair', c:'#556070'},
+  {k:'cat', mn:'Муурны зардал', en:'Office cat', c:'#A57AD0'},
+  {k:'print', mn:'Хэвлэл', en:'Printing', c:'#D9622B'},
+  {k:'donation', mn:'Хандив тусламжийн зардал', en:'Donations', c:'#9D4E8A'},
+  {k:'staff_loan', mn:'Ажилчдад зээлсэн', en:'Loans to staff', c:'#A16207', nopl:true},
+  {k:'fund', mn:'Фонд татан авалт', en:'Staff fund payout', c:'#B7791F', nopl:true}
 ];
 var FIN_MOVE={k:'cash', mn:'Касс руу шилжүүлэг', en:'Move to cash', c:'#A8A49C'};
+// Category colours follow what the money does: green comes in, blue is people, orange makes the work,
+// slate keeps the studio running, umber is owed to others, violet is team life, amber has to come back.
 function fcat(k){ return FIN_IN.concat(FIN_OUT,[FIN_MOVE]).filter(function(c){ return c.k===k; })[0] || {k:k, mn:k, en:k, c:'#8A8F99'}; }
 function fcatName(k){ var c=fcat(k); return LANG==='mn'?c.mn:c.en; }
 var WORK_TYPES=['Лого','Брэндинг','Илтгэл','Кампанит ажил, видео','Рийл','Сошиал','Постер','Сторибоард','Бусад'];
@@ -1555,8 +1599,9 @@ function vFinance(){
   var y=FIN.month.slice(0,4), m=FIN.month, tabs=[['overview',F('Тойм','Overview')],['upload',F('Оруулах','Upload')],['tx',F('Гүйлгээ','Transactions')],['sales',F('Ажил, борлуулалт','Jobs and sales')],['clients',F('Харилцагч','Clients')],['reports',F('Тайлан','Reports')],['payroll',F('Цалин','Payroll')],['plan',F('Төлөвлөгөө','Plan')]];
   var dt=fromIso(m+'-01');
   var h='<header class="fin-head"><div><div class="eyebrow">'+esc(F('Санхүү','Finance'))+'</div><h1 class="display">'+esc(F('Мөнгө','Money'))+'</h1></div>'+
-    '<div class="ph-tools"><div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх сар','Previous month'))+'">'+ICON.back+'</button><b class="fmonth">'+esc(LANG==='mn'?dt.getFullYear()+' оны '+(dt.getMonth()+1)+'-р сар':MON_EN[dt.getMonth()]+' '+dt.getFullYear())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараа сар','Next month'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
+    '<div class="ph-tools"><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
   h+='<nav class="seg fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav>';
+  h+=FIN.tab==='payroll'||FIN.tab==='plan'?'':perNav();
   var V={overview:finOverview, upload:finUpload, tx:finTx, sales:finSales, clients:finClientView, reports:finReports, payroll:finPayroll, plan:finPlan};
   return h+'<div class="fin-pane" data-key="'+FIN.tab+'-'+(FIN.per||'m')+'">'+(V[FIN.tab]||finOverview)()+'</div>';
 }
@@ -1568,22 +1613,22 @@ function finGate(){
 }
 function statTile(label, val, sub, cls){ return '<div class="stat'+(cls?' '+cls:'')+'"><span>'+esc(label)+'</span><b>'+esc(val)+'</b>'+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
 function finOverview(){
-  var m=FIN.month, y=m.slice(0,4), list=txIn(m), inn=sumBy(list,'in'), out=sumBy(list,'out'), p=plan();
-  var target=+(p.sales||{})[+m.slice(5)]||0, booked=salesBooked(m), yt=salesYear(y), yTarget=Object.keys(p.sales||{}).reduce(function(s,k){ return s+(+p.sales[k]||0); },0);
-  var h='<div class="fin-stats">'+statTile(F('Орж ирсэн','Money in'), moneyShort(inn), money(inn))+statTile(F('Гарсан','Money out'), moneyShort(out), money(out))+statTile(F('Цэвэр урсгал','Net flow'), moneyShort(inn-out), money(inn-out), inn-out<0?'neg':'')+statTile(F('Үлдэгдэл','Cash on hand'), moneyShort(balanceAt(m)), F('сарын эцэст','at month end'), 'ink')+'</div>';
+  var R=perRange(), m=R[1], y=m.slice(0,4), list=FIN.data.fin_tx.filter(function(t){ return inPer(t.date); }), inn=sumBy(list,'in'), out=sumBy(list,'out'), p=plan();
+  var target=salesTarget(R[2]), booked=FIN.data.fin_deals.filter(function(d){ return inPer(d.date); }).reduce(function(s,d){ return s+dealFinal(d); },0), yt=salesYear(y), yTarget=Object.keys(p.sales||{}).reduce(function(s,k){ return s+(+p.sales[k]||0); },0);
+  var h='<div class="fin-stats">'+statTile(F('Орж ирсэн','Money in'), moneyShort(inn), money(inn), 'in')+statTile(F('Гарсан','Money out'), moneyShort(out), money(out))+statTile(F('Цэвэр урсгал','Net flow'), moneyShort(inn-out), money(inn-out), inn-out<0?'neg':'pos')+statTile(F('Үлдэгдэл','Cash on hand'), moneyShort(balanceAt(m)), F('хугацааны эцэст','at the end of the period'), 'ink')+'</div>';
   h+='<div class="fin-grid"><section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Борлуулалт ба төлөвлөгөө','Sales vs plan'))+'</h3><button class="lnk" data-act="ftab" data-t="sales">'+esc(F('Бүгд','All'))+'</button></div>'+
     '<div class="big-num">'+esc(moneyShort(booked))+'<span> / '+esc(moneyShort(target))+'</span></div>'+wavy(target?booked/target:0, target?Math.round(booked/target*100)+'%':F('Төлөвлөгөө алга','No target'))+
     '<p class="muted s13" style="margin:14px 0 0">'+esc(F('Оны эхнээс: ','Year to date: '))+'<b>'+esc(moneyShort(yt))+'</b> / '+esc(moneyShort(yTarget))+(yTarget?' ('+Math.round(yt/yTarget*100)+'%)':'')+'</p></section>';
   var rec=receivables(), recSum=rec.reduce(function(s,x){ return s+x.left; },0);
-  h+='<section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Авлага','Owed to us'))+'</h3><b>'+esc(money(recSum))+'</b></div>'+(rec.length?'<div class="mini-rows">'+rec.slice(0,5).map(function(x){ return '<button class="mini" data-act="fdeal" data-id="'+esc(x.d.id)+'"><span><b>'+esc(x.d.client)+'</b><em>'+esc(x.d.title||md(fromIso(x.d.date)))+'</em></span><span class="amt">'+esc(money(x.left))+'</span></button>'; }).join('')+'</div>':'<p class="muted">'+esc(F('Бүх төлбөр орж ирсэн.','Everything is paid.'))+'</p>')+'</section></div>';
+  h+='<section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Авлага','Owed to us'))+'</h3><b class="owed">'+esc(money(recSum))+'</b></div>'+(rec.length?'<div class="mini-rows">'+rec.slice(0,5).map(function(x){ return '<button class="mini" data-act="fdeal" data-id="'+esc(x.d.id)+'"><span><b>'+esc(x.d.client)+'</b><em>'+esc(x.d.title||md(fromIso(x.d.date)))+'</em></span><span class="amt">'+esc(money(x.left))+'</span></button>'; }).join('')+'</div>':'<p class="muted">'+esc(F('Бүх төлбөр орж ирсэн.','Everything is paid.'))+'</p>')+'</section></div>';
   // budget burn
   var outs={}; list.filter(function(t){ return t.type==='out'; }).forEach(function(t){ outs[t.cat]=(outs[t.cat]||0)+(+t.amount||0); });
   var rows=Object.keys(outs).sort(function(a,b){ return outs[b]-outs[a]; }).slice(0,7);
-  h+='<div class="fin-grid"><section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Энэ сарын зарлага','Spending this month'))+'</h3><button class="lnk" data-act="ftab" data-t="reports">'+esc(F('Тайлан','Report'))+'</button></div>'+(rows.length?rows.map(function(k){ var b=(+(p.budget||{})[k]||0)/12, pct=b?outs[k]/b:0; return '<div class="bar-row"><div class="bar-l"><span class="pdot" style="background:'+fcat(k).c+'"></span>'+esc(fcatName(k))+'</div><div class="bar-v"><b>'+esc(moneyShort(outs[k]))+'</b>'+(b?'<span class="muted">/ '+esc(moneyShort(b))+'</span>':'')+'</div><div class="bar-t"><i style="width:'+Math.min(100,(b?pct:1)*100)+'%;background:'+(pct>1?'var(--red)':fcat(k).c)+'"></i></div></div>'; }).join(''):'<p class="muted">'+esc(F('Энэ сард зарлага алга.','No spending yet this month.'))+'</p>')+'</section>';
+  h+='<div class="fin-grid"><section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Энэ хугацааны зарлага','Spending in this period'))+'</h3><button class="lnk" data-act="ftab" data-t="reports">'+esc(F('Тайлан','Report'))+'</button></div>'+(rows.length?rows.map(function(k){ var b=(+(p.budget||{})[k]||0)/12*R[2], pct=b?outs[k]/b:0; return '<div class="bar-row"><div class="bar-l"><span class="pdot" style="background:'+fcat(k).c+'"></span>'+esc(fcatName(k))+'</div><div class="bar-v"><b>'+esc(moneyShort(outs[k]))+'</b>'+(b?'<span class="muted">/ '+esc(moneyShort(b))+'</span>':'')+'</div><div class="bar-t"><i style="width:'+Math.min(100,(b?pct:1)*100)+'%;background:'+(pct>1?'var(--red)':fcat(k).c)+'"></i></div></div>'; }).join(''):'<p class="muted">'+esc(F('Энэ хугацаанд зарлага алга.','No spending in this period.'))+'</p>')+'</section>';
   var vat=FIN.data.fin_tx.filter(function(t){ return t.vat==='todo'; }), rcp=FIN.data.fin_tx.filter(function(t){ return t.receipt==='todo'; });
   var meta=FIN.data.fin_meta.filter(function(x){ return x.id==='sync'; })[0];
   h+='<section class="card fin-card"><div class="fin-card-h"><h3>'+esc(F('Хийх зүйлс','To do'))+'</h3></div><div class="mini-rows">'+
-    '<button class="mini" data-act="ffilter" data-f="vat"><span><b>'+esc(F('НӨАТ шивэх','VAT receipts to file'))+'</b><em>'+esc(F('И-баримтад шивээгүй борлуулалт','Sales not yet in e-barimt'))+'</em></span><span class="chip '+(vat.length?'red':'ok')+'">'+vat.length+'</span></button>'+
+    '<button class="mini" data-act="ffilter" data-f="vat"><span><b>'+esc(F('НӨАТ шивэх','VAT receipts to file'))+'</b><em>'+esc(F('И-баримтад шивээгүй борлуулалт','Sales not yet in e-barimt'))+'</em></span><span class="chip '+(vat.length?'warn':'ok')+'">'+vat.length+'</span></button>'+
     '<button class="mini" data-act="ffilter" data-f="receipt"><span><b>'+esc(F('Нийлүүлэгчийн НӨАТ ирээгүй','Supplier VAT missing'))+'</b><em>'+esc(F('Худалдан авалтад НӨАТ баримт хүлээж буй','Purchases waiting for a VAT receipt'))+'</em></span><span class="chip '+(rcp.length?'warn':'ok')+'">'+rcp.length+'</span></button>'+
     '<div class="mini static"><span><b>Google Sheets</b><em>'+esc(meta&&meta.at?F('Сүүлд илгээсэн: ','Last sent: ')+new Date(meta.at).toLocaleString():(S.hosted?F('Тохируулаагүй эсвэл хүлээгдэж байна','Not set up yet or waiting'):F('Өөрийн хостинг дээр ажиллана','Works on your own hosting')))+'</em></span>'+(meta&&meta.ok?'<span class="chip ok">'+ICON.check+'</span>':'<span class="chip">'+ICON.sheet+'</span>')+'</div>'+
   '</div></section></div>';
@@ -1591,7 +1636,7 @@ function finOverview(){
 }
 function finTx(){
   var m=FIN.month, f=FIN.filter, q=(FIN.q||'').toLowerCase();
-  var list=(f==='vat'||f==='receipt')?FIN.data.fin_tx.filter(function(t){ return t[f]==='todo'; }):txIn(m).filter(function(t){ return f==='all'||t.type===f; });
+  var list=(f==='vat'||f==='receipt')?FIN.data.fin_tx.filter(function(t){ return t[f]==='todo'; }):FIN.data.fin_tx.filter(function(t){ return inPer(t.date); }).filter(function(t){ return f==='all'||t.type===f; });
   if(q) list=list.filter(function(t){ return (t.note+' '+(t.client||'')+' '+fcatName(t.cat)).toLowerCase().indexOf(q)>=0; });
   list.sort(function(a,b){ return String(b.date).localeCompare(String(a.date)) || String(b.created||'').localeCompare(String(a.created||'')); });
   var h='<div class="fin-bar"><div class="seg" role="group">'+[['all',F('Бүгд','All')],['in',F('Орлого','In')],['out',F('Зарлага','Out')],['vat',F('НӨАТ шивэх','VAT to file')],['receipt',F('Баримт','Receipts')]].map(function(o){ return '<button data-act="ffilter" data-f="'+o[0]+'" aria-pressed="'+(f===o[0])+'">'+esc(o[1])+'</button>'; }).join('')+'</div><label class="sr" for="fq">'+esc(F('Хайх','Search'))+'</label><input class="input sm" id="fq" placeholder="'+esc(F('Хайх: утга, харилцагч, ангилал','Search: note, client, category'))+'" value="'+esc(FIN.q||'')+'" style="max-width:300px"><button class="btn primary" data-act="ftxnew">'+ICON.plus+esc(F('Гүйлгээ нэмэх','Add transaction'))+'</button></div>';
@@ -1616,7 +1661,7 @@ function finReports(){
   var R=perRange(), list=FIN.data.fin_tx.filter(function(t){ return inPer(t.date); }), p=plan(), months=R[2];
   function sums(type){ var o={}; list.filter(function(t){ return t.type===type; }).forEach(function(t){ o[t.cat]=(o[t.cat]||0)+(+t.amount||0); }); return o; }
   var si=sums('in'), so=sums('out'), inPL=0, outPL=0;
-  var h='<div class="fin-bar">'+perSeg()+'<b class="per-l">'+esc(perLabel())+'</b></div>';
+  var h='';
   h+='<div class="card report"><h3>'+esc(F('Ашиг алдагдлын тайлан','Profit and loss'))+'</h3><table class="rep"><thead><tr><th>'+esc(F('Утга','Item'))+'</th><th class="nr">'+esc(F('Төсөв','Budget'))+'</th><th class="nr">'+esc(F('Гүйцэтгэл','Actual'))+'</th><th class="bar-col"></th></tr></thead><tbody>';
   h+='<tr class="grp"><td colspan="4">'+esc(F('Орлого','Income'))+'</td></tr>';
   FIN_IN.forEach(function(c){ if(c.nopl) return; var v=si[c.k]||0; inPL+=v; h+='<tr><td>'+esc(fcatName(c.k))+'</td><td class="nr muted">'+(c.k==='sales'?esc(money(salesTarget(months))):'')+'</td><td class="nr">'+esc(money(v))+'</td><td></td></tr>'; });
@@ -1635,8 +1680,9 @@ function finReports(){
 function prevMonth(m){ var d0=fromIso(m+'-01'); d0.setMonth(d0.getMonth()-1); return iso(d0).slice(0,7); }
 function salesTarget(months){ var p=plan(), s=0, mm=+perRange()[1].slice(5); for(var i=mm-months+1;i<=mm;i++) s+=+(p.sales||{})[i]||0; return s; }
 function finPayroll(){
-  var m=FIN.month, pr=payrollFor(m), staff=staffSorted();
-  var h='<div class="fin-bar"><p class="muted" style="margin:0;flex:1">'+esc(F('НДШ 11.5%, ХХОАТ 10% (хөнгөлөлттэй), байгууллагын НДШ 12.5% автоматаар бодогдоно.','Social insurance 11.5%, income tax 10% after the credit, and the company 12.5% are calculated for you.'))+'</p><button class="btn" data-act="fstaff">'+ICON.users+esc(F('Ажилтнууд','Staff'))+'</button>'+(pr?'':'<button class="btn primary" data-act="fpaymake">'+ICON.plus+esc(F('Энэ сарын цалин бодох','Start this month'))+'</button>')+'</div>';
+  var m=FIN.month, pr=payrollFor(m), staff=staffSorted(), dt=fromIso(m+'-01');
+  var h='<div class="per-bar"><div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх сар','Previous month'))+'">'+ICON.back+'</button><b class="fmonth">'+esc(LANG==='mn'?dt.getFullYear()+' оны '+(dt.getMonth()+1)+'-р сарын цалин':'Payroll, '+MON_EN[dt.getMonth()]+' '+dt.getFullYear())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараа сар','Next month'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div></div>';
+  h+='<div class="fin-bar"><p class="muted" style="margin:0;flex:1">'+esc(F('НДШ 11.5%, ХХОАТ 10% (хөнгөлөлттэй), байгууллагын НДШ 12.5% автоматаар бодогдоно.','Social insurance 11.5%, income tax 10% after the credit, and the company 12.5% are calculated for you.'))+'</p><button class="btn" data-act="fstaff">'+ICON.users+esc(F('Ажилтнууд','Staff'))+'</button>'+(pr?'':'<button class="btn primary" data-act="fpaymake">'+ICON.plus+esc(F('Энэ сарын цалин бодох','Start this month'))+'</button>')+'</div>';
   if(!staff.length) return h+'<div class="empty" style="margin-top:20px">'+esc(F('Эхлээд ажилтнуудаа нэмнэ үү.','Add your staff first.'))+'</div>';
   if(!pr) return h+'<div class="empty" style="margin-top:20px">'+esc(F('Энэ сарын цалин хараахан бодогдоогүй. Өмнөх сарын тоогоор эхлүүлнэ.','This month is not started yet. It starts from last month\'s numbers.'))+'</div>';
   var T={gross:0,ndsh:0,hhoat:0,company:0,deductions:0,net:0};
@@ -1723,7 +1769,7 @@ function finAction(a,b,id){
   if(a.indexOf('fup')===0) return fupAction(a,b);
   if(jobsAction(a,b)) return true;
   var md=S.modal;
-  if(a==='fmonth'){ var dd=fromIso(FIN.month+'-01'); dd.setMonth(dd.getMonth()+(+b.dataset.d)); FIN.month=iso(dd).slice(0,7); render(); return true; }
+  if(a==='fmonth'){ var step={month:1,quarter:3,half:6,year:12}[FIN.per||'month']||1, ps=FIN.tab==='payroll'?1:step, dd=fromIso(FIN.month+'-01'); dd.setMonth(dd.getMonth()+(+b.dataset.d)*ps); FIN.month=iso(dd).slice(0,7); render(); return true; }
   if(a==='ftab'){ FIN.tab=b.dataset.t; if(FIN.tab!=='tx') FIN.filter='all'; render(); return true; }
   if(a==='flock'){ lockFinance(); render(); return true; }
   if(a==='ffilter'){ FIN.tab='tx'; FIN.filter=b.dataset.f; render(); return true; }
@@ -2154,20 +2200,32 @@ function dealCosts(d){ return dealCostList(d).reduce(function(s,t){ return s+(+t
 function dshort(s){ return md(fromIso(String(s).slice(0,10))); }
 // ---------- periods: month, quarter, half year, year, all counted from the month shown at the top ----------
 function perRange(){
+  if(FIN.per==='custom'){ var f=FIN.from||FIN.month, t=FIN.to||FIN.month; if(t<f){ var s=f; f=t; t=s; } return [f, t, (+t.slice(0,4)-+f.slice(0,4))*12+(+t.slice(5))-(+f.slice(5))+1]; }
   var y=FIN.month.slice(0,4), m=+FIN.month.slice(5), p=FIN.per||'month', a=m, b=m;
   if(p==='quarter'){ a=Math.floor((m-1)/3)*3+1; b=a+2; } else if(p==='half'){ a=m<=6?1:7; b=a+5; } else if(p==='year'){ a=1; b=12; }
   return [y+'-'+('0'+a).slice(-2), y+'-'+('0'+b).slice(-2), b-a+1];
 }
 function perLabel(){
   var r=perRange(), y=r[0].slice(0,4), a=+r[0].slice(5), p=FIN.per||'month';
+  if(p==='custom'){ var ml=function(s){ return LANG==='mn'?s.slice(0,4)+'.'+s.slice(5):MON_EN[+s.slice(5)-1].slice(0,3)+' '+s.slice(0,4); }; return r[0]===r[1]?ml(r[0]):ml(r[0])+' - '+ml(r[1]); }
   if(p==='quarter') return F(y+' оны '+Math.ceil(a/3)+'-р улирал','Q'+Math.ceil(a/3)+' '+y);
   if(p==='half') return F(y+' оны '+(a===1?'эхний':'сүүлийн')+' хагас жил',(a===1?'H1 ':'H2 ')+y);
   if(p==='year') return F(y+' он','Year '+y);
   return LANG==='mn'?y+' оны '+a+'-р сар':MON_EN[a-1]+' '+y;
 }
 function inPer(dateStr){ var r=perRange(), m=monthOf(dateStr); return m>=r[0] && m<=r[1]; }
-function perSeg(){ return '<div class="seg" role="group" aria-label="'+esc(F('Хугацаа','Period'))+'">'+[['month',F('Сар','Month')],['quarter',F('Улирал','Quarter')],['half',F('Хагас жил','Half year')],['year',F('Жил','Year')]].map(function(o){ return '<button data-act="fper" data-v="'+o[0]+'" aria-pressed="'+((FIN.per||'month')===o[0])+'">'+esc(o[1])+'</button>'; }).join('')+'</div>'; }
+function perSeg(){ return '<div class="seg" role="group" aria-label="'+esc(F('Хугацаа','Period'))+'">'+[['month',F('Сар','Month')],['quarter',F('Улирал','Quarter')],['half',F('Хагас жил','Half year')],['year',F('Жил','Year')],['custom',F('Өөрөө сонгох','Custom')]].map(function(o){ return '<button data-act="fper" data-v="'+o[0]+'" aria-pressed="'+((FIN.per||'month')===o[0])+'">'+esc(o[1])+'</button>'; }).join('')+'</div>'; }
 
+function perNav(){
+  var p=FIN.per||'month', unit={month:F('сар','month'),quarter:F('улирал','quarter'),half:F('хагас жил','half year'),year:F('жил','year')}[p];
+  var nav=p==='custom'
+    ? '<div class="per-range"><label class="sr" for="pfrom">'+esc(F('Эхлэх сар','From month'))+'</label><input class="input sm" type="month" id="pfrom" value="'+esc(FIN.from||FIN.month)+'"><span>-</span><label class="sr" for="pto">'+esc(F('Дуусах сар','To month'))+'</label><input class="input sm" type="month" id="pto" value="'+esc(FIN.to||FIN.month)+'"></div>'
+    : '<div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх ','Previous ')+unit)+'">'+ICON.back+'</button><b class="fmonth">'+esc(perLabel())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараагийн ','Next ')+unit)+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div>';
+  return '<div class="per-bar">'+perSeg()+nav+'</div>';
+}
+document.addEventListener('change', function(e){
+  if(e.target.id==='pfrom'||e.target.id==='pto'){ if(e.target.value){ if(e.target.id==='pfrom') FIN.from=e.target.value; else FIN.to=e.target.value; render(); } }
+});
 // ---------- matching a description to a client's job ----------
 var CLIENT_ALIAS={'pizza hut':['пицца','pizza'],'emart':['имарт','emart','e-mart'],'mobicom':['мобиком','mobicom'],'max group':['макс','max'],'unitel':['юнител','unitel'],'kakumi':['какуми','kakumi'],'hairan':['хайран','hairan'],'milkman':['милкмэн','milkman'],'pinuta':['пинута','pinuta'],'pmc':['pmc'],'sisu':['sisu','сису'],'paradox':['paradox','парадокс','юү кэй эс']};
 function clientTokens(name){
@@ -2198,14 +2256,14 @@ function costSuggestions(){
 function finSales(){
   var all=FIN.data.fin_deals.filter(function(d){ return inPer(d.date) && (!FIN.clientF || d.client===FIN.clientF); }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); });
   var T={c:0,f:0,l:0,p:0,k:0}; all.forEach(function(d){ T.c+=+d.amount||0; T.f+=dealFinal(d); T.l+=dealLost(d); T.p+=dealPaid(d); T.k+=dealCosts(d); });
-  var h='<div class="fin-bar">'+perSeg()+'<b class="per-l">'+esc(perLabel())+'</b>'+(FIN.clientF?'<button class="chip-x" data-act="fclientf" data-c="">'+esc(FIN.clientF)+' '+ICON.x+'</button>':'')+'<span style="flex:1"></span><button class="btn primary" data-act="fdealnew">'+ICON.plus+esc(F('Ажил нэмэх','Add a job'))+'</button></div>';
-  h+='<div class="fin-stats five">'+statTile(F('Гэрээгээр','Contracted'), moneyShort(T.c), money(T.c))+statTile(F('Өөрчлөлт, цуцлалт','Changed or cancelled'), T.l?'-'+moneyShort(T.l):'0', F('гэрээнээс хасагдсан','taken off contracts'), T.l?'neg':'')+statTile(F('Бодит орлого','Actually received'), moneyShort(T.p), money(T.p))+statTile(F('Ажлын зардал','Job costs'), moneyShort(T.k), money(T.k))+statTile(F('Ашиг','Profit'), moneyShort(T.p-T.k), F('орсон орлого, зардал хассан','received minus costs'), 'ink')+'</div>';
+  var h='<div class="fin-bar">'+(FIN.clientF?'<button class="chip-x" data-act="fclientf" data-c="">'+esc(FIN.clientF)+' '+ICON.x+'</button>':'')+'<span style="flex:1"></span><button class="btn primary" data-act="fdealnew">'+ICON.plus+esc(F('Ажил нэмэх','Add a job'))+'</button></div>';
+  h+='<div class="fin-stats five">'+statTile(F('Гэрээгээр','Contracted'), moneyShort(T.c), money(T.c))+statTile(F('Өөрчлөлт, цуцлалт','Changed or cancelled'), T.l?'-'+moneyShort(T.l):'0', F('гэрээнээс хасагдсан','taken off contracts'), T.l?'neg':'')+statTile(F('Бодит орлого','Actually received'), moneyShort(T.p), money(T.p), 'in')+statTile(F('Ажлын зардал','Job costs'), moneyShort(T.k), money(T.k))+statTile(F('Ашиг','Profit'), moneyShort(T.p-T.k), F('орсон орлого, зардал хассан','received minus costs'), 'ink')+'</div>';
   var sug=costSuggestions();
   if(sug.length) h+='<div class="fin-tip"><span>'+esc(F(sug.length+' зардал аль ажилд хамаарахыг таамагласан. Холбовол ажил бүрийн ашиг гарна.','I matched '+sug.length+' costs to jobs. Link them to see each job\'s profit.'))+'</span><button class="btn sm" data-act="flinksug">'+esc(F('Шалгаад холбох','Check and link'))+'</button></div>';
   if(!all.length) return h+'<div class="empty" style="margin-top:20px">'+esc(F('Энэ хугацаанд ажил алга.','No jobs in this period.'))+'</div>';
   return h+'<div class="card report"><div class="pay-scroll"><table class="rep jobs"><thead><tr><th>'+esc(F('Ажил','Job'))+'</th><th class="nr">'+esc(F('Гэрээ','Contract'))+'</th><th class="nr">'+esc(F('Эцсийн','Final'))+'</th><th class="nr">'+esc(F('Орсон','Received'))+'</th><th class="nr">'+esc(F('Үлдэгдэл','Owed'))+'</th><th class="nr">'+esc(F('Зардал','Costs'))+'</th><th class="nr">'+esc(F('Ашиг','Profit'))+'</th><th>'+esc(F('Төлөв','Status'))+'</th></tr></thead><tbody>'+
-    all.map(function(d){ var fin=dealFinal(d), paid=dealPaid(d), cost=dealCosts(d), left=Math.max(0,fin-paid), st=d.status||(left<=0.5?'paid':'active'), cls=st==='cancelled'?'red':st==='changed'?'warn':st==='done'||st==='paid'?'ok':'';
-      return '<tr class="click" data-act="fdeal" data-id="'+esc(d.id)+'" tabindex="0"><td><b>'+esc(d.client)+'</b><div class="muted s13">'+esc([md(fromIso(String(d.date).slice(0,10))), d.work, d.title].filter(Boolean).join(' · '))+'</div></td><td class="nr">'+esc(money(d.amount))+'</td><td class="nr'+(fin<(+d.amount||0)?' red':'')+'">'+esc(money(fin))+'</td><td class="nr pos">'+esc(money(paid))+'</td><td class="nr">'+(left?esc(money(left)):'<span class="muted">0</span>')+'</td><td class="nr muted">'+(cost?esc(money(cost)):'')+'</td><td class="nr"><b class="'+(paid-cost<0?'red':'')+'">'+esc(money(paid-cost))+'</b></td><td><span class="chip '+cls+'">'+esc(dealStLabel(st))+'</span></td></tr>'; }).join('')+
+    all.map(function(d){ var fin=dealFinal(d), paid=dealPaid(d), cost=dealCosts(d), left=Math.max(0,fin-paid), st=d.status||(left<=0.5?'paid':'active'), cls=st==='cancelled'?'red':st==='changed'?'warn':st==='done'||st==='paid'?'ok':'info';
+      return '<tr class="click" data-act="fdeal" data-id="'+esc(d.id)+'" tabindex="0"><td><b>'+esc(d.client)+'</b><div class="muted s13">'+esc([md(fromIso(String(d.date).slice(0,10))), d.work, d.title].filter(Boolean).join(' · '))+'</div></td><td class="nr">'+esc(money(d.amount))+'</td><td class="nr'+(fin<(+d.amount||0)?' red':'')+'">'+esc(money(fin))+'</td><td class="nr pos">'+esc(money(paid))+'</td><td class="nr owed">'+(left?esc(money(left)):'<span class="muted">0</span>')+'</td><td class="nr muted">'+(cost?esc(money(cost)):'')+'</td><td class="nr"><b class="'+(paid-cost<0?'red':'')+'">'+esc(money(paid-cost))+'</b></td><td><span class="chip '+cls+'">'+esc(dealStLabel(st))+'</span></td></tr>'; }).join('')+
     '</tbody></table></div></div>';
 }
 
@@ -2219,16 +2277,16 @@ function finClientView(){
     var key=Object.keys(by).filter(function(k){ return nrm(k)===nrm(name) || clientTokens(k).some(function(w){ return tokenIn(nrm(name),w); }); })[0]; if(!key) return;
     if(t.vat==='done') by[key].vd+=+t.amount||0; else if(t.vat==='todo') by[key].vt+=+t.amount||0; });
   var names=Object.keys(by).sort(function(a,b){ return by[b].f-by[a].f; });
-  var h='<div class="fin-bar">'+perSeg()+'<b class="per-l">'+esc(perLabel())+'</b></div>';
+  var h='';
   h+='<div class="card report"><h3>'+esc(F('Харилцагч бүрээр','By client'))+'</h3>'+(names.length?'<div class="pay-scroll"><table class="rep jobs"><thead><tr><th>'+esc(F('Компани','Company'))+'</th><th>'+esc(F('Ажлын төрөл','Work'))+'</th><th class="nr">'+esc(F('Борлуулалт','Sales'))+'</th><th class="nr">'+esc(F('Орсон','Received'))+'</th><th class="nr">'+esc(F('Үлдэгдэл','Owed'))+'</th><th class="nr">'+esc(F('Ашиг','Profit'))+'</th><th>'+esc(F('НӨАТ','VAT'))+'</th></tr></thead><tbody>'+
     names.map(function(n){ var o=by[n], left=Math.max(0,o.f-o.p), w=Object.keys(o.w).join(', ');
-      return '<tr class="click" data-act="fclientf" data-c="'+esc(n)+'" tabindex="0"><td><b>'+esc(n)+'</b><div class="muted s13">'+esc(F(o.n+' ажил',o.n+(o.n===1?' job':' jobs')))+(o.f<o.c?' · '+esc(F('гэрээнээс ','contract was '))+esc(money(o.c)):'')+'</div></td><td class="muted s13">'+esc(w||'')+'</td><td class="nr">'+esc(money(o.f))+'</td><td class="nr pos">'+esc(money(o.p))+'</td><td class="nr">'+(left?esc(money(left)):'<span class="muted">0</span>')+'</td><td class="nr">'+esc(money(o.p-o.k))+'</td><td>'+(o.vt?'<span class="chip red">'+esc(F('Шивэх ','To file '))+esc(moneyShort(o.vt))+'</span>':o.vd?'<span class="chip ok">'+esc(F('Шивсэн','Filed'))+'</span>':'<span class="muted s13">'+esc(F('Бүртгэлгүй','Not set'))+'</span>')+'</td></tr>'; }).join('')+'</tbody></table></div>':'<p class="muted">'+esc(F('Энэ хугацаанд борлуулалт алга.','No sales in this period.'))+'</p>')+'</div>';
+      return '<tr class="click" data-act="fclientf" data-c="'+esc(n)+'" tabindex="0"><td><b>'+esc(n)+'</b><div class="muted s13">'+esc(F(o.n+' ажил',o.n+(o.n===1?' job':' jobs')))+(o.f<o.c?' · '+esc(F('гэрээнээс ','contract was '))+esc(money(o.c)):'')+'</div></td><td class="muted s13">'+esc(w||'')+'</td><td class="nr">'+esc(money(o.f))+'</td><td class="nr pos">'+esc(money(o.p))+'</td><td class="nr">'+(left?esc(money(left)):'<span class="muted">0</span>')+'</td><td class="nr">'+esc(money(o.p-o.k))+'</td><td>'+(o.vt?'<span class="chip warn">'+esc(F('Шивэх ','To file '))+esc(moneyShort(o.vt))+'</span>':o.vd?'<span class="chip ok">'+esc(F('Шивсэн','Filed'))+'</span>':'<span class="muted s13">'+esc(F('Бүртгэлгүй','Not set'))+'</span>')+'</td></tr>'; }).join('')+'</tbody></table></div>':'<p class="muted">'+esc(F('Энэ хугацаанд борлуулалт алга.','No sales in this period.'))+'</p>')+'</div>';
   var wk=Object.keys(work).sort(function(a,b){ return work[b]-work[a]; }), wt=wk.reduce(function(s,k){ return s+work[k]; },0);
   if(wk.length) h+='<div class="card fin-card" style="margin-top:20px"><div class="fin-card-h"><h3>'+esc(F('Ажлын төрлөөр','By type of work'))+'</h3></div>'+wk.map(function(k){ return '<div class="bar-row"><div class="bar-l">'+esc(k)+'</div><div class="bar-v"><b>'+esc(moneyShort(work[k]))+'</b><span class="muted">'+Math.round(work[k]/wt*100)+'%</span></div><div class="bar-t"><i style="width:'+(work[k]/wt*100)+'%;background:var(--ink)"></i></div></div>'; }).join('')+'</div>';
   // Purchases: did the supplier file a VAT receipt to us?
   var pv={}; FIN.data.fin_tx.filter(function(t){ return t.type==='out' && inPer(t.date) && !OVERHEAD[t.cat] && t.receipt && t.receipt!=='none'; }).forEach(function(t){ var k=t.client||F('Нэргүй нийлүүлэгч','Supplier not named'), o=pv[k]=pv[k]||{a:0,got:0,miss:0}; o.a+=+t.amount||0; if(t.receipt==='done') o.got+=+t.amount||0; else o.miss+=+t.amount||0; });
   var vs=Object.keys(pv).sort(function(a,b){ return pv[b].miss-pv[a].miss || pv[b].a-pv[a].a; });
-  h+='<div class="card report" style="margin-top:20px"><h3>'+esc(F('Худалдан авалт: нийлүүлэгч НӨАТ шивсэн үү','Purchases: did the supplier file VAT for us'))+'</h3>'+(vs.length?'<table class="rep"><thead><tr><th>'+esc(F('Нийлүүлэгч','Supplier'))+'</th><th class="nr">'+esc(F('Худалдан авсан','Bought'))+'</th><th class="nr">'+esc(F('НӨАТ ирсэн','VAT received'))+'</th><th class="nr">'+esc(F('Ирээгүй','Missing'))+'</th></tr></thead><tbody>'+vs.map(function(k){ var o=pv[k]; return '<tr><td>'+esc(k)+'</td><td class="nr">'+esc(money(o.a))+'</td><td class="nr pos">'+esc(money(o.got))+'</td><td class="nr'+(o.miss?' red':'')+'">'+esc(money(o.miss))+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="muted">'+esc(F('Зарлага дээр "НӨАТ баримт" сонгосон худалдан авалт энд гарна.','Purchases where you set the VAT receipt field show up here.'))+'</p>')+'</div>';
+  h+='<div class="card report" style="margin-top:20px"><h3>'+esc(F('Худалдан авалт: нийлүүлэгч НӨАТ шивсэн үү','Purchases: did the supplier file VAT for us'))+'</h3>'+(vs.length?'<table class="rep"><thead><tr><th>'+esc(F('Нийлүүлэгч','Supplier'))+'</th><th class="nr">'+esc(F('Худалдан авсан','Bought'))+'</th><th class="nr">'+esc(F('НӨАТ ирсэн','VAT received'))+'</th><th class="nr">'+esc(F('Ирээгүй','Missing'))+'</th></tr></thead><tbody>'+vs.map(function(k){ var o=pv[k]; return '<tr><td>'+esc(k)+'</td><td class="nr">'+esc(money(o.a))+'</td><td class="nr pos">'+esc(money(o.got))+'</td><td class="nr'+(o.miss?' owed':'')+'">'+esc(money(o.miss))+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="muted">'+esc(F('Зарлага дээр "НӨАТ баримт" сонгосон худалдан авалт энд гарна.','Purchases where you set the VAT receipt field show up here.'))+'</p>')+'</div>';
   return h;
 }
 
@@ -2241,7 +2299,7 @@ function linkModal(){
     '<div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary" data-act="flinkgo">'+esc(F('Сонгосныг холбох','Link the ticked ones'))+'</button></div>';
 }
 function jobsAction(a,b){
-  if(a==='fper'){ FIN.per=b.dataset.v; render(); return true; }
+  if(a==='fper'){ var r0=perRange(); FIN.per=b.dataset.v; if(FIN.per==='custom'){ FIN.from=FIN.from||r0[0]; FIN.to=FIN.to||r0[1]; } render(); return true; }
   if(a==='fclientf'){ FIN.clientF=b.dataset.c||''; FIN.tab='sales'; render(); return true; }
   if(a==='flinksug'){ openModal({kind:'flink'}); return true; }
   if(a==='flinkgo'){ var sug=costSuggestions(), n=0; Array.prototype.forEach.call(document.querySelectorAll('[data-lnk]'),function(c){ if(c.checked){ var x=sug[+c.dataset.lnk]; x.t.deal=x.d; fpersist('fin_tx',x.t); n++; } }); S.modal=null; render(); toast(F(n+' зардал холбогдлоо',n+' costs linked')); return true; }
@@ -2400,7 +2458,7 @@ function vPick(){
     return '<div class="group-l">'+esc(L(g[1]))+'</div>'+ps.map(function(p){
       k++; var load='';
       if(p.role==='exec'){ load='<span class="chip">'+esc(L('Agency overview'))+'</span>'; }
-      else if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip red">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
+      else if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip warn">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
       else { var a=active(p.id), ch=S.tasks.filter(function(t){return t.who===p.id&&changesAsked(t);}).length; load='<span class="chip">'+esc(L('{n} active',{n:a}))+'</span>'+(ch?'<span class="chip red">'+esc(L('{n} to fix',{n:ch}))+'</span>':''); }
       return '<button class="person" data-act="pick" data-id="'+esc(p.id)+'">'+av(p,true)+'<div style="min-width:0"><b>'+esc(p.name)+'</b><div class="muted">'+esc(L(ROLES[p.role]))+'</div><div class="load">'+load+'</div></div>'+(k<10?'<kbd>'+k+'</kbd>':'')+'</button>';
     }).join('');
@@ -2638,11 +2696,31 @@ function vAgency(){
     var seen=aud.filter(function(p){return seenBy(a,p.id);});
     return '<div class="rw"><span class="ann-ic sm">'+ICON.mega+'</span><span class="rw-m"><b>'+esc(a.title)+'</b><span class="muted">'+esc(L(a.aud==='all'?'Everyone':a.aud==='designer'?'Designers':'Video team'))+' · '+esc(person(a.by).name)+' · '+esc(short(a.date))+'</span></span><span class="seen hide-s" title="'+esc(seen.map(function(p){return p.name;}).join(', '))+'"><span class="avs">'+aud.map(function(p){ return '<span class="'+(seenBy(a,p.id)?'':'unseen')+'">'+av(p)+'</span>'; }).join('')+'</span><span class="muted s13">'+esc(L('{a}/{b} seen',{a:seen.length,b:aud.length}))+'</span></span>'+(S.readonly?'':'<button class="btn ghost sm" data-act="rmann" data-id="'+esc(a.id)+'">'+esc(L('Delete'))+'</button>')+'</div>';
   }).join('')+'</div>';
-  var dd=weekDays(S.wk*7);
-  h+='<div class="plan-h"><h3>'+esc(L('Planner'))+'</h3><div class="plan-nav"><button class="icon-btn" data-act="wk" data-d="-1" aria-label="'+esc(L('Previous week'))+'">'+ICON.back+'</button><span>'+esc(md(dd[0]))+' - '+esc(md(dd[6]))+'</span><button class="icon-btn" data-act="wk" data-d="1" aria-label="'+esc(L('Next week'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button>'+(S.wk?'<button class="btn ghost sm" data-act="wk" data-d="0">'+esc(L('This week'))+'</button>':'')+'</div>'+(S.readonly?'':'<button class="btn" data-act="newevent">'+ICON.plus+esc(L('Add to planner'))+'</button>')+'</div>';
+  var monthV=S.calView==='month', mref=new Date(TODAY.getFullYear(), TODAY.getMonth()+(S.mo||0), 1), dd=weekDays(S.wk*7);
+  var navLabel=monthV?(LANG==='mn'?mref.getFullYear()+' оны '+(mref.getMonth()+1)+'-р сар':MON_EN[mref.getMonth()]+' '+mref.getFullYear()):md(dd[0])+' - '+md(dd[6]);
+  var act=monthV?'mo':'wk', off=monthV?(S.mo||0):S.wk;
+  h+='<div class="plan-h"><h3>'+esc(L('Planner'))+'</h3>'+
+    '<div class="seg" role="group" aria-label="'+esc(L('View'))+'"><button data-act="calview" data-v="week" aria-pressed="'+(!monthV)+'">'+esc(L('Week'))+'</button><button data-act="calview" data-v="month" aria-pressed="'+monthV+'">'+esc(L('Month'))+'</button></div>'+
+    '<div class="plan-nav"><button class="icon-btn" data-act="'+act+'" data-d="-1" aria-label="'+esc(L(monthV?'Previous month':'Previous week'))+'">'+ICON.back+'</button><span>'+esc(navLabel)+'</span><button class="icon-btn" data-act="'+act+'" data-d="1" aria-label="'+esc(L(monthV?'Next month':'Next week'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button>'+(off?'<button class="btn ghost sm" data-act="'+act+'" data-d="0">'+esc(L(monthV?'This month':'This week'))+'</button>':'')+'</div>'+(S.readonly?'':'<button class="btn" data-act="newevent">'+ICON.plus+esc(L('Add to planner'))+'</button>')+'</div>';
   h+='<div class="legend">'+Object.keys(KINDS).map(function(k){ return '<span><i style="background:'+KINDS[k].color+'"></i>'+esc(L(KINDS[k].label))+'</span>'; }).join('')+'<span>'+esc(L('Shoots come in from tasks by themselves'))+'</span></div>';
-  h+=weekBlock(true);
+  h+=monthV?monthBlock(mref):weekBlock(true);
   return h;
+}
+// Month view: the whole month at a glance, Monday first, up to three events a day and a count for the rest
+function monthBlock(mref){
+  var first=new Date(mref.getFullYear(), mref.getMonth(), 1), start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
+  var last=new Date(mref.getFullYear(), mref.getMonth()+1, 0), cells=Math.ceil((((first.getDay()+6)%7)+last.getDate())/7)*7, ev=allEvents(), edit=!S.readonly;
+  var head='<div class="mon-h">'+[0,1,2,3,4,5,6].map(function(i){ var x=new Date(start); x.setDate(start.getDate()+i); return '<span>'+esc(dow(x))+'</span>'; }).join('')+'</div>';
+  var body='';
+  for(var i=0;i<cells;i++){
+    var x=new Date(start); x.setDate(start.getDate()+i);
+    var di=iso(x), list=ev.filter(function(e){ return e.date===di; }), isT=di===iso(TODAY), out=x.getMonth()!==mref.getMonth(), past=x<TODAY&&!isT;
+    body+='<div class="mon-d'+(isT?' today':'')+(out?' out':'')+(past?' past':'')+'"><div class="mon-n">'+(edit?'<button class="mon-add" data-act="newevent" data-date="'+di+'" aria-label="'+esc(L('Add to planner')+' '+md(x))+'">'+x.getDate()+'</button>':'<span>'+x.getDate()+'</span>')+'</div>'+
+      list.slice(0,3).map(function(e){ var k=KINDS[e.kind]||KINDS.meeting, t=(e.time?e.time+' ':'')+e.title;
+        return edit?'<button class="mon-e" style="--k:'+k.color+'" data-act="'+(e.auto?'evauto':'editevent')+'" data-id="'+esc(e.auto?e.task:e.id)+'" title="'+esc(t+' · '+whoLine(e))+'">'+esc(t)+'</button>':'<span class="mon-e" style="--k:'+k.color+'" title="'+esc(t)+'">'+esc(t)+'</span>'; }).join('')+
+      (list.length>3?'<button class="mon-more" data-act="calweek" data-date="'+di+'">'+esc(L('+{n} more',{n:list.length-3}))+'</button>':'')+'</div>';
+  }
+  return '<div class="mon">'+head+'<div class="mon-g">'+body+'</div></div>';
 }
 
 // ================= Team settings (PM) =================
@@ -2880,6 +2958,9 @@ document.addEventListener('click', function(e){
   if(a==='rmann'){ var gone=S.ann.filter(function(x){return x.id===id;})[0]; destroy('ann',id); render(); toast(L('Announcement deleted'), function(){ add('ann',gone); }); return; }
   // planner
   if(a==='wk'){ var dd=+b.dataset.d; S.wk = dd===0?0:S.wk+dd; render(); return; }
+  if(a==='mo'){ var dm=+b.dataset.d; S.mo = dm===0?0:(S.mo||0)+dm; render(); return; }
+  if(a==='calview'){ S.calView=b.dataset.v; if(S.calView==='month' && S.mo==null) S.mo=0; render(); return; }
+  if(a==='calweek'){ var tgt=fromIso(b.dataset.date), mon=weekDays(0)[0]; S.wk=Math.floor((tgt-mon)/(7*864e5)); S.calView='week'; render(); return; }
   if(a==='newevent'){ openModal({kind:'event', date:b.dataset.date||null}); return; }
   if(a==='editevent'){ var ev=S.events.filter(function(x){return x.id===id;})[0]; openModal({kind:'event', id:ev.id, title:ev.title, k:ev.kind, date:ev.date, time:ev.time, place:ev.place, who:ev.who==='all'?'all':(ev.who||[]).slice()}); return; }
   if(a==='evauto'){ var st=task(id); if(st && (isPM()||st.who===S.me)) openTask(st); else toast(L('Change a shoot date on its task.')); return; }

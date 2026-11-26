@@ -113,7 +113,7 @@ function vPick(){
     return '<div class="group-l">'+esc(L(g[1]))+'</div>'+ps.map(function(p){
       k++; var load='';
       if(p.role==='exec'){ load='<span class="chip">'+esc(L('Agency overview'))+'</span>'; }
-      else if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip red">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
+      else if(p.role==='pm'){ var r=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===p.id;}).length; load=r?'<span class="chip warn">'+esc(L('{n} to review',{n:r}))+'</span>':'<span class="chip ok">'+ICON.check+esc(L('Nothing to review'))+'</span>'; }
       else { var a=active(p.id), ch=S.tasks.filter(function(t){return t.who===p.id&&changesAsked(t);}).length; load='<span class="chip">'+esc(L('{n} active',{n:a}))+'</span>'+(ch?'<span class="chip red">'+esc(L('{n} to fix',{n:ch}))+'</span>':''); }
       return '<button class="person" data-act="pick" data-id="'+esc(p.id)+'">'+av(p,true)+'<div style="min-width:0"><b>'+esc(p.name)+'</b><div class="muted">'+esc(L(ROLES[p.role]))+'</div><div class="load">'+load+'</div></div>'+(k<10?'<kbd>'+k+'</kbd>':'')+'</button>';
     }).join('');
@@ -351,11 +351,31 @@ function vAgency(){
     var seen=aud.filter(function(p){return seenBy(a,p.id);});
     return '<div class="rw"><span class="ann-ic sm">'+ICON.mega+'</span><span class="rw-m"><b>'+esc(a.title)+'</b><span class="muted">'+esc(L(a.aud==='all'?'Everyone':a.aud==='designer'?'Designers':'Video team'))+' · '+esc(person(a.by).name)+' · '+esc(short(a.date))+'</span></span><span class="seen hide-s" title="'+esc(seen.map(function(p){return p.name;}).join(', '))+'"><span class="avs">'+aud.map(function(p){ return '<span class="'+(seenBy(a,p.id)?'':'unseen')+'">'+av(p)+'</span>'; }).join('')+'</span><span class="muted s13">'+esc(L('{a}/{b} seen',{a:seen.length,b:aud.length}))+'</span></span>'+(S.readonly?'':'<button class="btn ghost sm" data-act="rmann" data-id="'+esc(a.id)+'">'+esc(L('Delete'))+'</button>')+'</div>';
   }).join('')+'</div>';
-  var dd=weekDays(S.wk*7);
-  h+='<div class="plan-h"><h3>'+esc(L('Planner'))+'</h3><div class="plan-nav"><button class="icon-btn" data-act="wk" data-d="-1" aria-label="'+esc(L('Previous week'))+'">'+ICON.back+'</button><span>'+esc(md(dd[0]))+' - '+esc(md(dd[6]))+'</span><button class="icon-btn" data-act="wk" data-d="1" aria-label="'+esc(L('Next week'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button>'+(S.wk?'<button class="btn ghost sm" data-act="wk" data-d="0">'+esc(L('This week'))+'</button>':'')+'</div>'+(S.readonly?'':'<button class="btn" data-act="newevent">'+ICON.plus+esc(L('Add to planner'))+'</button>')+'</div>';
+  var monthV=S.calView==='month', mref=new Date(TODAY.getFullYear(), TODAY.getMonth()+(S.mo||0), 1), dd=weekDays(S.wk*7);
+  var navLabel=monthV?(LANG==='mn'?mref.getFullYear()+' оны '+(mref.getMonth()+1)+'-р сар':MON_EN[mref.getMonth()]+' '+mref.getFullYear()):md(dd[0])+' - '+md(dd[6]);
+  var act=monthV?'mo':'wk', off=monthV?(S.mo||0):S.wk;
+  h+='<div class="plan-h"><h3>'+esc(L('Planner'))+'</h3>'+
+    '<div class="seg" role="group" aria-label="'+esc(L('View'))+'"><button data-act="calview" data-v="week" aria-pressed="'+(!monthV)+'">'+esc(L('Week'))+'</button><button data-act="calview" data-v="month" aria-pressed="'+monthV+'">'+esc(L('Month'))+'</button></div>'+
+    '<div class="plan-nav"><button class="icon-btn" data-act="'+act+'" data-d="-1" aria-label="'+esc(L(monthV?'Previous month':'Previous week'))+'">'+ICON.back+'</button><span>'+esc(navLabel)+'</span><button class="icon-btn" data-act="'+act+'" data-d="1" aria-label="'+esc(L(monthV?'Next month':'Next week'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button>'+(off?'<button class="btn ghost sm" data-act="'+act+'" data-d="0">'+esc(L(monthV?'This month':'This week'))+'</button>':'')+'</div>'+(S.readonly?'':'<button class="btn" data-act="newevent">'+ICON.plus+esc(L('Add to planner'))+'</button>')+'</div>';
   h+='<div class="legend">'+Object.keys(KINDS).map(function(k){ return '<span><i style="background:'+KINDS[k].color+'"></i>'+esc(L(KINDS[k].label))+'</span>'; }).join('')+'<span>'+esc(L('Shoots come in from tasks by themselves'))+'</span></div>';
-  h+=weekBlock(true);
+  h+=monthV?monthBlock(mref):weekBlock(true);
   return h;
+}
+// Month view: the whole month at a glance, Monday first, up to three events a day and a count for the rest
+function monthBlock(mref){
+  var first=new Date(mref.getFullYear(), mref.getMonth(), 1), start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
+  var last=new Date(mref.getFullYear(), mref.getMonth()+1, 0), cells=Math.ceil((((first.getDay()+6)%7)+last.getDate())/7)*7, ev=allEvents(), edit=!S.readonly;
+  var head='<div class="mon-h">'+[0,1,2,3,4,5,6].map(function(i){ var x=new Date(start); x.setDate(start.getDate()+i); return '<span>'+esc(dow(x))+'</span>'; }).join('')+'</div>';
+  var body='';
+  for(var i=0;i<cells;i++){
+    var x=new Date(start); x.setDate(start.getDate()+i);
+    var di=iso(x), list=ev.filter(function(e){ return e.date===di; }), isT=di===iso(TODAY), out=x.getMonth()!==mref.getMonth(), past=x<TODAY&&!isT;
+    body+='<div class="mon-d'+(isT?' today':'')+(out?' out':'')+(past?' past':'')+'"><div class="mon-n">'+(edit?'<button class="mon-add" data-act="newevent" data-date="'+di+'" aria-label="'+esc(L('Add to planner')+' '+md(x))+'">'+x.getDate()+'</button>':'<span>'+x.getDate()+'</span>')+'</div>'+
+      list.slice(0,3).map(function(e){ var k=KINDS[e.kind]||KINDS.meeting, t=(e.time?e.time+' ':'')+e.title;
+        return edit?'<button class="mon-e" style="--k:'+k.color+'" data-act="'+(e.auto?'evauto':'editevent')+'" data-id="'+esc(e.auto?e.task:e.id)+'" title="'+esc(t+' · '+whoLine(e))+'">'+esc(t)+'</button>':'<span class="mon-e" style="--k:'+k.color+'" title="'+esc(t)+'">'+esc(t)+'</span>'; }).join('')+
+      (list.length>3?'<button class="mon-more" data-act="calweek" data-date="'+di+'">'+esc(L('+{n} more',{n:list.length-3}))+'</button>':'')+'</div>';
+  }
+  return '<div class="mon">'+head+'<div class="mon-g">'+body+'</div></div>';
 }
 
 // ================= Team settings (PM) =================

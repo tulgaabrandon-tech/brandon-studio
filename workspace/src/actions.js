@@ -186,6 +186,9 @@ document.addEventListener('click', function(e){
   if(a==='rmann'){ var gone=S.ann.filter(function(x){return x.id===id;})[0]; destroy('ann',id); render(); toast(L('Announcement deleted'), function(){ add('ann',gone); }); return; }
   // planner
   if(a==='wk'){ var dd=+b.dataset.d; S.wk = dd===0?0:S.wk+dd; render(); return; }
+  if(a==='mo'){ var dm=+b.dataset.d; S.mo = dm===0?0:(S.mo||0)+dm; render(); return; }
+  if(a==='calview'){ S.calView=b.dataset.v; if(S.calView==='month' && S.mo==null) S.mo=0; render(); return; }
+  if(a==='calweek'){ var tgt=fromIso(b.dataset.date), mon=weekDays(0)[0]; S.wk=Math.floor((tgt-mon)/(7*864e5)); S.calView='week'; render(); return; }
   if(a==='newevent'){ openModal({kind:'event', date:b.dataset.date||null}); return; }
   if(a==='editevent'){ var ev=S.events.filter(function(x){return x.id===id;})[0]; openModal({kind:'event', id:ev.id, title:ev.title, k:ev.kind, date:ev.date, time:ev.time, place:ev.place, who:ev.who==='all'?'all':(ev.who||[]).slice()}); return; }
   if(a==='evauto'){ var st=task(id); if(st && (isPM()||st.who===S.me)) openTask(st); else toast(L('Change a shoot date on its task.')); return; }
