@@ -1,0 +1,88 @@
+# BrandOn Studio: setup on your own hosting
+
+About 30 minutes, once. Everything here is free at the size of Brand On.
+
+You will make three free accounts: **Supabase** (the database), **Telegram BotFather** (the bot) and **Vercel** (the website). Keep this page open and go step by step.
+
+---
+
+## 1. Database (Supabase)
+
+1. Go to **supabase.com**, sign up, and press **New project**.
+   - Name: `brandon-studio`
+   - Region: **Southeast Asia (Singapore)**, the closest to Ulaanbaatar
+   - Choose a database password and save it somewhere safe. You won't need it day to day.
+2. When the project is ready, open **SQL Editor**, press **New query**, paste everything from `supabase/schema.sql`, and press **Run**. This creates the table and adds the team.
+3. Open **Authentication > Users > Add user > Create new user**.
+   - Email: `studio@brand-on.mn`
+   - Password: choose the **studio password**. You will tell the team this one in person.
+   - Tick **Auto Confirm User**.
+4. Open **Authentication > Sign In / Providers** and turn **off** "Allow new users to sign up". Now only the studio account can get in.
+5. Open **Project Settings > API** and copy two things:
+   - **Project URL** (looks like `https://abcdefgh.supabase.co`)
+   - **anon public** key
+
+   Send these two to Claude, or paste them into `public/config.js` yourself. They are safe to share. The studio password protects the data.
+
+## 2. Telegram bot
+
+1. In Telegram, open **@BotFather** and send `/newbot`.
+2. Name: `BrandOn Studio`. Username: something like `BrandOnStudioBot` (it must end in `bot`).
+3. BotFather gives you a **token**. This one is secret: don't paste it in a chat. It only goes into Supabase in the next step.
+4. Send the bot's username (without @) to Claude, or put it in `public/config.js` as `botUsername`.
+
+## 3. Telegram messages (Supabase functions)
+
+1. In Supabase open **Edge Functions > Deploy a new function > Via Editor**.
+   - Name it `notify`, delete the sample code, paste everything from `supabase/functions/notify/index.ts`, press **Deploy**.
+2. Do it again with the name `telegram` and the code from `supabase/functions/telegram/index.ts`.
+   - After deploying, open its **Details** and turn **off** "Enforce JWT verification". Telegram can't send a Supabase token.
+3. Open **Edge Functions > Secrets** and add:
+   - `TELEGRAM_BOT_TOKEN`: the token from BotFather
+   - `TELEGRAM_SECRET`: any random word you invent, for example `bo-7Kq2xZ`
+   - `APP_URL`: your website address from step 4 (you can add this one after)
+4. Open **Database > Webhooks** (press **Enable webhooks** if asked), then **Create a new hook**:
+   - Name: `telegram-notify`
+   - Table: `docs`
+   - Events: **Insert** and **Update**
+   - Type: **Supabase Edge Functions**, function `notify`, method `POST`
+   - Press **Create webhook**.
+
+## 4. Website (Vercel)
+
+1. Go to **vercel.com** and sign in with your GitHub account.
+2. **Add New > Project**, choose the `brandon-studio` repository.
+3. Set **Root Directory** to `workspace`. Framework preset: **Other**. Press **Deploy**.
+4. Vercel gives you an address like `brandon-studio.vercel.app`. Put it in the `APP_URL` secret in Supabase (step 3.3).
+
+From now on, every time Claude pushes an update to GitHub, the website updates by itself within a minute.
+
+## 5. Connect the bot
+
+Open this address in any browser once, with your own values filled in:
+
+```
+https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<PROJECT>.supabase.co/functions/v1/telegram&secret_token=<TELEGRAM_SECRET>
+```
+
+You should see `"ok":true`.
+
+## 6. The team, on their phones
+
+Each person, once:
+
+1. Opens the website on their phone. Taps **Share > Add to Home Screen** (iPhone) or **menu > Install app** (Android). Now it's an app icon.
+2. Types the **studio password**.
+3. Taps their name and creates their own **4-digit PIN**.
+4. Taps their name at the top, then **Telegram холбох**, then **Start** in Telegram.
+
+That's it. New tasks, sent work, notes, approvals, questions and announcements now arrive in Telegram, with a button that opens the right task.
+
+---
+
+### If something goes wrong
+
+- **Someone forgot their PIN:** Suvdaa or Reka opens **Team settings** and taps **PIN шинэчлэх** (Reset PIN) next to their name.
+- **No Telegram messages:** check the person shows "Telegram холбогдсон" (Telegram connected) in Team settings, and that the `telegram-notify` webhook exists.
+- **Backups:** Team settings has **Хүснэгтээр татах** (Export to spreadsheet). Do it once a month and keep the file in Drive.
+- **Supabase free projects pause after a week with no use.** With the team using it daily this won't happen. If it ever does, open Supabase and press **Restore**.
