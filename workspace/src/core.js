@@ -75,6 +75,42 @@ function startLive(){
     }, function(err){ clearTimeout(timer); S.slow=true; render(); });
   });
 }
+// ---------- smooth re-rendering ----------
+// Instead of replacing the page on every change, the new HTML is laid over the old one: elements that stay keep
+// their place, focus, scroll and running animations, and CSS transitions can animate the change (a pressed tab sliding, a bar growing).
+function morph(el, html){ var t=document.createElement('template'); t.innerHTML=html; morphKids(el, t.content); }
+function sameNode(a,b){
+  if(a.nodeType!==b.nodeType) return false;
+  if(a.nodeType!==1) return true;
+  return a.nodeName===b.nodeName && (a.id||'')===(b.id||'') && (a.getAttribute('data-key')||'')===(b.getAttribute('data-key')||'');
+}
+function morphKids(a,b){
+  var bn=b.childNodes;
+  for(var i=0;i<bn.length;i++){
+    var nb=bn[i], na=a.childNodes[i];
+    if(!na) a.appendChild(document.importNode(nb,true));
+    else if(sameNode(na,nb)) morphNode(na,nb);
+    else a.replaceChild(document.importNode(nb,true), na);
+  }
+  while(a.childNodes.length>bn.length) a.removeChild(a.lastChild);
+}
+function morphNode(a,b){
+  if(a.nodeType!==1){ if(a.nodeValue!==b.nodeValue) a.nodeValue=b.nodeValue; return; }
+  var i, at;
+  for(i=a.attributes.length-1;i>=0;i--){ at=a.attributes[i].name; if(!b.hasAttribute(at)) a.removeAttribute(at); }
+  for(i=0;i<b.attributes.length;i++){ at=b.attributes[i]; if(a.getAttribute(at.name)!==at.value) a.setAttribute(at.name, at.value); }
+  var tag=a.nodeName, focused=a===document.activeElement;
+  if(tag==='INPUT'){
+    if(a.type==='checkbox'||a.type==='radio') a.checked=b.hasAttribute('checked');
+    else if(!focused && a.type!=='file' && a.value!==(b.getAttribute('value')||'')) a.value=b.getAttribute('value')||'';
+    return;
+  }
+  if(tag==='TEXTAREA'){ if(!focused && a.value!==b.textContent) a.value=b.textContent; return; }
+  if(tag==='IFRAME') return;
+  morphKids(a,b);
+  if(tag==='SELECT' && !focused){ var o=b.querySelector('option[selected]'); a.value=o?o.value:(a.options[0]?a.options[0].value:''); }
+}
+
 // Re-render from live data without wiping what someone is typing
 function softRender(){
   var a=document.activeElement;

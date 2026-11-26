@@ -30,7 +30,7 @@
   --soft-up:3px 3px 8px rgba(20,20,20,.08),-3px -3px 8px rgba(255,255,255,.9);
   --soft-in:inset 2px 2px 5px rgba(20,20,20,.09),inset -2px -2px 5px rgba(255,255,255,.85);
   --glass:rgba(244,243,239,.72);
-  --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.34,1.5,.64,1);
+  --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.22,1,.36,1);
   --font:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:light;
 }
@@ -454,10 +454,10 @@ body.dark .toast .lnk{color:#FF6B7C}
   .keys{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
-::view-transition-old(root){animation:vt-out .16s var(--ease) both}
-::view-transition-new(root){animation:vt-in .28s var(--ease) both}
+::view-transition-old(root){animation:vt-out .14s ease-out both}
+::view-transition-new(root){animation:vt-in .2s ease-out both}
 @keyframes vt-out{to{opacity:0}}
-@keyframes vt-in{from{opacity:0;transform:translateY(6px)}}
+@keyframes vt-in{from{opacity:0}}
 /* refinements */
 .people{grid-template-columns:repeat(2,minmax(0,1fr));max-width:780px}
 .focus-m img{object-fit:contain;padding:28px}
@@ -474,8 +474,8 @@ body.dark .toast .lnk{color:#FF6B7C}
 
 /* =========== v6: calmer layout, soft touch, Material 3 Expressive motion =========== */
 :root{
-  --spring-fast:linear(0,.24 7%,.66 15%,1.03 25%,1.08 31%,1.04 39%,.99 50%,1 64%,1);
-  --spring-slow:linear(0,.18 8%,.56 18%,.92 30%,1.06 42%,1.03 54%,.99 68%,1);
+  --spring-fast:cubic-bezier(.22,1,.36,1);
+  --spring-slow:cubic-bezier(.16,1,.3,1);
   --soft-up:4px 4px 10px rgba(20,20,20,.09),-4px -4px 10px rgba(255,255,255,.95);
   --soft-up-lg:8px 8px 22px rgba(20,20,20,.09),-8px -8px 22px rgba(255,255,255,.95);
   --soft-in:inset 3px 3px 7px rgba(20,20,20,.1),inset -3px -3px 7px rgba(255,255,255,.9);
@@ -762,6 +762,35 @@ button.mini:hover{background:var(--surface-2)}
 .fup-r .fup-j{width:190px;flex:none}
 .link-list{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:14px}
 @media (max-width:720px){.fup-r .fup-j{width:100%;order:6}.deal-sum.five{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- smooth motion ---------- */
+/* One entrance per page: a short fade and a small lift, no bounce. The view transition only crossfades. */
+.page.enter > *{animation:rise .42s cubic-bezier(.22,1,.36,1) both}
+.page.enter > *:nth-child(2){animation-delay:.03s}.page.enter > *:nth-child(3){animation-delay:.06s}.page.enter > *:nth-child(4){animation-delay:.09s}.page.enter > *:nth-child(n+5){animation-delay:.12s}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* Switching a finance tab fades the new content in */
+.fin-pane{animation:pane .26s cubic-bezier(.22,1,.36,1) both}
+@keyframes pane{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* Sheets and the search palette leave as gently as they arrive */
+.modal{animation:sheet .32s cubic-bezier(.22,1,.36,1) both}
+@keyframes sheet{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+.overlay.closing{animation:fadeout .17s ease-in both}
+.overlay.closing .modal{animation:sheetout .17s ease-in both}
+#palette.closing .pal-ov{animation:fadeout .15s ease-in both}
+@keyframes fadeout{to{opacity:0}}
+@keyframes sheetout{to{opacity:0;transform:translateY(8px) scale(.985)}}
+/* State changes animate instead of snapping */
+.seg button,.pick,.chip,.tab,.tabs button,.icon-btn,.switch,.switch::after{transition:background-color .22s ease,color .22s ease,box-shadow .25s ease,border-radius .3s cubic-bezier(.22,1,.36,1),transform .25s cubic-bezier(.22,1,.36,1)}
+.btn{transition:background-color .2s ease,border-color .2s ease,box-shadow .25s ease,border-radius .3s cubic-bezier(.22,1,.36,1),transform .2s cubic-bezier(.22,1,.36,1)}
+.btn:active,.pick:active,.icon-btn:active{transform:scale(.97)}
+.bar-t i{transition:width .6s cubic-bezier(.22,1,.36,1)}
+.menu{animation:pop .24s cubic-bezier(.22,1,.36,1) both}
+@media (prefers-reduced-motion:reduce){.fin-pane,.modal,.overlay.closing,.overlay.closing .modal,.page.enter > *{animation:none!important}}
+/* Press feedback without a jumpy shape change on quick taps */
+.btn:active{border-radius:20px;transform:scale(.97)}
+.btn.xl:active{border-radius:22px}.btn.sm:active{border-radius:14px}
+.icon-btn:active{border-radius:16px;transform:scale(.96)}
+.fab-item:active{border-radius:22px;transform:scale(.98)}
 
 </style>
 </head>
@@ -1107,6 +1136,42 @@ function startLive(){
     }, function(err){ clearTimeout(timer); S.slow=true; render(); });
   });
 }
+// ---------- smooth re-rendering ----------
+// Instead of replacing the page on every change, the new HTML is laid over the old one: elements that stay keep
+// their place, focus, scroll and running animations, and CSS transitions can animate the change (a pressed tab sliding, a bar growing).
+function morph(el, html){ var t=document.createElement('template'); t.innerHTML=html; morphKids(el, t.content); }
+function sameNode(a,b){
+  if(a.nodeType!==b.nodeType) return false;
+  if(a.nodeType!==1) return true;
+  return a.nodeName===b.nodeName && (a.id||'')===(b.id||'') && (a.getAttribute('data-key')||'')===(b.getAttribute('data-key')||'');
+}
+function morphKids(a,b){
+  var bn=b.childNodes;
+  for(var i=0;i<bn.length;i++){
+    var nb=bn[i], na=a.childNodes[i];
+    if(!na) a.appendChild(document.importNode(nb,true));
+    else if(sameNode(na,nb)) morphNode(na,nb);
+    else a.replaceChild(document.importNode(nb,true), na);
+  }
+  while(a.childNodes.length>bn.length) a.removeChild(a.lastChild);
+}
+function morphNode(a,b){
+  if(a.nodeType!==1){ if(a.nodeValue!==b.nodeValue) a.nodeValue=b.nodeValue; return; }
+  var i, at;
+  for(i=a.attributes.length-1;i>=0;i--){ at=a.attributes[i].name; if(!b.hasAttribute(at)) a.removeAttribute(at); }
+  for(i=0;i<b.attributes.length;i++){ at=b.attributes[i]; if(a.getAttribute(at.name)!==at.value) a.setAttribute(at.name, at.value); }
+  var tag=a.nodeName, focused=a===document.activeElement;
+  if(tag==='INPUT'){
+    if(a.type==='checkbox'||a.type==='radio') a.checked=b.hasAttribute('checked');
+    else if(!focused && a.type!=='file' && a.value!==(b.getAttribute('value')||'')) a.value=b.getAttribute('value')||'';
+    return;
+  }
+  if(tag==='TEXTAREA'){ if(!focused && a.value!==b.textContent) a.value=b.textContent; return; }
+  if(tag==='IFRAME') return;
+  morphKids(a,b);
+  if(tag==='SELECT' && !focused){ var o=b.querySelector('option[selected]'); a.value=o?o.value:(a.options[0]?a.options[0].value:''); }
+}
+
 // Re-render from live data without wiping what someone is typing
 function softRender(){
   var a=document.activeElement;
@@ -1493,7 +1558,7 @@ function vFinance(){
     '<div class="ph-tools"><div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх сар','Previous month'))+'">'+ICON.back+'</button><b class="fmonth">'+esc(LANG==='mn'?dt.getFullYear()+' оны '+(dt.getMonth()+1)+'-р сар':MON_EN[dt.getMonth()]+' '+dt.getFullYear())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараа сар','Next month'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
   h+='<nav class="seg fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav>';
   var V={overview:finOverview, upload:finUpload, tx:finTx, sales:finSales, clients:finClientView, reports:finReports, payroll:finPayroll, plan:finPlan};
-  return h+(V[FIN.tab]||finOverview)();
+  return h+'<div class="fin-pane" data-key="'+FIN.tab+'-'+(FIN.per||'m')+'">'+(V[FIN.tab]||finOverview)()+'</div>';
 }
 function finGate(){
   return '<div class="fin-gate"><span class="fin-lock">'+ICON.lock+'</span><h1 class="h2">'+esc(F('Санхүү','Finance'))+'</h1><p class="lede" style="text-align:center;margin-top:8px">'+esc(F('Санхүүгийн кодоо оруулна уу. 15 минут хөдөлгөөнгүй бол автоматаар түгжигдэнэ.','Enter the finance code. It locks again after 15 quiet minutes.'))+'</p>'+
@@ -2274,17 +2339,18 @@ function weekDays(off){ var out=[]; var s=d(off||0); var mon=new Date(s); mon.se
 function render(){
   document.body.classList.toggle('dark', S.dark);
   var root=$('#root');
-  if(S.mode==='setup'){ root.innerHTML='<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'; return; }
-  if(S.mode==='login'){ root.innerHTML=vLogin(); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
-  if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ root.innerHTML=vLoading(); renderModal(); renderPalette(); return; }
-  if(!S.me){ root.innerHTML = S.people.length ? vPick() : vSetup(); renderModal(); renderPalette(); return; }
+  if(S.mode==='setup'){ morph(root,'<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'); return; }
+  if(S.mode==='login'){ morph(root,vLogin()); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
+  if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ morph(root,vLoading()); renderModal(); renderPalette(); return; }
+  if(!S.me){ morph(root, S.people.length ? vPick() : vSetup()); renderModal(); renderPalette(); return; }
   if(!S.view) S.view=home();
   var allowed=isExec()?['dash','projects','project','review','finance']:isPM()?null:['home','review','finance'];
   if(allowed && allowed.indexOf(S.view)<0) S.view=home();
   if(S.view==='finance' && !hasFinance()) S.view=home();
   if(S.ready && isPM() && !S.recurDone){ S.recurDone=true; setTimeout(runRecurring,400); }
-  var entering = S.lastView!==S.view+'|'+S.me; S.lastView=S.view+'|'+S.me;
-  if(S.view==='review'){ root.innerHTML=vReview(); renderModal(); renderPalette(); return; }
+  if(S.lastView!==S.view+'|'+S.me){ S.enterUntil=Date.now()+650; S.lastView=S.view+'|'+S.me; }
+  var entering = Date.now()<(S.enterUntil||0);
+  if(S.view==='review'){ morph(root,vReview()); renderModal(); renderPalette(); return; }
   var u=me(), pm=isPM(), h='';
   if(S.mode==='demo') h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
@@ -2304,7 +2370,7 @@ function render(){
   var V={home:vHome, needs:vNeeds, projects:vProjects, project:vProject, agency:vAgency, settings:vSettings, finance:vFinance, dash:vDash};
   h+='<main class="page'+(entering?' enter':'')+(S.view==='finance'?' wide':'')+'">'+(V[S.view]||vHome)()+'</main>';
   if(!S.readonly) h+=(S.view==='finance'?(FIN.unlocked?'<div class="fab-w"><button class="fab" data-act="ftxnew" aria-label="'+esc(F('Гүйлгээ нэмэх','Add transaction'))+'">'+ICON.plus+'</button></div>':''):(isExec()?'':fabHtml()));
-  root.innerHTML=h;
+  morph(root,h);
   renderModal(); renderPalette();
 }
 function fabHtml(){
@@ -2616,11 +2682,12 @@ function palItems(){
 }
 function renderPalette(){
   var el=$('#palette');
-  if(!S.palette){ el.innerHTML=''; return; }
+  if(!S.palette){ if(el.firstChild && !el.classList.contains('closing')){ el.classList.add('closing'); setTimeout(function(){ if(!S.palette){ el.innerHTML=''; } el.classList.remove('closing'); },160); } return; }
+  el.classList.remove('closing');
   var items=palItems(); S.palItems=items; if(S.palette.i>=items.length) S.palette.i=Math.max(0,items.length-1);
   var g='', list=items.map(function(it,i){ var head=it.g!==g?'<div class="pal-g">'+esc(L(it.g))+'</div>':''; g=it.g; return head+'<button class="pal-it" data-pi="'+i+'" aria-selected="'+(i===S.palette.i)+'" role="option">'+it.icon+'<span>'+esc(it.label)+'</span>'+(it.sub?'<span class="sub">'+esc(it.sub)+'</span>':it.kbd?'<span class="sub"><kbd>'+it.kbd+'</kbd></span>':'')+'</button>'; }).join('');
   var had=$('#palq'), val=had?had.value:S.palette.q||'';
-  el.innerHTML='<div class="pal-ov" data-palov><div class="pal" role="dialog" aria-label="'+esc(L('Search'))+'"><div class="pal-in">'+ICON.search+'<input id="palq" placeholder="'+esc(L('Type a task, project, person or action'))+'" autocomplete="off" role="combobox" aria-expanded="true"><kbd>Esc</kbd></div><div class="pal-list" role="listbox">'+(list||'<div class="pal-empty">'+esc(L('Nothing found'))+'</div>')+'</div><div class="pal-f"><span><kbd>↑</kbd><kbd>↓</kbd> '+esc(L('move'))+'</span><span><kbd>↵</kbd> '+esc(L('open'))+'</span><span><kbd>Esc</kbd> '+esc(L('close'))+'</span></div></div></div>';
+  morph(el,'<div class="pal-ov" data-palov><div class="pal" role="dialog" aria-label="'+esc(L('Search'))+'"><div class="pal-in">'+ICON.search+'<input id="palq" placeholder="'+esc(L('Type a task, project, person or action'))+'" autocomplete="off" role="combobox" aria-expanded="true"><kbd>Esc</kbd></div><div class="pal-list" role="listbox">'+(list||'<div class="pal-empty">'+esc(L('Nothing found'))+'</div>')+'</div><div class="pal-f"><span><kbd>↑</kbd><kbd>↓</kbd> '+esc(L('move'))+'</span><span><kbd>↵</kbd> '+esc(L('open'))+'</span><span><kbd>Esc</kbd> '+esc(L('close'))+'</span></div></div></div>');
   var inp=$('#palq'); inp.value=val; inp.focus(); inp.setSelectionRange(val.length,val.length);
   var sel=el.querySelector('[aria-selected="true"]'); if(sel) sel.scrollIntoView({block:'nearest'});
 }
@@ -2629,7 +2696,13 @@ function renderPalette(){
 function field(label, inner, opt){ return '<div class="field"><span class="flabel">'+esc(label)+(opt?' <span class="muted" style="font-weight:400">'+esc(L('optional'))+'</span>':'')+'</span>'+inner+'</div>'; }
 function renderModal(){
   var m=$('#modal');
-  if(!S.modal){ m.classList.remove('on'); m.innerHTML=''; return; }
+  if(!S.modal){
+    // Leave gently: fade the sheet out, then clear it (unless another one opened meanwhile)
+    if(m.classList.contains('on') && !m.classList.contains('closing') && !RM){ m.classList.add('closing'); setTimeout(function(){ if(!S.modal){ m.classList.remove('on'); m.innerHTML=''; } m.classList.remove('closing'); },170); }
+    else if(RM || !m.firstChild){ m.classList.remove('on'); m.innerHTML=''; }
+    return;
+  }
+  if(m.classList.contains('closing')){ m.classList.remove('closing'); m.innerHTML=''; }
   m.classList.add('on');
   var md=S.modal, body='';
   if(md.kind==='submit'){
@@ -2705,7 +2778,7 @@ function renderModal(){
       field(L('What do you do?'), '<div class="chips">'+['designer','video','pm'].map(function(r){ return '<button class="pick" data-act="jrole" data-r="'+r+'" aria-pressed="'+((md.role||'designer')===r)+'">'+esc(L(ROLES[r]))+'</button>'; }).join('')+'</div>')+
       '<p class="err" id="jerr" role="alert"></p><div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="savejoin">'+esc(L('Join the team'))+'</button></div>';
   }
-  m.innerHTML='<div class="modal glass" role="dialog" aria-modal="true">'+body+'</div>';
+  morph(m,'<div class="modal glass" role="dialog" aria-modal="true">'+body+'</div>');
 }
 // Keep what's typed when a modal re-renders
 function keep(){

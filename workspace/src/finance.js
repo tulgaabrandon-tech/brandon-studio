@@ -137,7 +137,7 @@ function vFinance(){
     '<div class="ph-tools"><div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх сар','Previous month'))+'">'+ICON.back+'</button><b class="fmonth">'+esc(LANG==='mn'?dt.getFullYear()+' оны '+(dt.getMonth()+1)+'-р сар':MON_EN[dt.getMonth()]+' '+dt.getFullYear())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараа сар','Next month'))+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
   h+='<nav class="seg fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav>';
   var V={overview:finOverview, upload:finUpload, tx:finTx, sales:finSales, clients:finClientView, reports:finReports, payroll:finPayroll, plan:finPlan};
-  return h+(V[FIN.tab]||finOverview)();
+  return h+'<div class="fin-pane" data-key="'+FIN.tab+'-'+(FIN.per||'m')+'">'+(V[FIN.tab]||finOverview)()+'</div>';
 }
 function finGate(){
   return '<div class="fin-gate"><span class="fin-lock">'+ICON.lock+'</span><h1 class="h2">'+esc(F('Санхүү','Finance'))+'</h1><p class="lede" style="text-align:center;margin-top:8px">'+esc(F('Санхүүгийн кодоо оруулна уу. 15 минут хөдөлгөөнгүй бол автоматаар түгжигдэнэ.','Enter the finance code. It locks again after 15 quiet minutes.'))+'</p>'+

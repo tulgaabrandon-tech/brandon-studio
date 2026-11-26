@@ -2,7 +2,13 @@
 function field(label, inner, opt){ return '<div class="field"><span class="flabel">'+esc(label)+(opt?' <span class="muted" style="font-weight:400">'+esc(L('optional'))+'</span>':'')+'</span>'+inner+'</div>'; }
 function renderModal(){
   var m=$('#modal');
-  if(!S.modal){ m.classList.remove('on'); m.innerHTML=''; return; }
+  if(!S.modal){
+    // Leave gently: fade the sheet out, then clear it (unless another one opened meanwhile)
+    if(m.classList.contains('on') && !m.classList.contains('closing') && !RM){ m.classList.add('closing'); setTimeout(function(){ if(!S.modal){ m.classList.remove('on'); m.innerHTML=''; } m.classList.remove('closing'); },170); }
+    else if(RM || !m.firstChild){ m.classList.remove('on'); m.innerHTML=''; }
+    return;
+  }
+  if(m.classList.contains('closing')){ m.classList.remove('closing'); m.innerHTML=''; }
   m.classList.add('on');
   var md=S.modal, body='';
   if(md.kind==='submit'){
@@ -78,7 +84,7 @@ function renderModal(){
       field(L('What do you do?'), '<div class="chips">'+['designer','video','pm'].map(function(r){ return '<button class="pick" data-act="jrole" data-r="'+r+'" aria-pressed="'+((md.role||'designer')===r)+'">'+esc(L(ROLES[r]))+'</button>'; }).join('')+'</div>')+
       '<p class="err" id="jerr" role="alert"></p><div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="savejoin">'+esc(L('Join the team'))+'</button></div>';
   }
-  m.innerHTML='<div class="modal glass" role="dialog" aria-modal="true">'+body+'</div>';
+  morph(m,'<div class="modal glass" role="dialog" aria-modal="true">'+body+'</div>');
 }
 // Keep what's typed when a modal re-renders
 function keep(){

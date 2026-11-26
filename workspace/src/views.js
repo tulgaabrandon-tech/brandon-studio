@@ -52,17 +52,18 @@ function weekDays(off){ var out=[]; var s=d(off||0); var mon=new Date(s); mon.se
 function render(){
   document.body.classList.toggle('dark', S.dark);
   var root=$('#root');
-  if(S.mode==='setup'){ root.innerHTML='<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'; return; }
-  if(S.mode==='login'){ root.innerHTML=vLogin(); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
-  if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ root.innerHTML=vLoading(); renderModal(); renderPalette(); return; }
-  if(!S.me){ root.innerHTML = S.people.length ? vPick() : vSetup(); renderModal(); renderPalette(); return; }
+  if(S.mode==='setup'){ morph(root,'<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'); return; }
+  if(S.mode==='login'){ morph(root,vLogin()); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
+  if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ morph(root,vLoading()); renderModal(); renderPalette(); return; }
+  if(!S.me){ morph(root, S.people.length ? vPick() : vSetup()); renderModal(); renderPalette(); return; }
   if(!S.view) S.view=home();
   var allowed=isExec()?['dash','projects','project','review','finance']:isPM()?null:['home','review','finance'];
   if(allowed && allowed.indexOf(S.view)<0) S.view=home();
   if(S.view==='finance' && !hasFinance()) S.view=home();
   if(S.ready && isPM() && !S.recurDone){ S.recurDone=true; setTimeout(runRecurring,400); }
-  var entering = S.lastView!==S.view+'|'+S.me; S.lastView=S.view+'|'+S.me;
-  if(S.view==='review'){ root.innerHTML=vReview(); renderModal(); renderPalette(); return; }
+  if(S.lastView!==S.view+'|'+S.me){ S.enterUntil=Date.now()+650; S.lastView=S.view+'|'+S.me; }
+  var entering = Date.now()<(S.enterUntil||0);
+  if(S.view==='review'){ morph(root,vReview()); renderModal(); renderPalette(); return; }
   var u=me(), pm=isPM(), h='';
   if(S.mode==='demo') h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
@@ -82,7 +83,7 @@ function render(){
   var V={home:vHome, needs:vNeeds, projects:vProjects, project:vProject, agency:vAgency, settings:vSettings, finance:vFinance, dash:vDash};
   h+='<main class="page'+(entering?' enter':'')+(S.view==='finance'?' wide':'')+'">'+(V[S.view]||vHome)()+'</main>';
   if(!S.readonly) h+=(S.view==='finance'?(FIN.unlocked?'<div class="fab-w"><button class="fab" data-act="ftxnew" aria-label="'+esc(F('Гүйлгээ нэмэх','Add transaction'))+'">'+ICON.plus+'</button></div>':''):(isExec()?'':fabHtml()));
-  root.innerHTML=h;
+  morph(root,h);
   renderModal(); renderPalette();
 }
 function fabHtml(){
@@ -394,11 +395,12 @@ function palItems(){
 }
 function renderPalette(){
   var el=$('#palette');
-  if(!S.palette){ el.innerHTML=''; return; }
+  if(!S.palette){ if(el.firstChild && !el.classList.contains('closing')){ el.classList.add('closing'); setTimeout(function(){ if(!S.palette){ el.innerHTML=''; } el.classList.remove('closing'); },160); } return; }
+  el.classList.remove('closing');
   var items=palItems(); S.palItems=items; if(S.palette.i>=items.length) S.palette.i=Math.max(0,items.length-1);
   var g='', list=items.map(function(it,i){ var head=it.g!==g?'<div class="pal-g">'+esc(L(it.g))+'</div>':''; g=it.g; return head+'<button class="pal-it" data-pi="'+i+'" aria-selected="'+(i===S.palette.i)+'" role="option">'+it.icon+'<span>'+esc(it.label)+'</span>'+(it.sub?'<span class="sub">'+esc(it.sub)+'</span>':it.kbd?'<span class="sub"><kbd>'+it.kbd+'</kbd></span>':'')+'</button>'; }).join('');
   var had=$('#palq'), val=had?had.value:S.palette.q||'';
-  el.innerHTML='<div class="pal-ov" data-palov><div class="pal" role="dialog" aria-label="'+esc(L('Search'))+'"><div class="pal-in">'+ICON.search+'<input id="palq" placeholder="'+esc(L('Type a task, project, person or action'))+'" autocomplete="off" role="combobox" aria-expanded="true"><kbd>Esc</kbd></div><div class="pal-list" role="listbox">'+(list||'<div class="pal-empty">'+esc(L('Nothing found'))+'</div>')+'</div><div class="pal-f"><span><kbd>↑</kbd><kbd>↓</kbd> '+esc(L('move'))+'</span><span><kbd>↵</kbd> '+esc(L('open'))+'</span><span><kbd>Esc</kbd> '+esc(L('close'))+'</span></div></div></div>';
+  morph(el,'<div class="pal-ov" data-palov><div class="pal" role="dialog" aria-label="'+esc(L('Search'))+'"><div class="pal-in">'+ICON.search+'<input id="palq" placeholder="'+esc(L('Type a task, project, person or action'))+'" autocomplete="off" role="combobox" aria-expanded="true"><kbd>Esc</kbd></div><div class="pal-list" role="listbox">'+(list||'<div class="pal-empty">'+esc(L('Nothing found'))+'</div>')+'</div><div class="pal-f"><span><kbd>↑</kbd><kbd>↓</kbd> '+esc(L('move'))+'</span><span><kbd>↵</kbd> '+esc(L('open'))+'</span><span><kbd>Esc</kbd> '+esc(L('close'))+'</span></div></div></div>');
   var inp=$('#palq'); inp.value=val; inp.focus(); inp.setSelectionRange(val.length,val.length);
   var sel=el.querySelector('[aria-selected="true"]'); if(sel) sel.scrollIntoView({block:'nearest'});
 }
