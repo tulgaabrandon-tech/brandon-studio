@@ -67,10 +67,12 @@ function demoSend(col, obj, del){
 window.addEventListener('message', function(e){
   var m=e.data; if(!m || m.bo!=='sync' || S.mode!=='demo' || !window.BO_BRIDGE || COLS.indexOf(m.col)<0) return;
   var arr=S[m.col], cur=arr.filter(function(x){ return x.id===m.id; })[0];
+  var isNew=!cur && !m.del;
   if(m.del){ S[m.col]=arr.filter(function(x){ return x.id!==m.id; }); }
   else if(cur){ Object.keys(cur).forEach(function(k){ delete cur[k]; }); Object.assign(cur, m.obj); }
   else arr.push(m.obj);
   if(m.col==='tasks' && m.obj && !m.del && m.obj.status==='review' && isPM() && project(m.obj.project).pm===S.me) toast(L('{name} sent work for review',{name:person(m.obj.who).name}));
+  if(m.col==='tasks' && isNew && m.obj.who===S.me) toast(L('{name} gave you a new task: {title}',{name:person(m.obj.by).name, title:m.obj.title}));
   render();
 });
 // A presentation clicker sends Page Up / Page Down: pass those to the slides even when a demo window has focus

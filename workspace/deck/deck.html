@@ -117,6 +117,48 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .rule .no{font-size:72px;font-weight:900;color:var(--red);letter-spacing:-.03em}
 .rule b{display:block;font-size:56px;font-weight:900;letter-spacing:-.02em}
 .rule p{font-size:30px;color:var(--mute);margin-top:8px}
+/* messenger mock */
+.chatsplit{display:grid;grid-template-columns:620px 1fr;gap:110px;align-items:center;flex:1}
+.msgr{height:860px;border-radius:40px;background:#0f0f11;border:1px solid #26262a;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 120px -30px rgba(0,0,0,.9)}
+.msgr-h,.tg-h{display:flex;align-items:center;gap:16px;padding:22px 26px;border-bottom:1px solid #222}
+.msgr-h b,.tg-h b{display:block;font-size:24px}.msgr-h span,.tg-h span{font-size:17px;color:#888}
+.msgr-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#7b5cff,#e8467c);display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff}
+.msgr-b{position:relative;flex:1;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+.msgr-roll{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;gap:12px;padding:20px 24px;animation:roll 38s linear infinite}
+@keyframes roll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.mm{max-width:78%;padding:12px 18px;border-radius:22px;background:#262629;font-size:21px;line-height:1.35;color:#e8e8ec;align-self:flex-start}
+.mm small{display:block;font-size:14px;font-weight:700;color:#9a9aa0;margin-bottom:2px}
+.mm.me{align-self:flex-end;background:linear-gradient(135deg,#7b5cff,#e8467c);color:#fff}
+.mm.task{box-shadow:0 0 0 2px rgba(232,39,61,.75)}
+.mm.file{display:flex;align-items:center;gap:12px}.mm.file i{width:40px;height:48px;border-radius:6px;background:#3a3a3e;flex:none}
+.trio{display:flex;gap:34px;justify-content:center;margin-top:44px;font-size:52px;font-weight:800;letter-spacing:-.02em}
+.trio span:nth-child(2){color:#d4d4d8}.trio span:nth-child(3){color:var(--red)}
+/* adobe map */
+.map{margin-top:34px;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.map-h,.map-r{display:grid;grid-template-columns:1fr 90px 1.25fr;align-items:center;gap:20px}
+.map-h{padding:12px 0;font-size:22px;font-weight:700;color:var(--mute)}
+.map-r{padding:14px 0;border-top:1px solid var(--line)}
+.map-r span{display:flex;flex-direction:column;gap:4px;font-size:22px;color:var(--mute)}
+.map-r b{font-size:29px;font-weight:800;color:#fff;letter-spacing:-.01em}
+.map-r span:last-child b{color:#fff}.map-r span:last-child{color:#cfcfd4}
+.map-r i{font-style:normal;font-size:38px;color:var(--red);text-align:center}
+/* telegram */
+.soon{display:inline-flex;font-size:22px;font-weight:800;letter-spacing:.06em;padding:8px 18px;border-radius:999px;background:#2AABEE;color:#fff}
+.tg-wrap{display:grid;grid-template-columns:860px 200px 1fr;align-items:center;gap:20px;flex:1;min-height:0;margin-top:26px}
+.phone.sm{width:330px;height:690px;border-radius:54px;padding:12px;justify-self:center}.phone.sm .scr{border-radius:44px}.phone.sm .notch{width:96px;height:28px;top:10px}
+.tg{border-radius:32px;background:#17212b;border:1px solid #243140;overflow:hidden;display:flex;flex-direction:column;height:690px}
+.tg-h{border-bottom-color:#243140}
+.tg-b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;padding:26px;background:#0e1621}
+.tm{max-width:90%;padding:12px 18px;border-radius:20px;background:#182533;color:#e9eef3;font-size:24px;line-height:1.35;align-self:flex-start}
+.tm .who{display:block;font-size:17px;font-weight:800;margin-bottom:4px}
+.tm.big-in{font-size:27px;font-weight:600}
+.tm.bot{border:2px solid rgba(232,39,61,.6)}
+.tm.bot b{display:block;font-size:28px;margin-bottom:10px}
+.tm .card{display:flex;flex-direction:column;gap:4px;padding:14px 18px;border-radius:14px;background:#0e1621;font-size:22px;color:#aab6c2}
+.tm .card span:first-child{font-size:28px;font-weight:800;color:#fff}
+.tg-step{opacity:0;transform:translateY(24px) scale(.97);transition:opacity .7s var(--ease),transform .9s var(--ease)}
+.tg-step.in{opacity:1;transform:none}
+.tg-arrow{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:20px;font-weight:700;color:var(--mute)}
 /* chrome */
 #bar{position:fixed;left:0;bottom:0;height:3px;background:var(--red);transition:width .8s var(--ease);z-index:20}
 #nav{position:fixed;right:22px;bottom:18px;display:flex;align-items:center;gap:8px;z-index:21;opacity:0;transition:opacity .4s}
@@ -135,18 +177,24 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 1 · cold open -->
 <section class="slide center" data-steps="1">
   <div class="q1" style="transition:opacity .8s var(--ease),transform 1s var(--ease),filter .8s"><div class="eye rv" style="--d:0">Brand On Creative House · 2026.11.27</div>
-  <div class="mega grad rv" style="--d:.3;margin-top:40px">Нэг асуулт.</div></div>
-  <div class="q2"><div class="huge rv" data-step="1">Яг одоо манай ажил <span class="redg">хаана</span> байна?</div></div>
+  <div class="huge grad rv" style="--d:.3;margin-top:40px">Өнөөдөр манай ажил<br>хаана байна вэ?</div></div>
+  <div class="q2"><div class="mega rv" data-step="1"><span class="redg">Messenger</span> дотор.</div></div>
 </section>
 
-<!-- 2 · the problem -->
-<section class="slide center" data-steps="1">
-  <div class="chaos" id="chaos"></div>
-  <div class="bubble" style="left:150px;top:180px;--d:1.2">Тэр файлын холбоос хаана байсан бэ?</div>
-  <div class="bubble" style="right:170px;top:240px;--d:1.6">Засварын хувилбар аль нь вэ?</div>
-  <div class="bubble" style="left:260px;bottom:200px;--d:2">Маргааш зураг авалт хэдэн цагт?</div>
-  <div class="bubble" style="right:240px;bottom:250px;--d:2.4">Хэн энэ ажлыг хийж байгаа юм?</div>
-  <div class="q2"><div><div class="big rv" data-step="1">Ажил олон газар тарсан.</div><div class="sub rv" data-step="1" style="--d:.3;margin:34px auto 0">Бриф нэг газар, файл өөр газар, засвар гурав дахь газар. Хэн юу хийж байгааг асууж байж л мэднэ.</div></div></div>
+<!-- 2 · the chat -->
+<section class="slide" data-steps="1">
+  <div class="chatsplit">
+    <div class="msgr rv" style="--d:.1">
+      <div class="msgr-h"><span class="msgr-av">B</span><div><b>Brand On баг</b><span>Messenger групп · 7 гишүүн</span></div></div>
+      <div class="msgr-b"><div class="msgr-roll" id="roll"></div></div>
+    </div>
+    <div class="chat-copy">
+      <div class="eye rv" style="--d:0">Одоо</div>
+      <div class="big rv" style="--d:.15;margin-top:14px">Бүх зүйл<br>нэг чатад.</div>
+      <div class="sub rv" style="--d:.35;margin-top:30px;font-size:34px">Даалгавар, файл, засвар, хугацаа, инээд, стикер. Шинэ мессеж ирэх бүрт өмнөх ажил дээшээ урсаад алга болно.</div>
+      <div class="sub rv" data-step="1" style="margin-top:34px;font-size:34px;color:#fff;font-weight:700">Хэн юу хийж байгааг, юу хоцорч байгааг<br>дээш гүйлгэж байж л мэднэ.</div>
+    </div>
+  </div>
 </section>
 
 <!-- 3 · reveal -->
@@ -154,8 +202,11 @@ body:hover #nav,#nav:focus-within{opacity:1}
   <div class="glow" style="width:900px;height:900px;left:510px;top:60px;background:radial-gradient(circle,rgba(232,39,61,.45),transparent 65%)"></div>
   <svg class="mark rv" style="--d:0" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#E8273D" stroke-width="15" stroke-linecap="butt"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#E8273D" stroke-width="15"/></svg>
   <div class="mega grad rv" style="--d:1;margin-top:60px">BrandOn Studio</div>
-  <div class="sub rv" style="--d:1.6;margin-top:36px;font-size:46px;color:#d4d4d8">Агентлагийн бүх ажил. <b style="color:#fff">Нэг дор.</b></div>
-  <div class="eye rv" style="--d:2.1;margin-top:30px">Төсөл · Даалгавар · Хяналт · Хуваарь · Санхүү</div>
+  <div class="trio">
+    <span class="rv" style="--d:1.7">Эмх цэгцтэй.</span>
+    <span class="rv" style="--d:2.1">Хялбар.</span>
+    <span class="rv" style="--d:2.5">Нэг харахад ойлгомжтой.</span>
+  </div>
 </section>
 
 <!-- 4 · five workspaces -->
@@ -180,7 +231,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
     <div class="line"><i></i></div>
     <div class="st rv" style="--d:.5"><span class="dot">1</span><b>Бриф</b><p>Менежер ажил үүсгэж, хүн, хугацаа, брифийг өгнө.</p><span class="tag">PM</span></div>
     <div class="st rv" style="--d:.9"><span class="dot">2</span><b>Хийх</b><p>Дизайнер "Эхлэх" дарна. Хүн бүр хэн юу хийж байгааг харна.</p><span class="tag">Дизайнер, видео</span></div>
-    <div class="st rv" style="--d:1.3"><span class="dot">3</span><b>Илгээх</b><p>Drive холбоосоо буулгаад илгээнэ. Telegram хэрэггүй.</p><span class="tag">Дизайнер, видео</span></div>
+    <div class="st rv" style="--d:1.3"><span class="dot">3</span><b>Илгээх</b><p>Drive холбоосоо буулгаад илгээнэ. Чатад урсаж алга болохгүй.</p><span class="tag">Дизайнер, видео</span></div>
     <div class="st rv" style="--d:1.7"><span class="dot">4</span><b>Хянах</b><p>Менежер ажлыг томоор нээж, засах газар дээр нь шууд тэмдэглэнэ.</p><span class="tag">PM</span></div>
     <div class="st rv" style="--d:2.1"><span class="dot">5</span><b>Батлах</b><p>Нэг товчоор батлах эсвэл засвартай нь буцаана.</p><span class="tag">PM</span></div>
   </div>
@@ -204,13 +255,28 @@ body:hover #nav,#nav:focus-within{opacity:1}
   </div>
 </section>
 
+<!-- 7a · familiar: Adobe -->
+<section class="slide" style="padding-top:90px;padding-bottom:60px">
+  <div class="eye rv" style="--d:0">Яагаад ийм бүтэцтэй вэ</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Шинэ програм сурах хэрэггүй.</div>
+  <div class="sub rv" style="--d:.25;margin-top:22px">Бид өдөр бүр Photoshop, Illustrator, Premiere дээр ажилладаг. Тиймээс BrandOn Studio яг тэдгээр шиг бүтэцтэй: гар, нүд хоёр аль хэдийн дассан.</div>
+  <div class="map">
+    <div class="map-h rv" style="--d:.35"><span>Adobe дээр</span><span></span><span>BrandOn Studio дээр</span></div>
+    <div class="map-r rv" style="--d:.45"><span><b>Workspaces</b>Essentials, Editing, Color...</span><i>→</i><span><b>Ажлын орчин</b>Өнөөдөр, Хянах, Үйлдвэрлэл, Төлөвлөлт, Мөнгө</span></div>
+    <div class="map-r rv" style="--d:.55"><span><b>Properties самбар</b>Сонгосон давхаргын тохиргоо</span><i>→</i><span><b>Шинж чанар самбар</b>Сонгосон ажлаа баруун талд шууд засна</span></div>
+    <div class="map-r rv" style="--d:.65"><span><b>Layers, Project самбар</b>Зүүн талд жагсаалт</span><i>→</i><span><b>Зүүн самбар</b>Төслүүд, хянах дараалал, баг</span></div>
+    <div class="map-r rv" style="--d:.75"><span><b>Tools мөр, Contextual Task Bar</b>Хэрэгсэл, сонгосны доорх товч</span><i>→</i><span><b>Хэрэгслийн мөр, үйлдлийн товч</b>Сонгосон ажлын доор гол үйлдэл</span></div>
+    <div class="map-r rv" style="--d:.85"><span><b>Tab, ⌘Z, V</b>Самбар нуух, буцаах, сонгох</span><i>→</i><span><b>Яг адилхан</b>Ижил товчлол, ижил зуршил</span></div>
+  </div>
+</section>
+
 <!-- 7 · Adobe habits -->
 <section class="slide" style="padding-bottom:80px" data-live="keys">
   <div class="eye rv" style="--d:0">Удирдлага</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Photoshop шиг ажилладаг.</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Товчлол нь ч адилхан.</div>
   <div class="split">
     <div>
-      <div class="sub rv" style="--d:.2;font-size:32px;margin-bottom:34px">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Adobe-д дассан гар энд ч ажиллана.</div>
+      <div class="sub rv" style="--d:.2;font-size:32px;margin-bottom:34px">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Photoshop-т дассан гар энд шууд ажиллана.</div>
       <div class="keys">
         <div class="key rv" style="--d:.3"><kbd>⌘K</kbd><span>Юуг ч хайх</span></div>
         <div class="key rv" style="--d:.38"><kbd>1-5</kbd><span>Орчин солих</span></div>
@@ -252,19 +318,39 @@ body:hover #nav,#nav:focus-within{opacity:1}
   </div>
 </section>
 
-<!-- 10 · one more thing: money -->
-<section class="slide" data-steps="1">
+<!-- 10 · money -->
+<section class="slide">
+  <div class="eye rv" style="--d:0">Мөнгө</div>
+  <div class="huge rv" style="--d:.1;margin-top:14px">Санхүү. <span class="redg">Тодорхой.</span></div>
+  <div class="fin">
+    <div class="fc rv" style="--d:.35"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулна. Давхардсан гүйлгээг өөрөө шалгаж, ангиллыг санал болгоно.</p></div>
+    <div class="fc rv" style="--d:.5"><span class="n">НӨАТ</span><p>Харилцагч бүрийн төлбөр, НӨАТ шивсэн эсэх. Нийлүүлэгч бидэнд шивсэн эсэх.</p></div>
+    <div class="fc rv" style="--d:.65"><span class="n">Ашиг</span><p>Гэрээ ба бодит орлого, өөрчилсөн, цуцалсан гэрээ. Ажил бүрийн зардлын дараах цэвэр ашиг.</p></div>
+  </div>
+  <div class="sub rv" style="--d:.8;font-size:30px;margin-top:40px">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
+  <div class="lock rv" style="--d:.9"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүст. Тусдаа кодоор түгжээтэй.</div>
+</section>
+
+<!-- 10b · one more thing: Telegram -->
+<section class="slide" data-steps="3" data-tg="1" style="padding-top:80px;padding-bottom:60px">
   <div class="q2 rv om" style="--d:0"><div class="huge grad">Бас нэг зүйл...</div></div>
   <div class="rv" data-step="1" style="display:flex;flex-direction:column;flex:1">
-    <div class="eye">Мөнгө</div>
-    <div class="huge" style="margin-top:14px">Санхүү. <span class="redg">Тодорхой.</span></div>
-    <div class="fin">
-      <div class="fc"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулна. Давхардсан гүйлгээг өөрөө шалгаж, ангиллыг санал болгоно.</p></div>
-      <div class="fc"><span class="n">НӨАТ</span><p>Харилцагч бүрийн төлбөр, НӨАТ шивсэн эсэх. Нийлүүлэгч бидэнд шивсэн эсэх.</p></div>
-      <div class="fc"><span class="n">Ашиг</span><p>Гэрээ ба бодит орлого, өөрчилсөн, цуцалсан гэрээ. Ажил бүрийн зардлын дараах цэвэр ашиг.</p></div>
+    <div class="row-h">
+      <div><span class="soon">Удахгүй</span><div class="h" style="margin-top:14px">Чатаас шууд ажил болно.</div></div>
     </div>
-    <div class="sub" style="font-size:30px;margin-top:40px">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
-    <div class="lock"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүст. Тусдаа кодоор түгжээтэй.</div>
+    <div class="tg-wrap">
+      <div class="tg">
+        <div class="tg-h"><span class="msgr-av" style="background:#2AABEE">B</span><div><b>Brand On баг</b><span>Telegram групп · BrandOn Studio бот нэмэгдсэн</span></div></div>
+        <div class="tg-b">
+          <div class="tm"><span class="who" style="color:#1F7A5A">Jerry</span>Маргааш студи чөлөөтэй юу?</div>
+          <div class="tm big-in tg-step" data-at="2"><span class="who" style="color:#B5532A">Reka</span>Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй</div>
+          <div class="tm bot tg-step" data-at="3"><span class="who" style="color:#DA1F34">BrandOn Studio</span><b>Tumku-д ажил өглөө</b><div class="card"><span>Reel edit</span><span>Hairan · Маргааш, оройн 18:00</span><span>Өгсөн: Reka</span></div></div>
+        </div>
+      </div>
+      <div class="tg-arrow tg-step" data-at="3"><svg width="120" height="40" viewBox="0 0 120 40"><path d="M2 20h108M96 6l14 14-14 14" fill="none" stroke="#E8273D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>хэн · юу · хэзээ</span></div>
+      <div class="phone sm"><div class="scr"><span class="notch"></span><div class="win-b" style="position:absolute;inset:0" data-frame="tumku" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div></div>
+    </div>
+    <div class="note" style="font-size:22px;margin-top:6px">Жишээ: Telegram холболт удахгүй нэмэгдэнэ. Бот мессежийг уншаад хэнд, юу, хэзээ гэдгийг ойлгож, ажлыг үүсгээд тухайн хүнд мэдэгдэнэ.</div>
   </div>
 </section>
 
@@ -273,7 +359,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
   <div class="eye rv" style="--d:0">Өнөөдрөөс</div>
   <div class="big rv" style="--d:.1;margin-top:14px">Гурван дүрэм.</div>
   <div class="rules">
-    <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Бүх ажил энд илгээгдэнэ.</b><p>Drive холбоосоор. Telegram-аар файл явуулахгүй.</p></div></div>
+    <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Бүх ажил энд илгээгдэнэ.</b><p>Drive холбоосоор. Messenger-ээр файл, засвар явуулахгүй.</p></div></div>
     <div class="rule rv" style="--d:.55"><span class="no">02</span><div><b>Хуваарь, зар энд.</b><p>Өглөө бүр "Өнөөдөр"-өө нээ. Зар уншаад "Ойлголоо" дар.</p></div></div>
     <div class="rule rv" style="--d:.75"><span class="no">03</span><div><b>Ажлын байдал энд.</b><p>"Эхлэх" дарахад бүгд харна. Хэн юу хийж байгааг асуух шаардлагагүй.</p></div></div>
   </div>
@@ -301,13 +387,11 @@ body:hover #nav,#nav:focus-within{opacity:1}
   function fit(){ var s=Math.min(innerWidth/1920, innerHeight/1080); stage.style.transform='translate(-50%,-50%) scale('+s+')'; }
   addEventListener('resize', fit); fit();
 
-  // ----- the problem slide: scattered app names -----
-  var words=[['Telegram',170,120,90],['Drive',130,1240,70],['Excel',150,1340,600],['Утас',120,140,560],['Messenger',84,700,40],['Gmail',80,820,860],['Viber',90,560,330],['PDF',72,1600,380],['Final_v3.pdf',62,980,300],['Final_FINAL_2.ai',56,300,880],['Zoom',70,1580,900],['Sheets',66,60,330]];
-  var ch=document.getElementById('chaos');
-  words.forEach(function(w,i){ var s=document.createElement('span'); s.textContent=w[0];
-    var x=w[2], y=w[3];
-    s.style.cssText='left:'+x+'px;top:'+y+'px;font-size:'+w[1]+'px;--o:'+(0.08+((i*7)%10)/40)+';--x2:'+(((i%3)-1)*40)+'px;--y2:'+(((i%4)-1.5)*24)+'px;--rt:'+(((i%5)-2)*3)+'deg;transition-delay:'+(i*0.08)+'s';
-    ch.appendChild(s); });
+  // ----- the Messenger slide: one endless chat where tasks scroll away -----
+  var chat=[['Reka','Tumku, Hairan-ы reel-ээ хэзээ гаргах вэ?',1],['Tumku','Маргааш гэж бодож байна',0],['Jerry','Хаха энэ видеог хараарай',0],['Suvdaa','Tulgaa, Paradox-ын логоны 3 хувилбар баасан гаригт',1],['Tulgaa','Ок',0],['Khongoroo','Puree-ийн өнгө.pdf',2],['Reka','Зураг авалт 10 цагаас уу 11-ээс үү?',0],['Jerry','11',0],['Suvdaa','Энэ хувилбар биш, өмнөх нь',0],['Nomin','Өнөөдөр оройн хоол хэдэн цагт?',0],['Tumku','Teaser_final_v3.mp4',2],['Reka','Тэр файлын холбоосыг дахиад явуулаач',0],['Suvdaa','Khongoroo, брэндбүүкийн өнгөний хуудсыг даваа гэхэд',1],['Khongoroo','За',0],['Jerry','Камерын батерей хэн авсан бэ?',0],['Tulgaa','Логоны засвар хийчихлээ, шалгаарай',0],['Reka','Аль файл нь вэ?',0],['Suvdaa','Kids puree-д хариу өгөх хэрэгтэй',1]];
+  var roll=document.getElementById('roll'), rh='';
+  for(var rep=0;rep<2;rep++) chat.forEach(function(c,i){ var me=c[0]==='Suvdaa'; rh+='<div class="mm'+(me?' me':'')+(c[2]===1?' task':'')+(c[2]===2?' file':'')+'">'+(me?'':'<small>'+c[0]+'</small>')+(c[2]===2?'<i></i>':'')+c[1]+'</div>'; });
+  if(roll) roll.innerHTML=rh;
 
   // ----- live app copies: one app, many windows, all kept in sync -----
   var APP=null, frames=[], log=[];
@@ -334,7 +418,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
     log.push(m);
     frames.forEach(function(f){ if(f.contentWindow && f.contentWindow!==e.source){ try{ f.contentWindow.postMessage(m,'*'); }catch(x){} } });
   });
-  document.querySelectorAll('[data-reset]').forEach(function(b){ b.addEventListener('click', function(){ log=[]; frames.forEach(function(f){ f.srcdoc=f.srcdoc; }); }); });
+  document.querySelectorAll('[data-reset]').forEach(function(b){ b.addEventListener('click', function(){ log=[]; tgDone=false; frames.forEach(function(f){ f.srcdoc=f.srcdoc; }); }); });
 
   // ----- navigation with builds -----
   function steps(s){ return +(s.dataset.steps||0); }
@@ -342,7 +426,17 @@ body:hover #nav,#nav:focus-within{opacity:1}
     s.querySelectorAll('[data-step]').forEach(function(el){ el.classList.toggle('shown', +el.dataset.step<=n); });
     if(s.querySelector('.q1')) s.querySelector('.q1').classList.toggle('gone', n>=1);
     if(s.querySelector('.om')) s.querySelector('.om').classList.toggle('gone', n>=1);
-    var c=s.querySelector('.chaos'); if(c) c.classList.toggle('fall', n>=1);
+    s.querySelectorAll('.tg-step').forEach(function(el){ el.classList.toggle('in', n>=+el.dataset.at); });
+    if(s.dataset.tg && n>=3) tgSend();
+  }
+  // the Telegram example: the bot turns Reka's message into a task for Tumku (same relay the live windows use)
+  var tgDone=false;
+  function tgSend(){
+    if(tgDone) return; tgDone=true;
+    var t=new Date(); t.setDate(t.getDate()+1); var due=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
+    var n=new Date(), today=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);
+    var m={bo:'sync', from:'telegram', col:'tasks', id:'tg_reel', del:false, obj:{id:'tg_reel', project:'s_hairan', title:'Reel edit', who:'tumku', due:due, status:'todo', by:'reka', created:today, brief:'Telegram-аас: "Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй". Маргааш оройн 18:00.', shoot:'', versions:[], thread:[]}};
+    setTimeout(function(){ log.push(m); frames.forEach(function(f){ try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }); }, 900);
   }
   function show(i, st){
     i=Math.max(0, Math.min(slides.length-1, i));
