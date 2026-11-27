@@ -1,0 +1,223 @@
+/* =================== Spectrum 2 visual language ===================
+   Values from Adobe Spectrum 2 tokens: gray scale, component heights (24/32/40/48),
+   pill buttons, 8px fields, quiet action buttons, flat cards, solid popovers, blue focus.
+   BrandOn keeps its red as the accent for the main call to action and urgency.
+   Font: Source Sans 3, Adobe's open sibling of Adobe Clean, which covers Mongolian Өө Үү. */
+:root{
+  --s-gray-25:#FFFFFF; --s-gray-50:#F8F8F8; --s-gray-75:#F3F3F3; --s-gray-100:#E9E9E9; --s-gray-200:#E1E1E1; --s-gray-300:#DADADA;
+  --s-gray-400:#C6C6C6; --s-gray-500:#8F8F8F; --s-gray-600:#717171; --s-gray-700:#505050; --s-gray-800:#292929; --s-gray-900:#131313;
+  --s-blue:#3B63FB; --s-blue-soft:#EEF2FF; --s-focus:#4B75FF;
+  --s-canvas:var(--s-gray-75); --s-chrome:var(--s-gray-50); --s-card:var(--s-gray-25); --s-card-2:var(--s-gray-50); --s-fill:var(--s-gray-100); --s-fill-hover:var(--s-gray-200); --s-fill-down:var(--s-gray-300);
+  --red:#DA1F34; --red-ink:#C21A2D; --red-soft:#FFEBE9;
+  --ok:#05834E; --ok-soft:#E2F5EA; --warn:#C24E00; --warn-soft:#FFEEDD;
+  --sh-2:0 1px 4px rgba(0,0,0,.08);
+  --sh-pop:0 2px 8px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12);
+  color-scheme:light;
+}
+body.dark{
+  --s-gray-25:#111111; --s-gray-50:#1B1B1B; --s-gray-75:#222222; --s-gray-100:#2C2C2C; --s-gray-200:#323232; --s-gray-300:#393939;
+  --s-gray-400:#444444; --s-gray-500:#6D6D6D; --s-gray-600:#8A8A8A; --s-gray-700:#AFAFAF; --s-gray-800:#DBDBDB; --s-gray-900:#F2F2F2;
+  --s-blue:#5681FF; --s-blue-soft:rgba(86,129,255,.18); --s-focus:#6995FE;
+  --s-canvas:var(--s-gray-25); --s-chrome:var(--s-gray-50); --s-card:var(--s-gray-75); --s-card-2:var(--s-gray-100); --s-fill:var(--s-gray-200); --s-fill-hover:var(--s-gray-300); --s-fill-down:var(--s-gray-400);
+  --red:#E8273D; --red-ink:#FF6B5C; --red-soft:rgba(252,67,46,.16);
+  --ok:#2DBA77; --ok-soft:rgba(9,157,89,.18); --warn:#F08A2E; --warn-soft:rgba(224,100,0,.18);
+  --sh-2:0 1px 4px rgba(0,0,0,.4); --sh-pop:0 2px 8px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+/* aliases are declared on body so they resolve against the theme's own grays */
+body,body.dark{
+  --bg:var(--s-canvas); --chrome:var(--s-chrome); --surface:var(--s-card); --surface-2:var(--s-card-2); --sunk:var(--s-fill);
+  --ink:var(--s-gray-900); --ink-2:var(--s-gray-800); --muted:var(--s-gray-700); --faint:var(--s-gray-600);
+  --line:var(--s-gray-200); --line-2:var(--s-gray-300); --field:var(--s-gray-500);
+  --info:var(--s-blue); --info-soft:var(--s-blue-soft); --sel:var(--s-blue); --sel-soft:var(--s-blue-soft);
+  --red-glow:transparent;
+  --r-s:8px; --r:10px; --r-l:12px; --r-xl:16px;
+  --sh-1:none; --soft-up:none; --soft-in:none; --soft-up-lg:none; --glass:var(--s-chrome);
+  --ease:cubic-bezier(.45,0,.4,1); --spring:var(--ease); --spring-fast:var(--ease); --spring-slow:var(--ease);
+  --font:"Source Sans 3","Adobe Clean",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+body{font:400 14px/1.5 var(--font);font-feature-settings:normal;letter-spacing:0}
+::selection{background:var(--sel);color:#fff}
+:focus-visible{outline:2px solid var(--s-focus);outline-offset:2px;border-radius:8px}
+.i{stroke-width:1.75}
+
+/* ---------- type: Spectrum heading, body and detail ---------- */
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted)}
+.display{font-size:clamp(26px,2.6vw,34px);line-height:1.2;font-weight:800;letter-spacing:-.005em;margin:4px 0 0}
+.display .dot{color:var(--red)}
+.h2{font-size:clamp(22px,2vw,27px);line-height:1.25;font-weight:800;letter-spacing:0}
+.lede{font-size:16px;line-height:1.5;margin:6px 0 0}
+.sec{margin:36px 0 10px}
+.sec h3{font-size:16px;font-weight:700;letter-spacing:0;text-transform:none}
+.page{padding:32px 32px 96px}
+.canvas .page{padding-top:24px}
+.page.enter > *{animation:rise .25s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+kbd{font:600 11px/1 var(--font);height:18px;min-width:18px;border-radius:4px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted)}
+
+/* ---------- app frame: solid chrome, hairlines, 48px header ---------- */
+.topbar,body.framed .topbar{background:var(--chrome);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--line)}
+.bar-in,body.framed .bar-in{min-height:48px;padding:6px 12px;gap:14px}
+.brand{font-size:15px;font-weight:700;letter-spacing:0}
+.mark{width:28px;height:28px;border-radius:8px;background:none;border:0;box-shadow:none}
+.rail,.panel,.strip,.statusbar{background:var(--chrome)}
+.rail{width:48px;padding:8px 0;gap:4px}
+.rail-b{width:32px;height:32px;border-radius:8px;background:transparent;box-shadow:none;color:var(--ink-2)}
+.rail-b:hover{background:var(--sunk)}
+.rail-b.on{background:var(--s-gray-800);color:var(--s-gray-25);box-shadow:none}
+.rail-b.on:hover{background:var(--s-gray-900)}
+.panel-h{height:40px;padding:0 6px 0 14px}
+.panel-h b{font-size:14px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink)}
+.panel-tools .icon-btn{width:28px;height:28px}
+.strip span{font-size:12px;font-weight:700;letter-spacing:0;text-transform:none}
+.statusbar{height:28px;font-size:12px}
+.sb-dot{background:var(--ok)}
+
+/* workspace switcher: Spectrum tabs, 2px indicator under the current one */
+.tabs,.tabs.ws-switch{background:none;box-shadow:none;padding:0;gap:0;border-radius:0;align-self:stretch}
+.tabs button{min-height:0;height:100%;padding:0 12px;border-radius:0;font-size:14px;font-weight:600;color:var(--muted);box-shadow:none;position:relative;background:none}
+.tabs button:hover{color:var(--ink);background:none}
+.tabs button[aria-current]{color:var(--ink);font-weight:700;background:none;box-shadow:none;border-radius:0}
+.tabs button[aria-current]::after{content:"";position:absolute;left:12px;right:12px;bottom:-7px;height:2px;border-radius:1px;background:var(--ink)}
+.count{height:18px;min-width:18px;font-size:11px;font-weight:700;background:var(--red)}
+
+/* ---------- controls ---------- */
+/* buttons: pill, bold label, fill styles. Default is Spectrum "secondary fill" */
+.btn,.btn:active,.btn.xl,.btn.xl:active,.btn.sm:active{border-radius:999px}
+.btn{min-height:32px;padding:0 14px;font-size:14px;font-weight:700;border:0;background:var(--sunk);color:var(--ink-2);box-shadow:none;transition:background-color .13s var(--ease),color .13s var(--ease)}
+.btn:hover{background:var(--s-fill-hover);border:0}
+.btn:active{transform:none;background:var(--s-fill-down)}
+.btn.primary{background:var(--red);color:#fff;box-shadow:none}
+.btn.primary:hover,body.dark .btn.primary:hover{background:var(--red-ink);filter:none}
+body.dark .btn.primary:hover{background:#FF3D53}
+.btn.ink{background:var(--s-gray-800);color:var(--s-gray-25)}
+.btn.ink:hover{background:var(--s-gray-900)}
+.btn.ghost{background:transparent;border:0;border-radius:8px;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--sunk)}
+.btn.xl{min-height:40px;padding:0 18px;font-size:16px}
+.btn.sm{min-height:24px;height:28px;padding:0 12px;font-size:13px}
+.btn.danger{color:var(--red-ink)}
+.lnk{color:var(--s-blue);font-weight:600;text-decoration:underline}
+/* action buttons: quiet, 8px corners */
+.icon-btn,.icon-btn:hover,.icon-btn:active{background:transparent;box-shadow:none;border-radius:8px;transform:none}
+.icon-btn{width:32px;height:32px;color:var(--ink-2)}
+.icon-btn:hover{background:var(--sunk);color:var(--ink)}
+.icon-btn:active{background:var(--s-fill-hover)}
+.icon-btn.sm{width:28px;height:28px;border-radius:8px}
+/* segmented control */
+.seg{background:var(--sunk);box-shadow:none;border-radius:8px;padding:2px;gap:2px}
+.seg button,.seg button[aria-pressed="true"],.seg button[aria-selected="true"]{border-radius:6px;min-height:28px;font-size:14px;font-weight:600}
+.seg button{color:var(--muted);box-shadow:none}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"],.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 0 0 1px var(--line-2)}
+/* toggle buttons and tags: selected is the neutral dark fill Spectrum uses */
+.pick,.pick:hover,.pick:active,.pick[aria-pressed="true"],.pick.on,.modal .pick,.modal .pick[aria-pressed="true"]{border-radius:8px;box-shadow:none;transform:none}
+.pick{min-height:32px;padding:0 12px;background:var(--sunk);border:0;color:var(--ink-2);font-weight:600}
+.pick:hover{background:var(--s-fill-hover)}
+.pick[aria-pressed="true"],.pick.on,.modal .pick[aria-pressed="true"]{background:var(--s-gray-800);color:var(--s-gray-25)}
+.pick.sm{min-height:28px}
+/* fields: 2px border, 8px corners, blue focus */
+.input{min-height:40px;padding:8px 12px;border-radius:8px;border:2px solid var(--line-2);background:var(--surface);font-size:14px;transition:border-color .13s var(--ease)}
+.input:hover{border-color:var(--field)}
+.input:focus{border-color:var(--s-gray-800);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--s-focus)}
+.input.sm{min-height:32px;padding:4px 10px;font-size:14px}
+textarea.input{min-height:88px}
+.input[disabled]{background:var(--s-gray-75);border-color:var(--s-gray-200);color:var(--muted)}
+.search{min-height:32px;border-radius:999px;border:2px solid var(--line-2);background:var(--surface);box-shadow:none;font-size:14px;min-width:240px;padding:0 6px 0 12px}
+.search:hover{border-color:var(--field)}
+.userbtn{min-height:32px;border-radius:999px;font-weight:600}
+.userbtn:hover{background:var(--sunk)}
+/* switch */
+.switch{width:28px;height:16px;background:var(--surface);box-shadow:inset 0 0 0 2px var(--s-gray-600);border-radius:999px}
+.switch::after{top:3px;left:3px;width:10px;height:10px;background:var(--s-gray-600);box-shadow:none;transition:transform .13s var(--ease)}
+.switch.on{background:var(--red);box-shadow:none}
+.switch.on::after{transform:translateX(12px);background:#fff}
+.menu-item:active .switch::after{width:10px}
+
+/* ---------- badges, avatars ---------- */
+.chip{height:24px;padding:0 9px;border-radius:7px;font-size:12px;font-weight:600;background:var(--sunk);color:var(--ink-2)}
+.chip .dot{width:6px;height:6px;opacity:1}
+.chip.red{background:var(--red-soft);color:var(--red-ink)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.av,.av-lg,.av-xl{font-weight:700;box-shadow:none}
+.pdot{border-radius:3px}
+
+/* ---------- cards, lists, tables: flat, 1px gray-200, 12px corners ---------- */
+.card,.rows{border-radius:12px;border:1px solid var(--line);box-shadow:none;background:var(--surface)}
+.rw{min-height:56px;padding:8px 16px;gap:12px}
+.rw:hover{background:var(--surface-2)}
+.rw-m b{font-size:14px;font-weight:700}
+.rw-m .muted{font-size:13px}
+.rw .dt span{font-size:18px;font-weight:700}
+.empty{border-radius:12px;border:2px dashed var(--line-2)}
+.stat,.stat.ink,.person,.person:hover,.person:active{border-radius:12px;box-shadow:none;transform:none}
+.stat{background:var(--surface);border:1px solid var(--line)}
+.stat.ink{background:var(--s-gray-800);color:var(--s-gray-25);border-color:transparent}
+.person{background:var(--surface);border:1px solid var(--line)}
+.person:hover{border-color:var(--field);box-shadow:var(--sh-2)}
+.ins-stat,.ins-item{border-radius:10px}
+.ins-h h3{font-size:18px;font-weight:800;letter-spacing:0}
+.ins-s summary{font-size:14px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink)}
+.pl-group{font-size:12px;font-weight:700;letter-spacing:0;text-transform:none}
+.pl-r{border-radius:8px;min-height:40px}
+.pl-r.cur{background:var(--sel-soft);box-shadow:none}
+.pl-r.cur b{color:var(--sel)}
+
+/* selection: Spectrum blue, never confused with a status colour */
+.is-sel{box-shadow:inset 0 0 0 2px var(--sel)!important}
+.rw.is-sel,.txr.is-sel,.qcard.is-sel,.evp.is-sel,.mon-e.is-sel,.pl-r.is-sel{background:var(--sel-soft)}
+tr.is-sel td{background:var(--sel-soft)}
+tr.is-sel td:first-child{box-shadow:inset 3px 0 0 var(--sel)}
+tr.is-sel{box-shadow:none!important}
+
+/* ---------- floating things: solid popovers with Spectrum shadow ---------- */
+.menu,.modal,.taskbar,.actionbar,.bnav,.insp-sheet,.lp-drawer,.pal{background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none;border:1px solid var(--line);box-shadow:var(--sh-pop)}
+.menu{border-radius:10px;padding:6px}
+.menu-item{min-height:32px;border-radius:8px;padding:0 10px;font-weight:500}
+.menu-item:hover{background:var(--sunk)}
+.modal{border-radius:16px}
+.taskbar{border-radius:12px;padding:4px}
+.tb-b{height:28px;border-radius:999px;font-weight:700}
+.tb-b:hover{background:var(--sunk)}
+.tb-b.primary{background:var(--red)}
+.actionbar{border-radius:12px}
+.toast{border-radius:10px;background:var(--s-gray-800);color:var(--s-gray-25);font-weight:600;padding:10px 12px 10px 16px}
+.overlay,.sheet-ov,.fab-scrim{background:rgba(0,0,0,.4)}
+.fab{border-radius:999px;width:56px;height:56px;box-shadow:var(--sh-pop)}
+.fab:hover,.fab:active{border-radius:999px;transform:none}
+.fab-item{border-radius:999px;min-height:48px}
+
+/* progress: Spectrum meter instead of the wave */
+.wavy{gap:10px;margin-top:12px}
+.meter-t{flex:1;height:4px;border-radius:2px;background:var(--s-gray-300);overflow:hidden;min-width:0}
+.meter-t span{display:block;height:100%;border-radius:2px;background:var(--red);transition:width .3s var(--ease)}
+.wavy b{font-size:13px;font-weight:600}
+.loader{width:32px;height:32px;border-radius:50%;background:none;border:3px solid var(--s-gray-300);border-top-color:var(--red);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* calm motion: Spectrum uses short, plain transitions, not springs */
+@media (prefers-reduced-motion:reduce){.page.enter > *,.loader{animation:none!important}}
+select.input{padding-right:34px;background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%}
+/* coach mark: Spectrum informative blue */
+.hint-pop{background:var(--s-blue);border-radius:10px;font-weight:600}
+.hint-pop::after{background:var(--s-blue);width:12px;height:12px;bottom:-5px}
+.hint-pop .btn{background:#fff;color:var(--s-blue)}
+.group-l{font-size:14px;font-weight:700;letter-spacing:0;color:var(--ink)}
+/* headings that were tracked uppercase become Spectrum headings: sentence case, no tracking */
+.cmp-h,.pal-g,.day-sep,.ag .dt b,.day-h span,.rw .dt b,.mon-h span{letter-spacing:0;text-transform:none;font-weight:600}
+.plan-h h3,.fin-card-h h3,.report h3,.cost-box h3{font-size:16px;font-weight:700;letter-spacing:0;text-transform:none}
+.rep .grp td{font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink)}
+.big-num,.stat b,.fin-stats b{letter-spacing:-.005em}
+/* review viewer: Spectrum dark chrome */
+.v-side,.v-foot{background:#1B1B1B}
+.v-foot .row > *{min-width:0}
+.v-foot .btn{background:#2C2C2C;color:#F2F2F2;overflow:hidden;text-overflow:ellipsis}
+.v-foot .btn:hover{background:#393939}
+.v-foot .btn.primary{background:#E8273D}
+@media (max-width:899px){
+  .bnav{border-radius:16px;padding:4px}
+  .bnav button{border-radius:10px;font-size:11px;min-width:0}
+  .bnav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bnav button[aria-current]{background:var(--s-gray-800);color:var(--s-gray-25)}
+}

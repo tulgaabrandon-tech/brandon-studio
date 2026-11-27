@@ -312,9 +312,9 @@ function vProject(){
 }
 
 function wavy(frac, label){
-  var w=400, pts=[]; for(var x=0;x<=w;x+=4){ pts.push(x+','+(7+4*Math.sin(x/24*2*Math.PI)).toFixed(1)); }
-  var d='M'+pts.join(' L'), fw=Math.max(0,Math.min(1,frac))*w;
-  return '<div class="wavy" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(frac*100)+'" aria-label="'+esc(label)+'"><svg viewBox="0 0 '+w+' 14" preserveAspectRatio="none" aria-hidden="true"><line class="track" x1="'+(fw+8)+'" y1="7" x2="'+w+'" y2="7" stroke-width="4" stroke-linecap="round"/>'+(fw>0?'<clipPath id="wc"><rect x="0" y="0" width="'+fw+'" height="14"/></clipPath><path class="fill" d="'+d+'" fill="none" stroke-width="4" stroke-linecap="round" clip-path="url(#wc)" stroke-dasharray="1000 0"/>':'')+'</svg><b>'+esc(label)+'</b></div>';
+  // Spectrum meter: a straight 4px track with the filled part in the accent
+  var pc=Math.round(Math.max(0,Math.min(1,frac))*100);
+  return '<div class="wavy" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pc+'" aria-label="'+esc(label||(pc+'%'))+'"><span class="meter-t"><span style="width:'+pc+'%"></span></span>'+(label?'<b>'+esc(label)+'</b>':'')+'</div>';
 }
 
 // ================= Management dashboard (Nomin) =================

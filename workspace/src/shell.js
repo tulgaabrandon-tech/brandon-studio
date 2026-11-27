@@ -1,7 +1,7 @@
 // ================= Application frame: workspaces, selection, inspector, panels =================
 // Adapted from how Photoshop, Illustrator and Premiere Pro work: pick a workspace, select on the canvas,
 // edit in the inspector on the right, act from a small bar beside the selection. Spectrum 2 sets behaviour;
-// BrandOn's paper, red, Onest and rounded corners set the look.
+// The look follows Spectrum 2 too (spectrum.css), with BrandOn red as the accent.
 Object.assign(MN, {
   'Today':'Өнөөдөр', 'Production':'Үйлдвэрлэл', 'Planning':'Төлөвлөлт', 'Money':'Мөнгө', 'Workspaces':'Ажлын орчин',
   'Inspector':'Шинж чанар', 'Nothing selected':'Юу ч сонгоогүй', '{n} selected':'{n} сонгосон', 'Select':'Сонгох', 'Select tool':'Сонгох хэрэгсэл',
@@ -78,7 +78,7 @@ function wsSwitcher(){
 }
 
 // ---------- layout: per person, per workspace, on this device ----------
-var LAYOUT_DEF={today:{left:false,insp:true,side:'left',w:'regular'}, review:{left:true,insp:true,side:'left',w:'regular'}, production:{left:true,insp:true,side:'left',w:'regular'}, planning:{left:true,insp:true,side:'left',w:'regular'}, money:{left:false,insp:true,side:'left',w:'regular'}};
+var LAYOUT_DEF={today:{left:false,insp:true,side:'left',w:'regular'}, review:{left:true,insp:true,side:'left',w:'regular'}, production:{left:true,insp:true,side:'left',w:'regular'}, planning:{left:false,insp:true,side:'left',w:'regular'}, money:{left:false,insp:true,side:'left',w:'regular'}};
 function lay(ws){
   ws=ws||wsOf(S.view);
   if(!S.layout[ws]){ var saved=null; try{ saved=JSON.parse(localStorage.getItem('bo.layout.'+S.me+'.'+ws)||'null'); }catch(e){} S.layout[ws]=Object.assign({}, LAYOUT_DEF[ws]||LAYOUT_DEF.today, saved||{}); }

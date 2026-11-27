@@ -45,11 +45,11 @@ When asked to start or work on a job:
 
 ## UI rules
 
-Brand: red `#DA1F34` (dark mode `#E8273D`), near-black and white, font Onest (stand-in for Gramatika, which needs a web license). Light and dark mode.
+The studio app (`workspace/`) follows **Adobe Spectrum 2**, both in how it works and how it looks. Styles: `workspace/src/style.css`, then `workspace/src/spectrum.css` on top (spectrum.css wins).
 
-Three layers, each with one job:
-- **Flat for reading**: cards, job cards, tables, lists, comments, previews, forms. Hairline border, subtle lift on hover.
-- **Soft (neumorphism) for touching**: switches, segmented tabs, choice tiles, icon buttons, active nav item, overview stats. Raised means pressable, sunken means on or selected. Soft shadows only work on a matching surface, so `.card` recomputes its own shadow colors.
-- **Glass for what floats**: sticky top bar, notifications popover, command palette, job action bar, labels on previews, toasts, mobile nav. Never on a plain surface, never for long text. Has a solid fallback.
+- **Look:** Spectrum 2 gray scale (canvas gray-75, chrome gray-50, cards white; dark theme uses Spectrum's dark grays), font Source Sans 3 (Adobe's open sibling of Adobe Clean, covers Өө Үү), body 14px, sentence-case headings with no letter-spacing.
+- **Components:** pill buttons with bold labels. Default buttons use the gray "secondary fill" and the main call to action is solid BrandOn red `#DA1F34` (dark `#E8273D`). Action buttons are quiet with 8px corners. Fields have a 2px border and 8px corners. Badges have 7px corners and a subtle fill. Cards are flat with a 1px gray-200 border and 12px corners. Popovers, dialogs and bars are solid with Spectrum shadows: no glass, no neumorphism, no springy shape morphs. Component heights are 24, 32, 40 and 48px.
+- **Colour meaning:** red is for the main action, urgency and loss. Spectrum blue is for selection, focus and information. Green means money in or done, orange means waiting or owed. Selected toggles use the dark neutral fill.
+- **Frame:** workspaces (Today, Review, Production, Planning, Money), a tools rail, a left panel, the canvas, the inspector and a status bar. Click selects, double-click or Enter opens.
 
-Also: inputs are flat with a real border and a red focus ring. The primary button is solid red, never soft. Red is only for action, alerts, progress and focus. Text contrast at least 4.5:1 in both modes; every state has a text label, not just a color or shadow. Respect `prefers-reduced-motion`.
+Text contrast must be at least 4.5:1 in both modes. Every state has a text label, not just a colour. Respect `prefers-reduced-motion`.
