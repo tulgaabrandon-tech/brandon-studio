@@ -292,7 +292,6 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 .chat-ic{width:150px;height:150px;margin-right:44px;flex:none;transform:translateY(6px)}
 /* reveal: white with the regular logo, then Studio slides out and the stage goes dark */
 .slide.reveal{background:#fff}
-.slide.reveal.on{animation:lightsdown 1.4s cubic-bezier(.65,0,.35,1) 2.1s both}
 @keyframes lightsdown{from{background:#fff}to{background:#000}}
 .lockup{display:flex;align-items:center;justify-content:center}
 .lockup{--fs:160px}
@@ -302,9 +301,9 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 .lk-studio{display:inline-block;overflow:hidden;max-width:0;white-space:nowrap}
 .lk-studio span{display:inline-block;transform:translateX(-100%);font-weight:300;letter-spacing:-.045em}
 .reveal.on .lk-mark{animation:markin .9s cubic-bezier(.16,1,.3,1) .2s both}
-.reveal.on .lk-brand{animation:brandin 1s cubic-bezier(.16,1,.3,1) .45s both, inkflip 1.4s cubic-bezier(.65,0,.35,1) 2.1s both}
+.reveal.on .lk-brand{animation:brandin 1s cubic-bezier(.16,1,.3,1) .45s both}
 .reveal.on .lk-studio{animation:studiow 1.3s cubic-bezier(.76,0,.24,1) 1.7s both}
-.reveal.on .lk-studio span{animation:studiox 1.3s cubic-bezier(.76,0,.24,1) 1.7s both, inkflip2 1.4s cubic-bezier(.65,0,.35,1) 2.1s both}
+.reveal.on .lk-studio span{animation:studiox 1.3s cubic-bezier(.76,0,.24,1) 1.7s both}
 @keyframes markin{to{opacity:1;transform:none}}
 @keyframes brandin{to{opacity:1;transform:none}}
 @keyframes inkflip{from{color:#414042}to{color:#fff}}
@@ -319,6 +318,96 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 .reveal.on .trio span:nth-child(1){animation-delay:3.4s}.reveal.on .trio span:nth-child(2){animation-delay:3.75s}.reveal.on .trio span:nth-child(3){animation-delay:4.1s}
 .reveal .trio{margin-top:56px}
 @media (prefers-reduced-motion:reduce){.slide.reveal.on{background:#000}.reveal .lk-brand{color:#fff}.reveal .lk-studio{max-width:900px}.reveal .lk-studio span{transform:none;color:#C9C9CF}.reveal .lk-mark,.reveal .lk-brand,.reveal .trio span{opacity:1;transform:none}}
+
+/* ===== round 3 ===== */
+.reveal .lk-studio span{color:#414042}
+.msg-line > span{white-space:nowrap}
+.statement{font-size:62px;line-height:1.14;font-weight:700;letter-spacing:-.04em;max-width:1560px}
+.statement span{color:#7c7c84}
+/* photoshop vs studio */
+.cmp-wrap{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;margin-top:56px}
+.wf-cap{font-size:16px;font-weight:500;color:var(--mute);margin-bottom:14px}
+.wf-box{height:430px;border-radius:18px;background:#0c0c0e;border:1px solid #26262a;display:grid;gap:8px;padding:8px}
+.wf-box.ps{grid-template-columns:46px 1fr 210px;grid-template-rows:42px 1fr 1fr;grid-template-areas:"z1 z1 z1" "z2 z4 z5" "z2 z4 z3"}
+.wf-box.bo{grid-template-columns:46px 190px 1fr 210px;grid-template-rows:42px 1fr;grid-template-areas:"z1 z1 z1 z1" "z2 z3 z4 z5"}
+.z{--zc:#3a3a3f;border-radius:10px;background:color-mix(in srgb,var(--zc) 16%,#141416);border:1px solid color-mix(in srgb,var(--zc) 45%,transparent);display:flex;align-items:flex-start;gap:8px;padding:10px 12px;font-size:14px;font-weight:500;color:#d4d4d8}
+.z i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--zc);color:#fff;font-style:normal;font-size:12px;font-weight:700;display:grid;place-items:center}
+.z1{grid-area:z1;--zc:#5681FF;align-items:center}.ps .z1{justify-content:flex-end}
+.z2{grid-area:z2;--zc:#E8273D;padding:10px 0;justify-content:center}
+.z3{grid-area:z3;--zc:#F08A2E}
+.z4{grid-area:z4;--zc:#3a3a3f;align-items:center;justify-content:center;color:#5c5c62;background:#111113}
+.z5{grid-area:z5;--zc:#2DBA77}
+.slide.on .z1,.slide.on .z2,.slide.on .z3,.slide.on .z5{animation:zp 6s infinite}
+.slide.on .z1{animation-delay:1.2s}.slide.on .z2{animation-delay:2.7s}.slide.on .z3{animation-delay:4.2s}.slide.on .z5{animation-delay:5.7s}
+@keyframes zp{0%,22%{box-shadow:0 0 0 2px var(--zc),0 0 40px color-mix(in srgb,var(--zc) 40%,transparent)}30%,100%{box-shadow:none}}
+.wf-eq{text-align:center;font-size:56px;font-weight:200;color:#4a4a50}
+.legend2{display:flex;justify-content:center;gap:34px;margin-top:40px;font-size:15px;color:var(--mute)}
+.legend2 span{display:flex;align-items:center;gap:10px}
+.legend2 i{width:22px;height:22px;border-radius:50%;font-style:normal;font-size:12px;font-weight:700;color:#fff;display:grid;place-items:center}
+.legend2 span:nth-child(1) i{background:#5681FF}.legend2 span:nth-child(2) i{background:#E8273D}.legend2 span:nth-child(3) i{background:#F08A2E}.legend2 span:nth-child(4) i{background:#2DBA77}
+/* telegram: two real phones */
+.tg-stage{flex:1;min-height:0;display:grid;grid-template-columns:1fr 380px 1fr;align-items:center;justify-items:center;margin:6px 0 4px}
+.tcol{display:flex;flex-direction:column;align-items:center;gap:14px}
+.tphone{width:336px;height:690px;border-radius:56px;padding:12px;background:linear-gradient(160deg,#3a3a3e,#111 40%,#2a2a2e);box-shadow:0 50px 120px -30px rgba(0,0,0,.95),0 0 0 2px #3c3c40}
+.tphone .scr{position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;background:#0e1621}
+.tphone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:96px;height:28px;border-radius:18px;background:#000;z-index:9}
+.sbar{position:absolute;top:0;left:0;right:0;height:44px;z-index:8;display:flex;align-items:center;justify-content:space-between;padding:4px 28px 0;font-size:13px;color:#fff;transition:color .4s}
+.sb-r{display:flex;align-items:flex-end;gap:2px}.sb-r i{width:3px;background:currentColor;border-radius:1px}.sb-r i:nth-child(1){height:5px}.sb-r i:nth-child(2){height:7px}.sb-r i:nth-child(3){height:9px}
+.sb-r em{width:20px;height:9px;border:1.5px solid currentColor;border-radius:3px;margin-left:5px;position:relative}.sb-r em::after{content:"";position:absolute;inset:1px 5px 1px 1px;background:currentColor;border-radius:1px}
+.scr.on-bo .sbar{color:#141414}
+.app{position:absolute;inset:0;transition:transform .55s cubic-bezier(.32,.72,0,1),opacity .45s ease,filter .45s ease}
+.app-tg{display:flex;flex-direction:column;padding-top:44px;background:#0e1621}
+.app-bo{background:#f3f3f3;opacity:0;transform:scale(1.07);pointer-events:none}
+.app-bo .win-b{position:absolute;left:0;right:0;top:40px;bottom:0}
+.scr.on-bo .app-tg{opacity:0;transform:scale(.93);filter:blur(3px)}
+.scr.on-bo .app-bo{opacity:1;transform:none;pointer-events:auto}
+.tg-top{display:flex;align-items:center;gap:10px;padding:6px 14px 10px;background:#17212b;border-bottom:1px solid #0a1017}
+.tg-top b{display:block;font-size:14px;font-weight:600;color:#fff}.tg-top small{font-size:11px;color:#7f91a4}
+.tg-back{font-size:28px;line-height:1;color:#5ea5e8;margin-right:2px}
+.tg-ava{width:34px;height:34px;border-radius:50%;background:#2AABEE;color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center}
+.tg-list{flex:1;position:relative;overflow:hidden}
+.tg-inner{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:5px;padding:10px 10px 8px}
+.m{max-width:84%;padding:6px 10px 7px;border-radius:14px;background:#182533;color:#e9eef3;font-size:13px;line-height:1.35;align-self:flex-start}
+.m .who{display:block;font-size:11px;font-weight:600;margin-bottom:1px}
+.m.me{align-self:flex-end;background:#2b5278}
+.m.me .who{display:none}
+.m.new{animation:min .4s cubic-bezier(.16,1,.3,1) both}
+@keyframes min{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+.m.bot{border:1.5px solid rgba(232,39,61,.75);max-width:90%}
+.m.bot .who{color:#ff6b5c}
+.m.bot b{display:block;font-size:13px;margin-bottom:6px}
+.m .cardm{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:10px;background:#0e1621;font-size:11.5px;color:#9fb0c1}
+.m .cardm span:first-child{font-size:14px;font-weight:700;color:#fff}
+.tg-in{display:flex;align-items:center;gap:8px;padding:8px 10px 16px;background:#17212b}
+.tg-field{flex:1;min-height:34px;border-radius:17px;background:#0e1621;padding:7px 14px;font-size:13px;line-height:1.35;color:#e9eef3;display:block}
+.tg-ph{color:#6c7883}
+.tg-caret{display:none;width:1.5px;height:15px;background:#5ea5e8;vertical-align:-3px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.typing .tg-caret{display:inline-block}.typing .tg-ph{display:none}
+.tg-send{width:34px;height:34px;border-radius:50%;background:#2AABEE;color:#fff;display:grid;place-items:center;font-size:13px;transform:scale(0);transition:transform .25s cubic-bezier(.16,1,.3,1);flex:none}
+.has-text .tg-send{transform:scale(1)}
+.kb{height:0;overflow:hidden;background:#1c2733;transition:height .38s cubic-bezier(.32,.72,0,1);flex:none}
+.kb-on .kb{height:206px}
+.kr{display:flex;justify-content:center;gap:3px;margin:7px 3px 0}
+.kk{flex:1;max-width:26px;height:38px;border-radius:6px;background:#3b4a5b;color:#fff;font-size:14px;display:grid;place-items:center;transition:background .08s,transform .08s}
+.kk.wide{max-width:none;flex:6;font-size:12px;color:#9fb0c1}
+.kk.hit{background:#8aa0b8;transform:translateY(-3px) scale(1.08)}
+.notif{position:absolute;left:10px;right:10px;top:8px;z-index:10;display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:20px;background:rgba(36,36,40,.94);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4);transform:translateY(-150%);transition:transform .55s cubic-bezier(.32,.72,0,1)}
+.notif.in{transform:none}
+.n-ic{width:38px;height:38px;border-radius:9px;background:#fff;display:grid;place-items:center;flex:none}
+.n-mk{width:26px;height:26px}
+.notif b{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600}.notif b small{font-weight:400;color:#9a9aa0}
+.notif span{display:block;font-size:12.5px;line-height:1.35;color:#e5e5ea;margin-top:1px}
+.notif div{flex:1;min-width:0}
+.tap{position:absolute;left:0;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.5);z-index:11;opacity:0;pointer-events:none}
+.tap.go{animation:tapa .5s ease-out}
+@keyframes tapa{0%{opacity:.85;transform:scale(.35)}100%{opacity:0;transform:scale(1.25)}}
+.tp-name{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:#cfcfd4}
+.tp-name .av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff}
+.tg-cap{max-width:330px;min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center}
+#tgcap{font-size:21px;line-height:1.45;font-weight:400;color:#e5e5ea;transition:opacity .35s ease}
+#tgcap.out{opacity:0}
+.tg-title{font-size:50px;white-space:nowrap;margin-top:14px}
 </style>
 </head>
 <body>
@@ -328,7 +417,7 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 <section class="slide center" data-steps="1">
   <div class="q1" style="transition:opacity .8s var(--ease),transform 1s var(--ease),filter .8s"><div class="eye rv" style="--d:0">Brand On Creative House · 2026.11.27</div>
   <div class="huge grad rv" style="--d:.3">Манай ажил<br>хаана явагддаг вэ?</div></div>
-  <div class="q2"><div class="mega rv msg-line" data-step="1"><svg class="chat-ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6C17 6 6 16.6 6 29.6c0 7.2 3.4 13.6 8.8 17.9V58l9.6-5.3c2.4.7 5 1 7.6 1 15 0 26-10.6 26-23.6S47 6 32 6z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="21" cy="30" r="3.4" fill="#fff"/><circle cx="32" cy="30" r="3.4" fill="#fff"/><circle cx="43" cy="30" r="3.4" fill="#fff"/></svg><span class="redg">Messenger</span>&nbsp;дотор.</div></div>
+  <div class="q2"><div class="mega rv msg-line" data-step="1"><svg class="chat-ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6C17 6 6 16.6 6 29.6c0 7.2 3.4 13.6 8.8 17.9V58l9.6-5.3c2.4.7 5 1 7.6 1 15 0 26-10.6 26-23.6S47 6 32 6z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="21" cy="30" r="3.4" fill="#fff"/><circle cx="32" cy="30" r="3.4" fill="#fff"/><circle cx="43" cy="30" r="3.4" fill="#fff"/></svg><span><span class="redg">Messenger</span> дээр л</span></div></div>
 </section>
 
 <!-- 2 · the chat -->
@@ -339,96 +428,111 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
       <div class="msgr-b"><div class="msgr-roll" id="roll"></div></div>
     </div>
     <div class="chat-copy">
-      <div class="eye rv" style="--d:0">Одоо</div>
-      <div class="big rv" style="--d:.15">Бүх зүйл<br>нэг чатад.</div>
-      <div class="sub rv" style="--d:.35">Даалгавар, файл, засвар, хугацаа, инээд, стикер. Шинэ мессеж ирэх бүрт өмнөх ажил дээшээ урсаад алга болно.</div>
-      <div class="sub rv" data-step="1" style="color:#fff;font-weight:700">Хэн юу хийж байгааг, юу хоцорч байгааг<br>дээш гүйлгэж байж л мэднэ.</div>
+      <div class="eye rv" style="--d:0">Одоогийн байдал</div>
+      <div class="big rv" style="--d:.15">Бүх юм нэг чатад<br>холилдчихдог</div>
+      <div class="sub rv" style="--d:.35">Ажил өгөх, файл явуулах, засвар хэлэх, зүгээр ярилцах бүгд нэг дор байдаг. Шинэ мессеж ирэх тусам өчигдрийн ажил дээшээ урсаад алга болчихдог.</div>
+      <div class="sub rv" data-step="1" style="color:#fff;font-weight:500">Хэн юу хийж байгаа, юу хоцорч байгааг мэдэх гэж дээш гүйлгээд л суудаг.</div>
     </div>
   </div>
 </section>
 
-<!-- 3 · reveal: the BrandOn logo on white, then Studio slides out and the lights go down -->
+<!-- 3 · reveal: the regular logo on white, then Studio slides out -->
 <section class="slide center reveal">
-  <div class="glow rglow" style="width:900px;height:900px;left:510px;top:60px;background:radial-gradient(circle,rgba(232,39,61,.45),transparent 65%)"></div>
   <div class="lockup">
     <svg class="lk-mark" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg>
     <span class="lk-brand">BrandOn</span><span class="lk-studio"><span>&nbsp;Studio</span></span>
   </div>
-  <div class="trio">
-    <span>Эмх цэгцтэй.</span>
-    <span>Хялбар.</span>
-    <span>Нэг харахад ойлгомжтой.</span>
-  </div>
+</section>
+
+<!-- 3b · what it is, in one sentence -->
+<section class="slide center">
+  <div class="statement rv" style="--d:.1">Бүх ажлаа нэг дороос цэгцтэй харж,<br><span>хялбархан удирдах манай өөрийн хэрэгсэл.</span></div>
+  <div class="sub rv" style="--d:.6;margin-left:auto;margin-right:auto;text-align:center">Хэн юу хийж байгаа, юу хоцорч байгааг нэг харахад л мэднэ.</div>
 </section>
 
 <!-- 4 · five workspaces -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Бүтэц</div>
-  <div class="big rv" style="--d:.1">Таван ажлын орчин.</div>
-  <div class="sub rv" style="--d:.25">Хүн бүр зөвхөн өөрт хэрэгтэйгээ харна. Гар дээрх 1-5 товчоор шууд солино.</div>
+  <div class="big rv" style="--d:.1">Хүн бүрт өөрийн ажлын орчин</div>
+  <div class="sub rv" style="--d:.25">Хүн бүр зөвхөн өөрт хэрэгтэй зүйлээ харна. Гар дээрх 1-5 товчоор хооронд нь шилжинэ.</div>
   <div class="ws">
-    <div class="wc rv" style="--d:.4;--c:#F5F5F7"><span class="k">1</span><b>Өнөөдөр</b><p>Таны ширээн дээр юу байгаа. Дараагийн алхам үргэлж хамгийн дээр.</p><span class="who">Бүх хүн</span></div>
-    <div class="wc rv" style="--d:.55;--c:#E8273D"><span class="k">2</span><b>Хянах</b><p>Ирсэн ажил дараалалд. Зураг дээр нь тэмдэглээд батлах эсвэл буцаах.</p><span class="who">Төслийн менежер</span></div>
-    <div class="wc rv" style="--d:.7;--c:#5681FF"><span class="k">3</span><b>Үйлдвэрлэл</b><p>Бүх төсөл харилцагчаар. Явц, эцсийн хугацаа, хэн юу хийж байгаа.</p><span class="who">Менежер, удирдлага</span></div>
-    <div class="wc rv" style="--d:.85;--c:#F08A2E"><span class="k">4</span><b>Төлөвлөлт</b><p>Багийн хуанли, зураг авалт, уулзалт, чөлөө, зар.</p><span class="who">Төслийн менежер</span></div>
-    <div class="wc rv" style="--d:1;--c:#2DBA77"><span class="k">5</span><b>Мөнгө</b><p>Банкны хуулга, мөнгөн урсгал, НӨАТ, ажил бүрийн ашиг.</p><span class="who">Зөвхөн эрхтэй хүн</span></div>
+    <div class="wc rv" style="--d:.4;--c:#F5F5F7"><span class="k">1</span><b>Өнөөдөр</b><p>Өнөөдөр юу хийх вэ гэдгээ эндээс харна. Дараагийн ажил үргэлж хамгийн дээр нь байна.</p><span class="who">Бүх хүн</span></div>
+    <div class="wc rv" style="--d:.55;--c:#E8273D"><span class="k">2</span><b>Хянах</b><p>Ирсэн ажлуудыг дарааллаар нь шалгаад батлах эсвэл засвартай нь буцаана.</p><span class="who">Төслийн менежер</span></div>
+    <div class="wc rv" style="--d:.7;--c:#5681FF"><span class="k">3</span><b>Үйлдвэрлэл</b><p>Бүх төслийг харилцагчаар нь харуулна. Явц, хугацаа, хэн юу хийж байгаа нь харагдана.</p><span class="who">Менежер, удирдлага</span></div>
+    <div class="wc rv" style="--d:.85;--c:#F08A2E"><span class="k">4</span><b>Төлөвлөлт</b><p>Уулзалт, зураг авалт, чөлөөг багийн нэг хуанли дээр харна.</p><span class="who">Төслийн менежер</span></div>
+    <div class="wc rv" style="--d:1;--c:#2DBA77"><span class="k">5</span><b>Мөнгө</b><p>Банкны хуулга, мөнгөн урсгал, НӨАТ, ажил бүрийн ашгийг эндээс харна.</p><span class="who">Зөвхөн эрхтэй хүн</span></div>
   </div>
 </section>
 
-<!-- 5 · one flow -->
+<!-- 5 · how a job moves -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Хэрхэн ажилладаг вэ</div>
-  <div class="big rv" style="--d:.1">Нэг урсгал. Таван алхам.</div>
+  <div class="big rv" style="--d:.1">Ажил таван алхамаар явна</div>
   <div class="flow">
     <div class="line"><i></i></div>
-    <div class="st rv" style="--d:.5"><span class="dot">1</span><b>Бриф</b><p>Менежер ажил үүсгэж, хүн, хугацаа, брифийг өгнө.</p><span class="tag">PM</span></div>
-    <div class="st rv" style="--d:.9"><span class="dot">2</span><b>Хийх</b><p>Дизайнер "Эхлэх" дарна. Хүн бүр хэн юу хийж байгааг харна.</p><span class="tag">Дизайнер, видео</span></div>
-    <div class="st rv" style="--d:1.3"><span class="dot">3</span><b>Илгээх</b><p>Drive холбоосоо буулгаад илгээнэ. Чатад урсаж алга болохгүй.</p><span class="tag">Дизайнер, видео</span></div>
-    <div class="st rv" style="--d:1.7"><span class="dot">4</span><b>Хянах</b><p>Менежер ажлыг томоор нээж, засах газар дээр нь шууд тэмдэглэнэ.</p><span class="tag">PM</span></div>
-    <div class="st rv" style="--d:2.1"><span class="dot">5</span><b>Батлах</b><p>Нэг товчоор батлах эсвэл засвартай нь буцаана.</p><span class="tag">PM</span></div>
+    <div class="st rv" style="--d:.5"><span class="dot">1</span><b>Бриф</b><p>Менежер ажлыг үүсгээд хэн хийх, хэзээ гэхэд, брифийг нь бичнэ.</p><span class="tag">PM</span></div>
+    <div class="st rv" style="--d:.9"><span class="dot">2</span><b>Хийх</b><p>Дизайнер "Эхлэх" дармагц хэн юу хийж байгаа нь бүгдэд харагдана.</p><span class="tag">Дизайнер, видео</span></div>
+    <div class="st rv" style="--d:1.3"><span class="dot">3</span><b>Илгээх</b><p>Drive холбоосоо буулгаад илгээнэ, чатад урсаад алга болохгүй.</p><span class="tag">Дизайнер, видео</span></div>
+    <div class="st rv" style="--d:1.7"><span class="dot">4</span><b>Хянах</b><p>Менежер ажлыг томоор нээгээд засах газар дээр нь шууд тэмдэглэнэ.</p><span class="tag">PM</span></div>
+    <div class="st rv" style="--d:2.1"><span class="dot">5</span><b>Батлах</b><p>Батлах эсвэл засвартай нь буцаахад нэг л товч дарна.</p><span class="tag">PM</span></div>
   </div>
 </section>
 
 <!-- 6 · live: PM and designer side by side -->
 <section class="slide" style="padding:80px 110px 70px" data-live="duo">
   <div class="row-h rv" style="--d:0">
-    <div><span class="live"><i></i>LIVE</span><div class="h">Шууд үзье.</div></div>
-    <div style="display:flex;align-items:center;gap:20px"><span class="note">Туршилтын өгөгдөл. Жинхэнэ ажилд нөлөөлөхгүй.</span><button class="ghost-btn" data-reset>Дахин эхлүүлэх</button></div>
+    <div><span class="live"><i></i>LIVE</span><div class="h">Шууд үзье</div></div>
+    <div style="display:flex;align-items:center;gap:20px"><span class="note">Туршилтын өгөгдөл тул жинхэнэ ажилд нөлөөлөхгүй.</span><button class="ghost-btn" data-reset>Дахин эхлүүлэх</button></div>
   </div>
   <div class="duo rv" style="--d:.25">
     <div class="win"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төслийн менежер</span></div><div class="win-b" data-frame="suvdaa" data-ws="review" data-w="1000" data-bare="1"><div class="ld">Ачаалж байна...</div></div></div>
     <div class="win"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#7A4FB0">K</span>Khongoroo<span class="role">График дизайнер</span></div><div class="win-b" data-frame="khongoroo" data-w="1000" data-bare="1"><div class="ld">Ачаалж байна...</div></div></div>
   </div>
   <div class="steps rv" style="--d:.5">
-    <div><b>1</b><span>Khongoroo "Brandbook" ажлаа <strong>Эхлэх</strong></span></div>
-    <div><b>2</b><span><strong>Ажлаа илгээх</strong>, жишээ файл өөрөө хавсарна</span></div>
-    <div><b>3</b><span>Suvdaa-гийн <strong>Хянах</strong> дараалалд шууд гарна</span></div>
-    <div><b>4</b><span>Нээгээд <strong>A</strong> батлах, <strong>S</strong> засвар буцаах</span></div>
+    <div><b>1</b><span>Khongoroo "Brandbook" ажил дээрээ <strong>Эхлэх</strong> дарна</span></div>
+    <div><b>2</b><span><strong>Ажлаа илгээх</strong> дарахад жишээ файл өөрөө хавсарна</span></div>
+    <div><b>3</b><span>Ажил Suvdaa-гийн <strong>Хянах</strong> дараалалд шууд орно</span></div>
+    <div><b>4</b><span>Нээгээд <strong>A</strong> дарвал батална, <strong>S</strong> дарвал засвартай буцаана</span></div>
   </div>
 </section>
 
-<!-- 7a · familiar: Adobe -->
-<section class="slide" style="padding-top:90px;padding-bottom:60px">
+<!-- 7a · familiar: same layout as Photoshop -->
+<section class="slide">
   <div class="eye rv" style="--d:0">Яагаад ийм бүтэцтэй вэ</div>
-  <div class="big rv" style="--d:.1">Шинэ програм сурах хэрэггүй.</div>
-  <div class="sub rv" style="--d:.25">Бид өдөр бүр Photoshop, Illustrator, Premiere дээр ажилладаг. Тиймээс BrandOn Studio яг тэдгээр шиг бүтэцтэй: гар, нүд хоёр аль хэдийн дассан.</div>
-  <div class="map">
-    <div class="map-h rv" style="--d:.35"><span>Adobe дээр</span><span></span><span>BrandOn Studio дээр</span></div>
-    <div class="map-r rv" style="--d:.45"><span><b>Workspaces</b>Essentials, Editing, Color...</span><i>→</i><span><b>Ажлын орчин</b>Өнөөдөр, Хянах, Үйлдвэрлэл, Төлөвлөлт, Мөнгө</span></div>
-    <div class="map-r rv" style="--d:.55"><span><b>Properties самбар</b>Сонгосон давхаргын тохиргоо</span><i>→</i><span><b>Шинж чанар самбар</b>Сонгосон ажлаа баруун талд шууд засна</span></div>
-    <div class="map-r rv" style="--d:.65"><span><b>Layers, Project самбар</b>Зүүн талд жагсаалт</span><i>→</i><span><b>Зүүн самбар</b>Төслүүд, хянах дараалал, баг</span></div>
-    <div class="map-r rv" style="--d:.75"><span><b>Tools мөр, Contextual Task Bar</b>Хэрэгсэл, сонгосны доорх товч</span><i>→</i><span><b>Хэрэгслийн мөр, үйлдлийн товч</b>Сонгосон ажлын доор гол үйлдэл</span></div>
-    <div class="map-r rv" style="--d:.85"><span><b>Tab, ⌘Z, V</b>Самбар нуух, буцаах, сонгох</span><i>→</i><span><b>Яг адилхан</b>Ижил товчлол, ижил зуршил</span></div>
+  <div class="h rv" style="--d:.1">Photoshop-д дассан бол шууд ажиллана</div>
+  <div class="cmp-wrap">
+    <div class="wf rv" style="--d:.3">
+      <div class="wf-cap">Photoshop</div>
+      <div class="wf-box ps">
+        <div class="z z1"><i>1</i>Workspaces</div>
+        <div class="z z2"><i>2</i></div>
+        <div class="z z4">Canvas</div>
+        <div class="z z5"><i>4</i>Properties</div>
+        <div class="z z3"><i>3</i>Layers</div>
+      </div>
+    </div>
+    <div class="wf-eq rv" style="--d:.5">=</div>
+    <div class="wf rv" style="--d:.4">
+      <div class="wf-cap">BrandOn Studio</div>
+      <div class="wf-box bo">
+        <div class="z z1"><i>1</i>Ажлын орчин</div>
+        <div class="z z2"><i>2</i></div>
+        <div class="z z3"><i>3</i>Төслүүд</div>
+        <div class="z z4">Ажлууд</div>
+        <div class="z z5"><i>4</i>Шинж чанар</div>
+      </div>
+    </div>
   </div>
+  <div class="legend2 rv" style="--d:.7"><span><i>1</i>Ажлын орчин</span><span><i>2</i>Хэрэгсэл</span><span><i>3</i>Жагсаалт</span><span><i>4</i>Сонгосон зүйлийн тохиргоо</span></div>
 </section>
 
-<!-- 7 · Adobe habits -->
+<!-- 7 · shortcuts -->
 <section class="slide" style="padding-bottom:80px" data-live="keys">
   <div class="eye rv" style="--d:0">Удирдлага</div>
-  <div class="big rv" style="--d:.1">Товчлол нь ч адилхан.</div>
+  <div class="big rv" style="--d:.1">Shortcut нь ч адилхан</div>
   <div class="split">
     <div>
-      <div class="sub rv" style="--d:.2">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Photoshop-т дассан гар энд шууд ажиллана.</div>
+      <div class="sub rv" style="--d:.2">Дарж сонгоод баруун талд нь мэдээллийг харна, давхар дарж нээнэ. Photoshop-т дассан гар чинь энд шууд ажиллана.</div>
       <div class="keys">
         <div class="key rv" style="--d:.3"><kbd>⌘K</kbd><span>Юуг ч хайх</span></div>
         <div class="key rv" style="--d:.38"><kbd>1-5</kbd><span>Орчин солих</span></div>
@@ -437,7 +541,7 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
         <div class="key rv" style="--d:.62"><kbd>Space</kbd><span>Томоор харах</span></div>
         <div class="key rv" style="--d:.7"><kbd>Tab</kbd><span>Самбар нуух</span></div>
         <div class="key rv" style="--d:.78"><kbd>⌘Z</kbd><span>Буцаах</span></div>
-        <div class="key rv" style="--d:.86"><kbd>?</kbd><span>Бүх товчлол</span></div>
+        <div class="key rv" style="--d:.86"><kbd>?</kbd><span>Бүх shortcut</span></div>
       </div>
     </div>
     <div class="win rv" style="--d:.4"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#B5532A">R</span>Reka<span class="role">Үйлдвэрлэл</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="reka" data-ws="production" data-w="1440"><div class="ld">Ачаалж байна...</div></div></div>
@@ -447,8 +551,8 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 <!-- 8 · planning -->
 <section class="slide" style="padding-bottom:80px" data-live="plan">
   <div class="row-h">
-    <div><div class="eye rv" style="--d:0">Төлөвлөлт</div><div class="h rv" style="--d:.1;white-space:nowrap">Бүх баг. Нэг хуанли.</div></div>
-    <div class="sub rv" style="--d:.2;max-width:720px;text-align:right">Уулзалт, зураг авалт, хугацаа, чөлөө. Хэн хэзээ завгүйг нэг харахад.</div>
+    <div><div class="eye rv" style="--d:0">Төлөвлөлт</div><div class="h rv" style="--d:.1;white-space:nowrap">Багийн хуваарь нэг хуанли дээр</div></div>
+    <div class="sub rv" style="--d:.2;max-width:620px;text-align:right">Хэн хэзээ уулзалттай, зураг авалттай, чөлөөтэйг нэг дороос харна.</div>
   </div>
   <div class="win rv" style="--d:.35;flex:1"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төлөвлөлт</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="suvdaa-plan" data-as="suvdaa" data-ws="planning" data-w="1500" data-bare="1" data-scroll=".plan-h"><div class="ld">Ачаалж байна...</div></div></div>
 </section>
@@ -459,11 +563,11 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
   <div class="phone-wrap">
     <div>
       <div class="eye rv" style="--d:0">Утсан дээр</div>
-      <div class="huge rv" style="--d:.1">Халаасанд.</div>
+      <div class="big rv" style="--d:.1">Утсан дээр ч<br>бүрэн ажиллана</div>
       <div class="bul">
-        <div class="rv" style="--d:.4"><i></i>Зураг авалт дээрээс ч ажлаа илгээнэ.</div>
-        <div class="rv" style="--d:.55"><i></i>Нэг гараар: сонгосон ажил доороос гарч ирнэ.</div>
-        <div class="rv" style="--d:.7"><i></i>Компьютер дээрхтэй яг адилхан, бүрэн ажиллана.</div>
+        <div class="rv" style="--d:.4"><i></i>Зураг авалт дээрээс ч ажлаа илгээж болно</div>
+        <div class="rv" style="--d:.55"><i></i>Сонгосон ажлын дэлгэрэнгүй доороос гарч ирнэ</div>
+        <div class="rv" style="--d:.7"><i></i>Компьютер дээр байгаа бүх зүйл утсан дээр ч бий</div>
       </div>
     </div>
     <div class="phone rv" style="--d:.3"><div class="scr"><span class="notch"></span><div class="win-b" style="position:absolute;inset:0" data-frame="jerry" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div></div>
@@ -473,47 +577,71 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 <!-- 10 · money -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Мөнгө</div>
-  <div class="huge rv" style="--d:.1">Санхүү. <span class="redg">Тодорхой.</span></div>
+  <div class="big rv" style="--d:.1">Санхүүгээ ч эндээс хөтөлнө</div>
   <div class="fin">
-    <div class="fc rv" style="--d:.35"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулна. Давхардсан гүйлгээг өөрөө шалгаж, ангиллыг санал болгоно.</p></div>
-    <div class="fc rv" style="--d:.5"><span class="n">НӨАТ</span><p>Харилцагч бүрийн төлбөр, НӨАТ шивсэн эсэх. Нийлүүлэгч бидэнд шивсэн эсэх.</p></div>
-    <div class="fc rv" style="--d:.65"><span class="n">Ашиг</span><p>Гэрээ ба бодит орлого, өөрчилсөн, цуцалсан гэрээ. Ажил бүрийн зардлын дараах цэвэр ашиг.</p></div>
+    <div class="fc rv" style="--d:.35"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулахад давхардсан гүйлгээг өөрөө шалгаж, ангиллыг нь санал болгоно.</p></div>
+    <div class="fc rv" style="--d:.5"><span class="n">НӨАТ</span><p>Харилцагч бүр хэдийг төлсөн, НӨАТ-аа шивсэн эсэх, нийлүүлэгч бидэнд шивсэн эсэхийг харна.</p></div>
+    <div class="fc rv" style="--d:.65"><span class="n">Ашиг</span><p>Гэрээний дүн, бодитоор орсон мөнгө, ажил бүрийн зардлын дараах ашгийг харна.</p></div>
   </div>
-  <div class="sub rv" style="--d:.8">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
-  <div class="lock rv" style="--d:.9"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүст. Тусдаа кодоор түгжээтэй.</div>
+  <div class="sub rv" style="--d:.8">Мөнгөн урсгал, ашиг алдагдлыг сар, улирал, хагас жил, жилээр гаргана.</div>
+  <div class="lock rv" style="--d:.9"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүс тусдаа кодоор нээнэ</div>
 </section>
 
-<!-- 10b · one more thing: Telegram -->
-<section class="slide" data-steps="3" data-tg="1" style="padding-top:80px;padding-bottom:60px">
+<!-- 10b · one more thing: Telegram, played out on two phones -->
+<section class="slide" data-steps="1" data-tg="1" style="padding-top:70px;padding-bottom:50px">
   <div class="q2 rv om" style="--d:0"><div class="huge grad">Бас нэг зүйл...</div></div>
   <div class="rv" data-step="1" style="display:flex;flex-direction:column;flex:1">
     <div class="row-h">
-      <div><span class="soon">Удахгүй</span><div class="h">Чатаас шууд ажил болно.</div></div>
+      <div><span class="soon">Удахгүй</span><div class="h tg-title">Telegram-аар бичсэн ажил системд өөрөө орно</div></div>
+      <button class="ghost-btn" data-tgreplay>Дахин тоглуулах</button>
     </div>
-    <div class="tg-wrap">
-      <div class="tg">
-        <div class="tg-h"><span class="msgr-av" style="background:#2AABEE">B</span><div><b>Brand On баг</b><span>Telegram групп · BrandOn Studio бот нэмэгдсэн</span></div></div>
-        <div class="tg-b">
-          <div class="tm"><span class="who" style="color:#1F7A5A">Jerry</span>Маргааш студи чөлөөтэй юу?</div>
-          <div class="tm big-in tg-step" data-at="2"><span class="who" style="color:#B5532A">Reka</span>Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй</div>
-          <div class="tm bot tg-step" data-at="3"><span class="who" style="color:#DA1F34">BrandOn Studio</span><b>Tumku-д ажил өглөө</b><div class="card"><span>Reel edit</span><span>Hairan · Маргааш, оройн 18:00</span><span>Өгсөн: Reka</span></div></div>
+    <div class="tg-stage">
+      <div class="tcol"><div class="tphone" id="ph-reka">
+        <div class="scr">
+          <div class="sbar"><b>16:06</b><span class="sb-r"><i></i><i></i><i></i><em></em></span></div>
+          <span class="notch"></span>
+          <div class="app app-tg">
+            <div class="tg-top"><span class="tg-back">‹</span><span class="tg-ava">B</span><div><b>Brand On баг</b><small>7 гишүүн, BrandOn Studio бот</small></div></div>
+            <div class="tg-list"><div class="tg-inner"></div></div>
+            <div class="tg-in"><span class="tg-field"><span class="tg-typed"></span><span class="tg-caret"></span><span class="tg-ph">Мессеж</span></span><span class="tg-send">➤</span></div>
+            <div class="kb"></div>
+          </div>
+          <div class="app app-bo"><div class="win-b" data-frame="reka-ph" data-as="reka" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div>
+          <div class="notif"><span class="n-ic"><svg class="n-mk" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg></span><div><b>BrandOn Studio <small>одоо</small></b><span>Reka танд шинэ ажил өглөө: Reel edit</span></div></div>
+          <span class="tap"></span>
         </div>
       </div>
-      <div class="tg-arrow tg-step" data-at="3"><svg width="120" height="40" viewBox="0 0 120 40"><path d="M2 20h108M96 6l14 14-14 14" fill="none" stroke="#E8273D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>хэн · юу · хэзээ</span></div>
-      <div class="phone sm"><div class="scr"><span class="notch"></span><div class="win-b" style="position:absolute;inset:0" data-frame="tumku" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div></div>
+      <div class="tp-name"><span class="av" style="background:#B5532A">R</span>Reka</div></div>
+      <div class="tg-cap"><span id="tgcap"></span></div>
+      <div class="tcol"><div class="tphone" id="ph-tumku">
+        <div class="scr">
+          <div class="sbar"><b>16:06</b><span class="sb-r"><i></i><i></i><i></i><em></em></span></div>
+          <span class="notch"></span>
+          <div class="app app-tg">
+            <div class="tg-top"><span class="tg-back">‹</span><span class="tg-ava">B</span><div><b>Brand On баг</b><small>7 гишүүн, BrandOn Studio бот</small></div></div>
+            <div class="tg-list"><div class="tg-inner"></div></div>
+            <div class="tg-in"><span class="tg-field"><span class="tg-typed"></span><span class="tg-caret"></span><span class="tg-ph">Мессеж</span></span><span class="tg-send">➤</span></div>
+            <div class="kb"></div>
+          </div>
+          <div class="app app-bo"><div class="win-b" data-frame="tumku-ph" data-as="tumku" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div>
+          <div class="notif"><span class="n-ic"><svg class="n-mk" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg></span><div><b>BrandOn Studio <small>одоо</small></b><span>Reka танд шинэ ажил өглөө: Reel edit</span></div></div>
+          <span class="tap"></span>
+        </div>
+      </div>
+      <div class="tp-name"><span class="av" style="background:#8A6D00">T</span>Tumku</div></div>
     </div>
-    <div class="note">Жишээ: Telegram холболт удахгүй нэмэгдэнэ. Бот мессежийг уншаад хэнд, юу, хэзээ гэдгийг ойлгож, ажлыг үүсгээд тухайн хүнд мэдэгдэнэ.</div>
+    <div class="note" style="text-align:center">Энэ бол жишээ. Telegram холболт удахгүй нэмэгдэнэ.</div>
   </div>
 </section>
 
-<!-- 11 · from today -->
+<!-- 11 · getting started -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Ашиглаж эхлэхэд</div>
-  <div class="big rv" style="--d:.1">Гурван дүрэм.</div>
+  <div class="big rv" style="--d:.1">Гурван зүйлийг санаарай</div>
   <div class="rules">
-    <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Бүх ажил энд илгээгдэнэ.</b><p>Drive холбоосоор. Messenger-ээр файл, засвар явуулахгүй.</p></div></div>
-    <div class="rule rv" style="--d:.55"><span class="no">02</span><div><b>Хуваарь, зар энд.</b><p>Өглөө бүр "Өнөөдөр"-өө нээ. Зар уншаад "Ойлголоо" дар.</p></div></div>
-    <div class="rule rv" style="--d:.75"><span class="no">03</span><div><b>Ажлын байдал энд.</b><p>"Эхлэх" дарахад бүгд харна. Хэн юу хийж байгааг асуух шаардлагагүй.</p></div></div>
+    <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Ажлаа энд илгээнэ</b><p>Drive холбоосоор илгээнэ. Файл, засвараа Messenger-ээр явуулахаа больё.</p></div></div>
+    <div class="rule rv" style="--d:.55"><span class="no">02</span><div><b>Хуваарь, зараа эндээс харна</b><p>Өглөө бүр "Өнөөдөр" хэсгээ нээгээд, зар уншсан бол "Ойлголоо" дарна.</p></div></div>
+    <div class="rule rv" style="--d:.75"><span class="no">03</span><div><b>Ажлаа эхлэхдээ "Эхлэх" дарна</b><p>Тэгвэл хэн юу хийж байгааг хэн ч асуух шаардлагагүй болно.</p></div></div>
   </div>
 </section>
 
@@ -522,13 +650,13 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
   <div class="glow" style="width:1000px;height:1000px;left:460px;top:40px;background:radial-gradient(circle,rgba(232,39,61,.35),transparent 65%)"></div>
   <svg class="mark rv" style="--d:0;width:150px;height:150px" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg>
   <div class="mega grad rv" style="--d:.5">BrandOn Studio</div>
-  <div class="lead rv" style="--d:1">Тун удахгүй ашиглаж эхэлнэ.</div>
+  <div class="lead rv" style="--d:1">Тун удахгүй ашиглаж эхэлнэ</div>
   <div class="eye rv q-end" style="--d:1.6">Асуулт байна уу?</div>
 </section>
 
 </div></div>
 <div id="bar"></div>
-<div id="hint">→ дараах · ← өмнөх · F бүтэн дэлгэц</div>
+<div id="hint">Баруун тал: дараах · Зүүн тал: өмнөх · F: бүтэн дэлгэц</div>
 <div id="nav"><button data-go="-1" aria-label="Өмнөх">‹</button><span id="cnt"></span><button data-go="1" aria-label="Дараах">›</button><button data-fs aria-label="Бүтэн дэлгэц">⤢</button></div>
 
 <script type="text/plain" id="bo-app">%%APP%%</script>
@@ -559,7 +687,7 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
     var inj='<script>window.BO_BRIDGE=1;window.BO_AS='+JSON.stringify(as)+';window.BO_WS='+JSON.stringify(ws)+';window.BO_BARE='+(box.dataset.bare?1:0)+';window.BO_SCROLL='+JSON.stringify(box.dataset.scroll||'')+';try{Object.defineProperty(window,"claude",{value:undefined,configurable:true});}catch(e){}<\/script>';
     f.srcdoc=appHtml().replace('<head>','<head>'+inj);
     f.title=as+' (live demo)';
-    function size(){ var r=box.getBoundingClientRect(), sc=stage.getBoundingClientRect().width/1920, bw=r.width/sc, bh=r.height/sc, k=bw/W; f.style.width=W+'px'; f.style.height=(bh/k)+'px'; f.style.transform='scale('+k+')'; }
+    function size(){ var bw=box.offsetWidth, bh=box.offsetHeight, k=bw/W; if(!bw||!bh) return; f.style.width=W+'px'; f.style.height=(bh/k)+'px'; f.style.transform='scale('+k+')'; }
     box.appendChild(f); size(); addEventListener('resize', size); box._size=size;
     f.addEventListener('load', function(){ var ld=box.querySelector('.ld'); if(ld) ld.remove(); setTimeout(function(){ log.forEach(function(m){ try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }); }, 400); });
     frames.push(f);
@@ -570,7 +698,7 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
     log.push(m);
     frames.forEach(function(f){ if(f.contentWindow && f.contentWindow!==e.source){ try{ f.contentWindow.postMessage(m,'*'); }catch(x){} } });
   });
-  document.querySelectorAll('[data-reset]').forEach(function(b){ b.addEventListener('click', function(){ log=[]; tgDone=false; frames.forEach(function(f){ f.srcdoc=f.srcdoc; }); }); });
+  document.querySelectorAll('[data-reset]').forEach(function(b){ b.addEventListener('click', function(){ log=[]; tgReset(); frames.forEach(function(f){ f.srcdoc=f.srcdoc; }); }); });
 
   // ----- navigation with builds -----
   function steps(s){ return +(s.dataset.steps||0); }
@@ -578,21 +706,84 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
     s.querySelectorAll('[data-step]').forEach(function(el){ el.classList.toggle('shown', +el.dataset.step<=n); });
     if(s.querySelector('.q1')) s.querySelector('.q1').classList.toggle('gone', n>=1);
     if(s.querySelector('.om')) s.querySelector('.om').classList.toggle('gone', n>=1);
-    s.querySelectorAll('.tg-step').forEach(function(el){ el.classList.toggle('in', n>=+el.dataset.at); });
-    if(s.dataset.tg && n>=3) tgSend();
+    if(s.dataset.tg){ if(n>=1) tgPlay(); else tgReset(); }
   }
-  // the Telegram example: the bot turns Reka's message into a task for Tumku (same relay the live windows use)
-  var tgDone=false;
-  function tgSend(){
-    if(tgDone) return; tgDone=true;
-    var t=new Date(); t.setDate(t.getDate()+1); var due=t.getFullYear()+'-'+('0'+(t.getMonth()+1)).slice(-2)+'-'+('0'+t.getDate()).slice(-2);
-    var n=new Date(), today=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);
-    var m={bo:'sync', from:'telegram', col:'tasks', id:'tg_reel', del:false, obj:{id:'tg_reel', project:'s_hairan', title:'Reel edit', who:'tumku', due:due, status:'todo', by:'reka', created:today, brief:'Telegram-аас: "Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй". Маргааш оройн 18:00.', shoot:'', versions:[], thread:[]}};
-    setTimeout(function(){ log.push(m); frames.forEach(function(f){ try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }); }, 900);
+
+  // ----- the Telegram example: two phones that act it out on their own -----
+  var KB=[['ф','ц','у','ж','э','н','г','ш','ү','з','к','ъ'],['й','ы','б','ө','а','х','р','о','л','д','п'],['я','ч','ё','с','м','и','т','ь','в','ю']];
+  var TG_HIST=[['Jerry','Маргааш студи чөлөөтэй юу?'],['Reka','Тийм, 10 цагаас захиалчихсан'],['Tulgaa','Paradox-ын логоны шинэ хувилбарыг Drive-д хийлээ'],['Suvdaa','Харлаа, сайн болжээ'],['Khongoroo','Өнөөдөр өдрийн хоолонд хаашаа явах вэ'],['Jerry','Модерн Номадс уу'],['Tumku','Би явна'],['Reka','Hairan-ы сарын тайлан маргааш 11 цагт'],['Nomin','Баасан гарагийн оройн хоолонд бүгд ирэх үү?'],['Tulgaa','Ирнэ ээ'],['Khongoroo','Би ч гэсэн'],['Jerry','Камерын батерейг цэнэглээд тавьчихлаа'],['Reka','Баярлалаа'],['Suvdaa','Kids puree-гээс хариу ирлээ, өнгөө арай зөөлрүүлье гэж байна']];
+  var TG_COL={Jerry:'#4FC08C',Reka:'#E8915C',Tulgaa:'#6FA8FF',Suvdaa:'#FF6B7C',Khongoroo:'#B48CFF',Tumku:'#E2C04A',Nomin:'#C9C9CF'};
+  var tgT=[], tgOn=false;
+  function ph(id){ return document.getElementById('ph-'+id); }
+  function esc2(t){ return String(t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function msgHtml(owner, who, text, isNew, bot){
+    if(bot) return '<div class="m bot'+(isNew?' new':'')+'"><span class="who">BrandOn Studio</span>'+bot+'</div>';
+    return '<div class="m'+(who===owner?' me':'')+(isNew?' new':'')+'"><span class="who" style="color:'+(TG_COL[who]||'#9fb0c1')+'">'+who+'</span>'+esc2(text)+'</div>';
   }
+  function tgRender(){
+    ['reka','tumku'].forEach(function(id){
+      var p=ph(id), owner=id==='reka'?'Reka':'Tumku';
+      p.querySelector('.tg-inner').innerHTML=TG_HIST.map(function(m){ return msgHtml(owner,m[0],m[1]); }).join('');
+      var kb=p.querySelector('.kb'); if(!kb.innerHTML) kb.innerHTML=KB.map(function(r){ return '<div class="kr">'+r.map(function(k){ return '<span class="kk" data-k="'+k+'">'+k+'</span>'; }).join('')+'</div>'; }).join('')+'<div class="kr"><span class="kk wide" data-k=" ">зай</span></div>';
+      var app=p.querySelector('.app-tg'); app.classList.remove('kb-on','typing','has-text');
+      p.querySelector('.tg-typed').textContent=''; p.querySelector('.scr').classList.remove('on-bo'); p.querySelector('.notif').classList.remove('in');
+    });
+  }
+  function addMsg(who, text, bot){ ['reka','tumku'].forEach(function(id){ var owner=id==='reka'?'Reka':'Tumku'; ph(id).querySelector('.tg-inner').insertAdjacentHTML('beforeend', msgHtml(owner,who,text,true,bot)); }); }
+  function cap(t){ var c=document.getElementById('tgcap'); c.classList.add('out'); at(380,function(){ c.textContent=t; c.classList.remove('out'); }, true); }
+  function tap(id, sel){ var p=ph(id), scr=p.querySelector('.scr'), el=p.querySelector(sel), t=p.querySelector('.tap'); if(!el) return; var r=el.getBoundingClientRect(), q=scr.getBoundingClientRect(), k=q.width/scr.offsetWidth; t.style.left=((r.left+r.width/2-q.left)/k)+'px'; t.style.top=((r.top+r.height/2-q.top)/k)+'px'; t.classList.remove('go'); void t.offsetWidth; t.classList.add('go'); }
+  function kb(id, on){ var a=ph(id).querySelector('.app-tg'); a.classList.toggle('kb-on', on); a.classList.toggle('typing', on); }
+  function typeIn(id, text, t0, cps){
+    var p=ph(id), out=p.querySelector('.tg-typed'), app=p.querySelector('.app-tg'), step=1000/cps;
+    text.split('').forEach(function(ch,i){ at(t0+i*step+(ch===' '?40:0), function(){
+      out.textContent+=ch; app.classList.add('has-text');
+      var key=p.querySelector('.kk[data-k="'+(ch===' '?' ':ch.toLowerCase())+'"]')||p.querySelectorAll('.kk')[Math.floor(Math.random()*30)];
+      if(key){ key.classList.add('hit'); setTimeout(function(){ key.classList.remove('hit'); }, 110); }
+    }); });
+    return t0+text.length*step;
+  }
+  function sendTyped(id, who){ var p=ph(id), out=p.querySelector('.tg-typed'), t=out.textContent; tap(id,'.tg-send'); out.textContent=''; p.querySelector('.app-tg').classList.remove('has-text'); kb(id,false); addMsg(who,t); }
+  function app(id, which){ ph(id).querySelector('.scr').classList.toggle('on-bo', which==='bo'); }
+  function at(ms, fn, raw){ var h=setTimeout(fn, ms); tgT.push(h); return h; }
+  function dstr(o){ var d=new Date(); d.setDate(d.getDate()+(o||0)); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function relay(m){ if(m.bo==='sync') log.push(m); frames.forEach(function(f){ try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }); }
+  var REEL_IMG='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600"><rect width="900" height="1600" fill="#1f2a1f"/><circle cx="450" cy="700" r="260" fill="#3D7A3A"/><path d="M400 610l150 90-150 90z" fill="#fff"/><text x="450" y="1120" text-anchor="middle" font-family="Arial" font-weight="700" font-size="64" fill="#fff">Hairan reel</text><rect x="300" y="1380" width="300" height="70" rx="35" fill="#fff"/><text x="450" y="1427" text-anchor="middle" font-family="Arial" font-weight="700" font-size="32" fill="#1f2a1f">ЖИШЭЭ ФАЙЛ</text></svg>');
+  function reelTask(status){
+    var o={id:'tg_reel', project:'s_hairan', title:'Reel edit', who:'tumku', due:dstr(1), status:status, by:'reka', created:dstr(0), brief:'Telegram-аас: "Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй". Маргааш оройн 18:00.', shoot:'', versions:[], thread:[]};
+    if(status==='review') o.versions=[{files:[{kind:'image', url:REEL_IMG, name:'hairan_reel.png'}], note:'Telegram-аас: аль хэдийн бэлэн болсон', by:'tumku', date:dstr(0), comments:[], decision:null}];
+    return {bo:'sync', from:'telegram', col:'tasks', id:'tg_reel', del:false, obj:o};
+  }
+  function tgReset(){ tgT.forEach(clearTimeout); tgT=[]; tgOn=false; if(ph('reka')) tgRender(); var c=document.getElementById('tgcap'); if(c){ c.textContent=''; c.classList.remove('out'); } }
+  function tgPlay(){
+    if(tgOn || !ph('reka')) return; tgReset(); tgOn=true;
+    var REKA='Tumku, reel-ийн эдитээ маргааш орой гэхэд бэлдчихээрэй', TUM='Аль хэдийн бэлэн болсон, Drive-д хийчихсэн';
+    at(300, function(){ cap('Reka Telegram групп дээр Tumku-д ажил өгч байна'); });
+    at(1300, function(){ tap('reka','.tg-field'); kb('reka',true); });
+    var e1=typeIn('reka', REKA, 1800, 16);
+    at(e1+400, function(){ sendTyped('reka','Reka'); });
+    at(e1+1800, function(){ addMsg('', '', '<b>Tumku-д шинэ ажил өглөө</b><div class="cardm"><span>Reel edit</span><span>Hairan · Маргааш, оройн 18:00</span><span>Өгсөн: Reka</span></div>'); cap('Бот хэнд, юу, хэзээ гэдгийг ойлгоод ажлыг өөрөө үүсгэнэ'); });
+    at(e1+4300, function(){ ph('tumku').querySelector('.notif').classList.add('in'); cap('Tumku-гийн утсанд мэдэгдэл очно'); });
+    at(e1+6300, function(){ relay(reelTask('todo')); tap('tumku','.notif'); });
+    at(e1+6600, function(){ ph('tumku').querySelector('.notif').classList.remove('in'); app('tumku','bo'); cap('Ажил Tumku-гийн жагсаалтад аль хэдийн орчихсон байна'); });
+    at(e1+10000, function(){ app('tumku','tg'); cap('Tumku ажлаа аль хэдийн хийчихсэн гэж хариулна'); });
+    at(e1+10900, function(){ tap('tumku','.tg-field'); kb('tumku',true); });
+    var e2=typeIn('tumku', TUM, e1+11400, 16);
+    at(e2+400, function(){ sendTyped('tumku','Tumku'); });
+    at(e2+1800, function(){ addMsg('', '', '<b>Reel edit-ийг Reka-д хянуулахаар илгээлээ</b><div class="cardm"><span>Reel edit</span><span>Төлөв: Хянуулахаар илгээсэн</span></div>'); relay(reelTask('review')); cap('Ажлын төлөв системд өөрөө солигдоно'); });
+    at(e2+3600, function(){ app('reka','bo'); cap('Reel edit Reka-гийн Хянах дараалалд шууд орж ирлээ'); });
+    at(e2+4300, function(){ relay({bo:'focus', id:'tg_reel'}); });
+    at(e2+3700, function(){ tgOn=false; });
+  }
+  document.querySelectorAll('[data-tgreplay]').forEach(function(b){ b.addEventListener('click', function(){
+    tgReset(); log=log.filter(function(m){ return m.id!=='tg_reel'; });
+    ['tumku-ph','reka-ph'].forEach(function(id){ var f=document.querySelector('[data-frame="'+id+'"] iframe'); if(f) f.srcdoc=f.srcdoc; });
+    setTimeout(tgPlay, 1500);
+  }); });
+
   function show(i, st){
     i=Math.max(0, Math.min(slides.length-1, i));
     slides.forEach(function(s,k){ s.classList.toggle('on', k===i); s.classList.toggle('past', k<i); });
+    if(!slides[i].dataset.tg) tgReset();
     cur=i; step=st||0; applySteps(slides[i], step);
     slides[i].querySelectorAll('[data-frame]').forEach(mount);
     // warm up the next live slide so it is ready when we get there
@@ -614,7 +805,8 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
   function fs(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(e){} }
   document.getElementById('nav').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; if(b.dataset.fs!=null) fs(); else if(+b.dataset.go>0) next(); else prev(); b.blur(); });
   // clicking the empty stage advances; clicks inside the live windows stay there
-  document.getElementById('view').addEventListener('click', function(e){ if(e.target.closest('.win,.phone,button,a')) return; next(); });
+  // click the left half to go back, the right half to go on (live windows and buttons keep their clicks)
+  document.getElementById('view').addEventListener('click', function(e){ if(e.target.closest('.win,.phone,.tphone,button,a')) return; if(e.clientX < innerWidth/2) prev(); else next(); });
   setTimeout(function(){ document.getElementById('hint').style.opacity=0; }, 6000);
   var h=+(location.hash||'').slice(1); show(h>0?h-1:0);
 })();

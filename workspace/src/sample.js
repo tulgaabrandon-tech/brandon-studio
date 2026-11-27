@@ -67,7 +67,10 @@ function demoSend(col, obj, del){
   try{ window.parent.postMessage({bo:'sync', from:window.BO_AS||'', col:col, id:obj.id, del:!!del, obj:del?null:JSON.parse(JSON.stringify(obj))}, '*'); }catch(e){}
 }
 window.addEventListener('message', function(e){
-  var m=e.data; if(!m || m.bo!=='sync' || S.mode!=='demo' || !window.BO_BRIDGE || COLS.indexOf(m.col)<0) return;
+  var m=e.data;
+  // the deck can point at one item, so the audience sees where it landed
+  if(m && m.bo==='focus' && window.BO_BRIDGE){ var el=document.querySelector('[data-id="'+String(m.id).replace(/"/g,'')+'"]'); if(el){ var card=el.closest('.qcard,.rw')||el; var r=card.getBoundingClientRect(), cv=document.getElementById('canvas'), sc=(cv && cv.scrollHeight>cv.clientHeight+4 && getComputedStyle(cv).overflowY!=='visible')?cv:null; if(sc) sc.scrollBy({top:r.top-sc.getBoundingClientRect().top-sc.clientHeight/2+r.height/2, behavior:'smooth'}); else window.scrollBy({top:r.top-innerHeight/2+r.height/2, behavior:'smooth'}); card.classList.add('is-sel'); } return; }
+  if(!m || m.bo!=='sync' || S.mode!=='demo' || !window.BO_BRIDGE || COLS.indexOf(m.col)<0) return;
   var arr=S[m.col], cur=arr.filter(function(x){ return x.id===m.id; })[0];
   var isNew=!cur && !m.del;
   if(m.del){ S[m.col]=arr.filter(function(x){ return x.id!==m.id; }); }
