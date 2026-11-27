@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BrandOn Studio · Танилцуулга</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@200..900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E8273D;--red-d:#DA1F34;--ink:#F5F5F7;--mute:#9A9AA0;--dim:#5C5C62;--line:rgba(255,255,255,.1);--blue:#5681FF;--green:#2DBA77;--orange:#F08A2E;
-  --ease:cubic-bezier(.16,1,.3,1);font-family:"Source Sans 3","Adobe Clean",system-ui,sans-serif}
+  --ease:cubic-bezier(.16,1,.3,1);font-family:"Geologica",system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#000;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -169,6 +169,123 @@ body:hover #nav,#nav:focus-within{opacity:1}
 #hint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);font-size:14px;color:#777;z-index:21;transition:opacity 1s;pointer-events:none}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation:none!important}}
+
+/* =========== refinement: Geologica, a calmer scale, more air =========== */
+:root{--mute:#8E8E95;--dim:#56565C;--soft:#C9C9CF}
+body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
+.slide{padding:120px 150px 100px}
+.eye{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:500;letter-spacing:.01em;color:var(--mute);margin-bottom:26px}
+.eye::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);flex:none}
+.center .eye{justify-content:center}
+.mega{font-size:176px;line-height:.95;font-weight:800;letter-spacing:-.055em}
+.huge{font-size:124px;line-height:.98;font-weight:800;letter-spacing:-.05em}
+.big{font-size:88px;line-height:1.02;font-weight:800;letter-spacing:-.045em}
+.h{font-size:64px;line-height:1.05;font-weight:800;letter-spacing:-.04em}
+.sub{font-size:26px;line-height:1.5;font-weight:300;color:var(--mute);max-width:1040px;margin-top:28px}
+.lead{font-size:34px;line-height:1.35;font-weight:300;color:var(--soft);margin-top:30px;letter-spacing:-.01em}
+.note{font-size:15px;line-height:1.5;color:var(--dim);font-weight:400}
+.q-end{margin-top:72px;margin-bottom:0}
+.q-end::before{display:none}
+/* cold open + reveal */
+.q1 .huge{margin-top:0}
+.mark{width:150px;height:150px}
+.mark + .mega{margin-top:48px}
+.trio{margin-top:40px;font-size:30px;font-weight:500;gap:28px;letter-spacing:-.01em}
+.trio span:nth-child(1){color:#fff}.trio span:nth-child(2){color:var(--soft)}
+/* messenger */
+.chatsplit{grid-template-columns:560px 1fr;gap:120px}
+.msgr{height:820px;border-radius:36px}
+.msgr-h b,.tg-h b{font-size:19px;font-weight:600}.msgr-h span,.tg-h span{font-size:13px}
+.msgr-av{width:40px;height:40px;font-size:16px}
+.mm{font-size:17px;padding:10px 15px;border-radius:18px}
+.mm small{font-size:11px;font-weight:600}
+.chat-copy .sub{font-size:24px}
+.chat-copy .sub[data-step]{font-size:26px;font-weight:500}
+/* cards */
+.ws{gap:16px;margin-top:64px}
+.wc{min-height:360px;padding:28px 26px 30px;border-radius:24px;gap:14px}
+.wc .k{width:40px;height:40px;border-radius:11px;font-size:16px;font-weight:600}
+.wc b{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:18px}
+.wc p{font-size:17px;line-height:1.5}
+.wc .who{font-size:14px;font-weight:500}
+/* flow */
+.flow{margin-top:110px}
+.flow .line{top:34px;height:2px}
+.st{gap:16px}
+.st .dot{width:70px;height:70px;font-size:22px;font-weight:700;border-width:2px}
+.st b{font-size:32px;font-weight:700;letter-spacing:-.03em;margin-top:8px}
+.st p{font-size:17px;line-height:1.5;max-width:260px}
+.st .tag{font-size:13px;font-weight:500;padding:5px 12px}
+/* live */
+.live{font-size:14px;letter-spacing:.16em;font-weight:700;gap:10px}
+.live i{width:10px;height:10px}
+.row-h .h{margin-top:14px}
+.duo{gap:28px;margin-top:30px}
+.win{border-radius:18px}
+.win-h{height:40px;font-size:14px;gap:12px}
+.win-h .av{width:22px;height:22px;font-size:11px}
+.win-h .dots i{width:10px;height:10px}
+.win-h .live{font-size:11px}
+.steps{gap:12px;margin-top:24px}
+.steps div{font-size:16px;line-height:1.45;padding:14px 16px;border-radius:14px;gap:12px;color:var(--soft)}
+.steps b{width:26px;height:26px;font-size:13px}
+.ghost-btn{font-size:14px;padding:10px 16px}
+/* adobe map */
+.map{margin-top:40px}
+.map-h{font-size:14px;font-weight:500}
+.map-r{padding:16px 0}
+.map-r b{font-size:24px;font-weight:600;letter-spacing:-.02em}
+.map-r span{font-size:16px;gap:6px}
+.map-r i{font-size:26px}
+/* keys */
+.split{grid-template-columns:600px 1fr;gap:70px;margin-top:40px}
+.split .sub{font-size:22px;margin:0 0 30px}
+.keys{gap:12px}
+.key{padding:14px 16px;border-radius:16px;gap:16px}
+.key kbd{min-width:64px;height:52px;font-size:18px;font-weight:600;border-radius:11px}
+.key span{font-size:17px;font-weight:500}
+/* planning */
+.row-h .sub{font-size:20px;max-width:640px;text-align:right;margin:0}
+/* phone */
+.phone-wrap{grid-template-columns:1fr 460px}
+.bul{gap:22px;margin-top:44px}
+.bul div{font-size:24px;font-weight:400;color:var(--soft);gap:18px}
+.bul i{width:8px;height:8px;transform:translateY(-4px)}
+/* money */
+.fin{gap:18px;margin-top:56px}
+.fc{padding:32px 30px;border-radius:22px;min-height:230px;gap:12px}
+.fc .n{font-size:44px;font-weight:700;letter-spacing:-.04em}
+.fc p{font-size:17px;line-height:1.55}
+.fin + .sub{font-size:20px;margin-top:34px}
+.lock{font-size:16px;font-weight:500;padding:12px 20px;margin-top:30px;gap:10px}
+.lock svg{width:18px;height:18px}
+/* telegram */
+.soon{font-size:13px;font-weight:600;letter-spacing:.04em;padding:6px 14px}
+.tg{height:640px}
+.tm{font-size:19px;padding:11px 16px}
+.tm .who{font-size:12px;font-weight:600}
+.tm.big-in{font-size:22px;font-weight:500}
+.tm.bot b{font-size:20px;font-weight:600}
+.tm .card{font-size:15px}
+.tm .card span:first-child{font-size:22px;font-weight:700}
+.tg-arrow{font-size:14px;font-weight:500}
+.tg-wrap + .note{margin-top:18px}
+/* rules */
+.rules{gap:0;margin-top:60px}
+.rule{grid-template-columns:120px 1fr;padding:30px 0;border-bottom:1px solid var(--line)}
+.rule:first-child{border-top:1px solid var(--line)}
+.rule .no{font-size:18px;font-weight:600;color:var(--red);letter-spacing:0}
+.rule b{font-size:40px;font-weight:700;letter-spacing:-.035em}
+.rule p{font-size:19px;font-weight:300;margin-top:10px}
+/* planning: the live window under the header */
+.row-h + .win{margin-top:36px}
+.rule{grid-template-columns:90px 1fr}
+/* content slides sit in the optical centre instead of hanging from the top */
+.slide{justify-content:center}
+.ws .wc{min-height:400px}
+/* chrome */
+#hint{font-size:12px}
+#nav span{font-size:12px}
 </style>
 </head>
 <body>
@@ -177,7 +294,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 1 · cold open -->
 <section class="slide center" data-steps="1">
   <div class="q1" style="transition:opacity .8s var(--ease),transform 1s var(--ease),filter .8s"><div class="eye rv" style="--d:0">Brand On Creative House · 2026.11.27</div>
-  <div class="huge grad rv" style="--d:.3;margin-top:40px">Өнөөдөр манай ажил<br>хаана байна вэ?</div></div>
+  <div class="huge grad rv" style="--d:.3">Өнөөдөр манай ажил<br>хаана байна вэ?</div></div>
   <div class="q2"><div class="mega rv" data-step="1"><span class="redg">Messenger</span> дотор.</div></div>
 </section>
 
@@ -190,9 +307,9 @@ body:hover #nav,#nav:focus-within{opacity:1}
     </div>
     <div class="chat-copy">
       <div class="eye rv" style="--d:0">Одоо</div>
-      <div class="big rv" style="--d:.15;margin-top:14px">Бүх зүйл<br>нэг чатад.</div>
-      <div class="sub rv" style="--d:.35;margin-top:30px;font-size:34px">Даалгавар, файл, засвар, хугацаа, инээд, стикер. Шинэ мессеж ирэх бүрт өмнөх ажил дээшээ урсаад алга болно.</div>
-      <div class="sub rv" data-step="1" style="margin-top:34px;font-size:34px;color:#fff;font-weight:700">Хэн юу хийж байгааг, юу хоцорч байгааг<br>дээш гүйлгэж байж л мэднэ.</div>
+      <div class="big rv" style="--d:.15">Бүх зүйл<br>нэг чатад.</div>
+      <div class="sub rv" style="--d:.35">Даалгавар, файл, засвар, хугацаа, инээд, стикер. Шинэ мессеж ирэх бүрт өмнөх ажил дээшээ урсаад алга болно.</div>
+      <div class="sub rv" data-step="1" style="color:#fff;font-weight:700">Хэн юу хийж байгааг, юу хоцорч байгааг<br>дээш гүйлгэж байж л мэднэ.</div>
     </div>
   </div>
 </section>
@@ -201,7 +318,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <section class="slide center">
   <div class="glow" style="width:900px;height:900px;left:510px;top:60px;background:radial-gradient(circle,rgba(232,39,61,.45),transparent 65%)"></div>
   <svg class="mark rv" style="--d:0" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#E8273D" stroke-width="15" stroke-linecap="butt"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#E8273D" stroke-width="15"/></svg>
-  <div class="mega grad rv" style="--d:1;margin-top:60px">BrandOn Studio</div>
+  <div class="mega grad rv" style="--d:1">BrandOn Studio</div>
   <div class="trio">
     <span class="rv" style="--d:1.7">Эмх цэгцтэй.</span>
     <span class="rv" style="--d:2.1">Хялбар.</span>
@@ -212,8 +329,8 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 4 · five workspaces -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Бүтэц</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Таван ажлын орчин.</div>
-  <div class="sub rv" style="--d:.25;margin-top:22px">Хүн бүр зөвхөн өөрт хэрэгтэйгээ харна. Гар дээрх 1-5 товчоор шууд солино.</div>
+  <div class="big rv" style="--d:.1">Таван ажлын орчин.</div>
+  <div class="sub rv" style="--d:.25">Хүн бүр зөвхөн өөрт хэрэгтэйгээ харна. Гар дээрх 1-5 товчоор шууд солино.</div>
   <div class="ws">
     <div class="wc rv" style="--d:.4;--c:#F5F5F7"><span class="k">1</span><b>Өнөөдөр</b><p>Таны ширээн дээр юу байгаа. Дараагийн алхам үргэлж хамгийн дээр.</p><span class="who">Бүх хүн</span></div>
     <div class="wc rv" style="--d:.55;--c:#E8273D"><span class="k">2</span><b>Хянах</b><p>Ирсэн ажил дараалалд. Зураг дээр нь тэмдэглээд батлах эсвэл буцаах.</p><span class="who">Төслийн менежер</span></div>
@@ -226,7 +343,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 5 · one flow -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Хэрхэн ажилладаг вэ</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Нэг урсгал. Таван алхам.</div>
+  <div class="big rv" style="--d:.1">Нэг урсгал. Таван алхам.</div>
   <div class="flow">
     <div class="line"><i></i></div>
     <div class="st rv" style="--d:.5"><span class="dot">1</span><b>Бриф</b><p>Менежер ажил үүсгэж, хүн, хугацаа, брифийг өгнө.</p><span class="tag">PM</span></div>
@@ -240,7 +357,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 6 · live: PM and designer side by side -->
 <section class="slide" style="padding:80px 110px 70px" data-live="duo">
   <div class="row-h rv" style="--d:0">
-    <div><span class="live"><i></i>LIVE</span><div class="h" style="margin-top:12px">Шууд үзье.</div></div>
+    <div><span class="live"><i></i>LIVE</span><div class="h">Шууд үзье.</div></div>
     <div style="display:flex;align-items:center;gap:20px"><span class="note">Туршилтын өгөгдөл. Жинхэнэ ажилд нөлөөлөхгүй.</span><button class="ghost-btn" data-reset>Дахин эхлүүлэх</button></div>
   </div>
   <div class="duo rv" style="--d:.25">
@@ -258,8 +375,8 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 7a · familiar: Adobe -->
 <section class="slide" style="padding-top:90px;padding-bottom:60px">
   <div class="eye rv" style="--d:0">Яагаад ийм бүтэцтэй вэ</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Шинэ програм сурах хэрэггүй.</div>
-  <div class="sub rv" style="--d:.25;margin-top:22px">Бид өдөр бүр Photoshop, Illustrator, Premiere дээр ажилладаг. Тиймээс BrandOn Studio яг тэдгээр шиг бүтэцтэй: гар, нүд хоёр аль хэдийн дассан.</div>
+  <div class="big rv" style="--d:.1">Шинэ програм сурах хэрэггүй.</div>
+  <div class="sub rv" style="--d:.25">Бид өдөр бүр Photoshop, Illustrator, Premiere дээр ажилладаг. Тиймээс BrandOn Studio яг тэдгээр шиг бүтэцтэй: гар, нүд хоёр аль хэдийн дассан.</div>
   <div class="map">
     <div class="map-h rv" style="--d:.35"><span>Adobe дээр</span><span></span><span>BrandOn Studio дээр</span></div>
     <div class="map-r rv" style="--d:.45"><span><b>Workspaces</b>Essentials, Editing, Color...</span><i>→</i><span><b>Ажлын орчин</b>Өнөөдөр, Хянах, Үйлдвэрлэл, Төлөвлөлт, Мөнгө</span></div>
@@ -273,10 +390,10 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 7 · Adobe habits -->
 <section class="slide" style="padding-bottom:80px" data-live="keys">
   <div class="eye rv" style="--d:0">Удирдлага</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Товчлол нь ч адилхан.</div>
+  <div class="big rv" style="--d:.1">Товчлол нь ч адилхан.</div>
   <div class="split">
     <div>
-      <div class="sub rv" style="--d:.2;font-size:32px;margin-bottom:34px">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Photoshop-т дассан гар энд шууд ажиллана.</div>
+      <div class="sub rv" style="--d:.2">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Photoshop-т дассан гар энд шууд ажиллана.</div>
       <div class="keys">
         <div class="key rv" style="--d:.3"><kbd>⌘K</kbd><span>Юуг ч хайх</span></div>
         <div class="key rv" style="--d:.38"><kbd>1-5</kbd><span>Орчин солих</span></div>
@@ -295,10 +412,10 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 8 · planning -->
 <section class="slide" style="padding-bottom:80px" data-live="plan">
   <div class="row-h">
-    <div><div class="eye rv" style="--d:0">Төлөвлөлт</div><div class="h rv" style="--d:.1;margin-top:14px;white-space:nowrap">Бүх баг. Нэг хуанли.</div></div>
-    <div class="sub rv" style="--d:.2;font-size:30px;max-width:720px;text-align:right">Уулзалт, зураг авалт, хугацаа, чөлөө. Зар тавихад хүн бүр "Ойлголоо" дарж уншсанаа мэдэгдэнэ.</div>
+    <div><div class="eye rv" style="--d:0">Төлөвлөлт</div><div class="h rv" style="--d:.1;white-space:nowrap">Бүх баг. Нэг хуанли.</div></div>
+    <div class="sub rv" style="--d:.2;max-width:720px;text-align:right">Уулзалт, зураг авалт, хугацаа, чөлөө. Зар тавихад хүн бүр "Ойлголоо" дарж уншсанаа мэдэгдэнэ.</div>
   </div>
-  <div class="win rv" style="--d:.35;margin-top:44px;flex:1"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төлөвлөлт</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="suvdaa-plan" data-as="suvdaa" data-ws="planning" data-w="1500" data-bare="1" data-scroll=".plan-h"><div class="ld">Ачаалж байна...</div></div></div>
+  <div class="win rv" style="--d:.35;flex:1"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төлөвлөлт</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="suvdaa-plan" data-as="suvdaa" data-ws="planning" data-w="1500" data-bare="1" data-scroll=".plan-h"><div class="ld">Ачаалж байна...</div></div></div>
 </section>
 
 <!-- 9 · phone -->
@@ -307,7 +424,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
   <div class="phone-wrap">
     <div>
       <div class="eye rv" style="--d:0">Утсан дээр</div>
-      <div class="huge rv" style="--d:.1;margin-top:14px">Халаасанд.</div>
+      <div class="huge rv" style="--d:.1">Халаасанд.</div>
       <div class="bul">
         <div class="rv" style="--d:.4"><i></i>Зураг авалт дээрээс ч ажлаа илгээнэ.</div>
         <div class="rv" style="--d:.55"><i></i>Нэг гараар: сонгосон ажил доороос гарч ирнэ.</div>
@@ -321,13 +438,13 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <!-- 10 · money -->
 <section class="slide">
   <div class="eye rv" style="--d:0">Мөнгө</div>
-  <div class="huge rv" style="--d:.1;margin-top:14px">Санхүү. <span class="redg">Тодорхой.</span></div>
+  <div class="huge rv" style="--d:.1">Санхүү. <span class="redg">Тодорхой.</span></div>
   <div class="fin">
     <div class="fc rv" style="--d:.35"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулна. Давхардсан гүйлгээг өөрөө шалгаж, ангиллыг санал болгоно.</p></div>
     <div class="fc rv" style="--d:.5"><span class="n">НӨАТ</span><p>Харилцагч бүрийн төлбөр, НӨАТ шивсэн эсэх. Нийлүүлэгч бидэнд шивсэн эсэх.</p></div>
     <div class="fc rv" style="--d:.65"><span class="n">Ашиг</span><p>Гэрээ ба бодит орлого, өөрчилсөн, цуцалсан гэрээ. Ажил бүрийн зардлын дараах цэвэр ашиг.</p></div>
   </div>
-  <div class="sub rv" style="--d:.8;font-size:30px;margin-top:40px">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
+  <div class="sub rv" style="--d:.8">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
   <div class="lock rv" style="--d:.9"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүст. Тусдаа кодоор түгжээтэй.</div>
 </section>
 
@@ -336,7 +453,7 @@ body:hover #nav,#nav:focus-within{opacity:1}
   <div class="q2 rv om" style="--d:0"><div class="huge grad">Бас нэг зүйл...</div></div>
   <div class="rv" data-step="1" style="display:flex;flex-direction:column;flex:1">
     <div class="row-h">
-      <div><span class="soon">Удахгүй</span><div class="h" style="margin-top:14px">Чатаас шууд ажил болно.</div></div>
+      <div><span class="soon">Удахгүй</span><div class="h">Чатаас шууд ажил болно.</div></div>
     </div>
     <div class="tg-wrap">
       <div class="tg">
@@ -350,14 +467,14 @@ body:hover #nav,#nav:focus-within{opacity:1}
       <div class="tg-arrow tg-step" data-at="3"><svg width="120" height="40" viewBox="0 0 120 40"><path d="M2 20h108M96 6l14 14-14 14" fill="none" stroke="#E8273D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>хэн · юу · хэзээ</span></div>
       <div class="phone sm"><div class="scr"><span class="notch"></span><div class="win-b" style="position:absolute;inset:0" data-frame="tumku" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div></div>
     </div>
-    <div class="note" style="font-size:22px;margin-top:6px">Жишээ: Telegram холболт удахгүй нэмэгдэнэ. Бот мессежийг уншаад хэнд, юу, хэзээ гэдгийг ойлгож, ажлыг үүсгээд тухайн хүнд мэдэгдэнэ.</div>
+    <div class="note">Жишээ: Telegram холболт удахгүй нэмэгдэнэ. Бот мессежийг уншаад хэнд, юу, хэзээ гэдгийг ойлгож, ажлыг үүсгээд тухайн хүнд мэдэгдэнэ.</div>
   </div>
 </section>
 
 <!-- 11 · from today -->
 <section class="slide">
-  <div class="eye rv" style="--d:0">Өнөөдрөөс</div>
-  <div class="big rv" style="--d:.1;margin-top:14px">Гурван дүрэм.</div>
+  <div class="eye rv" style="--d:0">Ашиглаж эхлэхэд</div>
+  <div class="big rv" style="--d:.1">Гурван дүрэм.</div>
   <div class="rules">
     <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Бүх ажил энд илгээгдэнэ.</b><p>Drive холбоосоор. Messenger-ээр файл, засвар явуулахгүй.</p></div></div>
     <div class="rule rv" style="--d:.55"><span class="no">02</span><div><b>Хуваарь, зар энд.</b><p>Өглөө бүр "Өнөөдөр"-өө нээ. Зар уншаад "Ойлголоо" дар.</p></div></div>
@@ -369,9 +486,9 @@ body:hover #nav,#nav:focus-within{opacity:1}
 <section class="slide center">
   <div class="glow" style="width:1000px;height:1000px;left:460px;top:40px;background:radial-gradient(circle,rgba(232,39,61,.35),transparent 65%)"></div>
   <svg class="mark rv" style="--d:0;width:150px;height:150px" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#E8273D" stroke-width="15"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#E8273D" stroke-width="15"/></svg>
-  <div class="mega grad rv" style="--d:.5;margin-top:50px">BrandOn Studio</div>
-  <div class="sub rv" style="--d:1;margin-top:30px;font-size:46px;color:#d4d4d8">Өнөөдрөөс ашиглаж эхэлнэ.</div>
-  <div class="eye rv" style="--d:1.6;margin-top:70px;font-size:32px">Асуулт байна уу?</div>
+  <div class="mega grad rv" style="--d:.5">BrandOn Studio</div>
+  <div class="lead rv" style="--d:1">Тун удахгүй ашиглаж эхэлнэ.</div>
+  <div class="eye rv q-end" style="--d:1.6">Асуулт байна уу?</div>
 </section>
 
 </div></div>
