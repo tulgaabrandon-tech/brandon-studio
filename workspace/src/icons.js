@@ -2,6 +2,7 @@
 function ic(p){ return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'; }
 var LOGO='<svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#DA1F34" stroke-width="17"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#DA1F34" stroke-width="17"/></svg>';
 var ICON={
+  cursor:ic('<path d="M5 3l14 7-6 2-2 6z"/>'), eye:ic('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'), wallet:ic('<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M16 12.5h2M3 10h18"/>'),
   plus:ic('<path d="M12 5v14M5 12h14"/>'), play:ic('<path d="M8 5l11 7-11 7z"/>'),
   upload:ic('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>'), check:ic('<path d="M20 6L9 17l-5-5"/>'),
   back:ic('<path d="M15 6l-6 6 6 6"/>'), down:ic('<path d="M6 9l6 6 6-6"/>'), x:ic('<path d="M6 6l12 12M18 6L6 18"/>'),

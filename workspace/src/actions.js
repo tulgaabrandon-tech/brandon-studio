@@ -76,13 +76,16 @@ function renderModal(){
       '<p class="err" id="derr" role="alert"></p><div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="savedeliver">'+ICON.check+esc(L('Mark as delivered'))+'</button></div>';
   }
   if(md.kind==='keys'){
-    var K=[['Ctrl/⌘ K','Search or jump to'],['N','New task'],['?','Keyboard shortcuts'],['Esc','Close or go back'],['↵','Do the next thing'],['1-9','Pick a person'],['A','Approve'],['S','Send back'],['M','Mark a spot'],['← →','Versions']];
+    var K=[['Ctrl/⌘ K','Search or jump to'],['1-5','Switch workspace'],['V','Select tool'],['N','New'],['↵','Open the selection'],['E','Edit the selection'],['Space','Open the work full size'],['↑ ↓','Move the selection'],['Shift / Ctrl + click','Select'],['Ctrl/⌘ A','Select all'],['Tab','Hide or show panels'],['[ ]','Previous or next period'],['Ctrl/⌘ Z','Undo'],['Esc','Clear the selection'],['?','Keyboard shortcuts'],['A · S · M','Approve, send back, mark (viewer)'],['← →','Versions'],['1-9','Pick a person']];
     body='<h2>'+esc(L('Keyboard shortcuts'))+'</h2><div class="keys">'+K.map(function(k){ return '<div><span>'+esc(L(k[1]))+'</span><kbd>'+esc(k[0])+'</kbd></div>'; }).join('')+'</div><div class="m-a"><button class="btn" data-act="close">'+esc(L('Close'))+'</button></div>';
   }
   if(md.kind==='join'){
     body='<h2>'+esc(L('Join the team'))+'</h2>'+field(L('Your name'), '<input class="input" id="jn" value="'+esc(md.name||'')+'">')+
       field(L('What do you do?'), '<div class="chips">'+['designer','video','pm'].map(function(r){ return '<button class="pick" data-act="jrole" data-r="'+r+'" aria-pressed="'+((md.role||'designer')===r)+'">'+esc(L(ROLES[r]))+'</button>'; }).join('')+'</div>')+
       '<p class="err" id="jerr" role="alert"></p><div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="savejoin">'+esc(L('Join the team'))+'</button></div>';
+  }
+  if(md.kind==='history'){
+    body='<h2>'+esc(L('Changes in this session'))+'</h2>'+(S.hist.length?'<div class="hist">'+S.hist.map(function(h,i){ return '<div class="hist-r'+(h.done?' done':'')+'"><span class="hist-t">'+esc(('0'+h.at.getHours()).slice(-2)+':'+('0'+h.at.getMinutes()).slice(-2))+'</span><span class="hist-m">'+esc(h.m)+'</span>'+(h.undo&&!h.done?'<button class="btn sm ghost" data-act="histundo" data-i="'+i+'">'+esc(L('Undo'))+'</button>':h.done?'<span class="muted s13">'+esc(L('Undone'))+'</span>':'')+'</div>'; }).join('')+'</div>':'<p class="muted">'+esc(L('No changes yet in this session.'))+'</p>')+'<div class="m-a"><button class="btn" data-act="close">'+esc(L('Close'))+'</button></div>';
   }
   morph(m,'<div class="modal glass" role="dialog" aria-modal="true">'+body+'</div>');
 }
@@ -96,7 +99,7 @@ function keep(){
   if(md.kind==='event'){ md.title=g('et'); md.time=g('eh'); md.place=g('ep'); }
   if(md.kind==='proj'){ md.client=g('pc'); md.name=g('pn'); md.drive=g('pd'); md.deadline=g('pdl'); md.contact=g('pct'); md.brief=g('pbr'); }
   if(md.kind==='keys'){
-    var K=[['Ctrl/⌘ K','Search or jump to'],['N','New task'],['?','Keyboard shortcuts'],['Esc','Close or go back'],['↵','Do the next thing'],['1-9','Pick a person'],['A','Approve'],['S','Send back'],['M','Mark a spot'],['← →','Versions']];
+    var K=[['Ctrl/⌘ K','Search or jump to'],['1-5','Switch workspace'],['V','Select tool'],['N','New'],['↵','Open the selection'],['E','Edit the selection'],['Space','Open the work full size'],['↑ ↓','Move the selection'],['Shift / Ctrl + click','Select'],['Ctrl/⌘ A','Select all'],['Tab','Hide or show panels'],['[ ]','Previous or next period'],['Ctrl/⌘ Z','Undo'],['Esc','Clear the selection'],['?','Keyboard shortcuts'],['A · S · M','Approve, send back, mark (viewer)'],['← →','Versions'],['1-9','Pick a person']];
     body='<h2>'+esc(L('Keyboard shortcuts'))+'</h2><div class="keys">'+K.map(function(k){ return '<div><span>'+esc(L(k[1]))+'</span><kbd>'+esc(k[0])+'</kbd></div>'; }).join('')+'</div><div class="m-a"><button class="btn" data-act="close">'+esc(L('Close'))+'</button></div>';
   }
   if(md.kind==='join'){ md.name=g('jn'); }

@@ -55,7 +55,7 @@ function render(){
   if(S.mode==='setup'){ morph(root,'<div class="login" style="justify-content:center"><div class="login-h"><span class="mark" style="width:52px;height:52px;border-radius:16px">'+LOGO+'</span><h1 class="display">'+esc(L('Almost ready'))+'</h1><p class="lede" style="text-align:center">'+esc(L('BrandOn Studio is not connected to its database yet. Follow SETUP.md, then this page opens the studio.'))+'</p></div></div>'); return; }
   if(S.mode==='login'){ morph(root,vLogin()); renderModal(); renderPalette(); setTimeout(function(){ var x=$('#spw'); if(x&&document.activeElement!==x) x.focus(); },30); return; }
   if(S.mode==='loading' || (S.mode==='live' && !S.ready && !S.people.length)){ morph(root,vLoading()); renderModal(); renderPalette(); return; }
-  if(!S.me){ morph(root, S.people.length ? vPick() : vSetup()); renderModal(); renderPalette(); return; }
+  if(!S.me){ document.body.classList.remove('framed'); morph(root, S.people.length ? vPick() : vSetup()); renderModal(); renderPalette(); return; }
   if(!S.view) S.view=home();
   var allowed=isExec()?['dash','projects','project','review','finance']:isPM()?null:['home','review','finance'];
   if(allowed && allowed.indexOf(S.view)<0) S.view=home();
@@ -63,28 +63,26 @@ function render(){
   if(S.ready && isPM() && !S.recurDone){ S.recurDone=true; setTimeout(runRecurring,400); }
   if(S.lastView!==S.view+'|'+S.me){ S.enterUntil=Date.now()+650; S.lastView=S.view+'|'+S.me; }
   var entering = Date.now()<(S.enterUntil||0);
-  if(S.view==='review'){ morph(root,vReview()); renderModal(); renderPalette(); return; }
+  if(S.view==='review'){ document.body.classList.remove('framed'); morph(root,vReview()); renderModal(); renderPalette(); return; }
   var u=me(), pm=isPM(), h='';
   if(S.mode==='demo') h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
   if(S.slow) h+='<div class="demo-bar warn">'+esc(L("Can't reach the data yet. Check your connection."))+'</div>';
   h+='<header class="topbar"><div class="bar-in"><button class="brand" data-act="go" data-v="'+home()+'" aria-label="BrandOn Studio"><span class="mark">'+LOGO+'</span><b>BrandOn <span>Studio</span></b></button>';
-  var tabs=null;
-  if(pm){ var n=S.tasks.filter(function(t){return t.status==='review'&&project(t.project).pm===S.me;}).length; tabs=[['needs',L('Review'),n],['projects',L('Projects'),0],['agency',L('Agency'),0]]; }
-  else if(isExec()) tabs=[['dash',L('Dashboard'),0],['projects',L('Projects'),0]];
-  else if(hasFinance()) tabs=[['home',L('My work'),0]];
-  if(tabs && hasFinance()) tabs.push(['finance',L('Finance'),0]);
-  if(tabs){
-    h+='<nav class="tabs" aria-label="Main">'+tabs.map(function(x){ var cur=S.view===x[0]||(S.view==='project'&&x[0]==='projects'); return '<button data-act="go" data-v="'+x[0]+'"'+(cur?' aria-current="page"':'')+'>'+esc(x[1])+(x[2]?'<span class="count">'+x[2]+'</span>':'')+'</button>'; }).join('')+'</nav>';
-  }
+  h+=wsSwitcher();
   h+='<div class="bar-r"><button class="search" data-act="palette" aria-label="'+esc(L('Search'))+'">'+ICON.search+'<span>'+esc(L('Search or jump to'))+'</span><kbd>'+(IS_MAC?'⌘':'Ctrl')+' K</kbd></button>'+
     '<button class="icon-btn" data-act="switch" title="'+esc(L('Switch person'))+'" aria-label="'+esc(L('Switch person'))+'">'+ICON.swap+'</button>'+
     '<div class="menu-w"><button class="userbtn" data-act="menu" aria-haspopup="true" aria-expanded="'+S.menu+'">'+av(u)+'<span class="hide-s">'+esc(u.name)+'</span>'+ICON.down+'</button>'+(S.menu?vMenu():'')+'</div></div></div></header>';
   var V={home:vHome, needs:vNeeds, projects:vProjects, project:vProject, agency:vAgency, settings:vSettings, finance:vFinance, dash:vDash};
-  h+='<main class="page'+(entering?' enter':'')+(S.view==='finance'?' wide':'')+'">'+(V[S.view]||vHome)()+'</main>';
-  if(!S.readonly) h+=(S.view==='finance'?(FIN.unlocked?'<div class="fab-w"><button class="fab" data-act="ftxnew" aria-label="'+esc(F('Гүйлгээ нэмэх','Add transaction'))+'">'+ICON.plus+'</button></div>':''):(isExec()?'':fabHtml()));
+  if(S.view!=='settings') S.wsCur=wsOf(S.view);
+  // drop selections that no longer exist (deleted elsewhere, or finance locked)
+  S.sel=S.sel.filter(function(s){ return s.k==='task'?!!task(s.id):s.k==='project'?!!project(s.id).id:s.k==='event'?S.events.some(function(x){return x.id===s.id;}):s.k==='person'?!!person(s.id).id:FIN.unlocked; });
+  h+=frameHtml((V[S.view]||vHome)(), entering);
+  // phones keep the round add button; on a desktop the tools rail does the same job (N)
+  if(!S.readonly && isSmall()) h+=(S.view==='finance'?(FIN.unlocked?'<div class="fab-w"><button class="fab" data-act="ftxnew" aria-label="'+esc(F('Гүйлгээ нэмэх','Add transaction'))+'">'+ICON.plus+'</button></div>':''):(isExec()?'':fabHtml()));
+  document.body.classList.add('framed');
   morph(root,h);
-  renderModal(); renderPalette();
+  renderModal(); renderPalette(); shellAfter();
 }
 function fabHtml(){
   var items=isPM()?[['newtask',ICON.check,L('New task')],['newproj',ICON.folder,L('New project')],['newevent',ICON.cal,L('Add to planner')],['go-agency',ICON.mega,L('Announce')]]:null;
