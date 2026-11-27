@@ -105,9 +105,10 @@ function vMenu(){
 function langSeg(){ return '<div class="seg" role="group" aria-label="'+esc(L('Language'))+'"><button data-act="lang" data-l="mn" aria-pressed="'+(LANG==='mn')+'">Монгол</button><button data-act="lang" data-l="en" aria-pressed="'+(LANG==='en')+'">English</button></div>'; }
 function vLoading(){ return '<div class="login" style="justify-content:center"><div class="login-h"><div class="loader" role="progressbar" aria-label="'+esc(L('Loading'))+'"></div><p class="muted">'+esc(L(S.slow?"Can't reach the data yet. Check your connection.":'Loading'))+'</p></div></div>'; }
 function vPick(){
-  var groups=[['exec','Management'],['pm','Project managers'],['designer','Designers'],['video','Video team']], k=0;
+  // PMs and management sit together under Management (PMs first); each keeps their own access
+  var groups=[[['pm','exec'],'Management'],[['designer'],'Designers'],[['video'],'Video team']], k=0;
   var grid='<div class="people">'+groups.map(function(g){
-    var ps=S.people.filter(function(p){return p.role===g[0];}); if(!ps.length) return '';
+    var ps=[]; g[0].forEach(function(r){ ps=ps.concat(S.people.filter(function(p){return p.role===r;})); }); if(!ps.length) return '';
     return '<div class="group-l">'+esc(L(g[1]))+'</div>'+ps.map(function(p){
       k++; var load='';
       if(p.role==='exec'){ load='<span class="chip">'+esc(L('Agency overview'))+'</span>'; }
