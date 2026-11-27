@@ -14,8 +14,9 @@ function renderModal(){
   if(md.kind==='submit'){
     var t=task(md.id), v=last(t), links=md.links||[''];
     body='<h2>'+esc(L('Send your work'))+'</h2><p class="muted s13" style="margin-top:-10px">'+esc(L('{title}. {name} reviews it.',{title:t.title,name:pmOf(t).name}))+'</p>'+
+      (window.BO_BRIDGE && typeof demoFile==='function' ? field(L('File'), '<div class="demo-file"><img src="'+esc(demoFile(t).url)+'" alt=""><div><b>'+esc(demoFile(t).name)+'</b><span class="muted s13">'+esc(L('Sample file for the demo. In real work you paste your Drive link here.'))+'</span></div></div>') :
       field(L('Drive link'), links.map(function(l,i){ var pl=parseLink(l); return '<div class="linkrow"><input class="input" data-link="'+i+'" placeholder="'+esc(L('Paste the Google Drive link'))+'" value="'+esc(l)+'" inputmode="url" autocomplete="off">'+(l?'<span class="chip '+(pl?(pl.kind==='drive'?'ok':''):'red')+'">'+(pl?(pl.kind==='drive'?ICON.check+esc(L('Drive file')):pl.kind==='folder'?esc(L('Drive folder')):esc(L('Link'))):'!')+'</span>':'')+(links.length>1?'<button class="icon-btn sm" data-act="rmlink" data-i="'+i+'" aria-label="'+esc(L('Remove'))+'">'+ICON.x+'</button>':'')+'</div>'; }).join('')+
-        '<p class="muted s13" style="margin:2px 0 0">'+esc(L('In Drive: Share, then Copy link. Set it so anyone at Brand On can view.'))+'</p><button class="lnk" data-act="addlink" style="align-self:flex-start">'+esc(L('+ Add another link'))+'</button>')+
+        '<p class="muted s13" style="margin:2px 0 0">'+esc(L('In Drive: Share, then Copy link. Set it so anyone at Brand On can view.'))+'</p><button class="lnk" data-act="addlink" style="align-self:flex-start">'+esc(L('+ Add another link'))+'</button>'))+
       (changesAsked(t)?field(L('Did you fix these?'), '<div class="fixlist">'+v.comments.map(function(c,ci){ return '<label class="fixrow"><input type="checkbox" data-fix="'+ci+'"'+((md.fixes||{})[ci]?' checked':'')+'><span>'+esc(c.text)+'</span></label>'; }).join('')+'</div>'):'')+
       field(L('Anything to say?'), '<input class="input" id="sn" placeholder="'+esc(L('e.g. Opened up the P, tested at small size'))+'" value="'+esc(md.note||'')+'">', true)+
       '<p class="err" id="serr" role="alert"></p><div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary xl" data-act="sendsub">'+esc(L('Send for review'))+'</button></div>';
@@ -160,7 +161,8 @@ document.addEventListener('click', function(e){
   if(a==='rmlink'){ keep(); S.modal.links.splice(+b.dataset.i,1); renderModal(); return; }
   if(a==='sendsub'){
     keep(); var md=S.modal, tk=task(md.id), files=[], bad=false;
-    md.links.forEach(function(l){ if(!l.trim()) return; var pl=parseLink(l); if(!pl){ bad=true; return; } files.push(pl); });
+    if(window.BO_BRIDGE && typeof demoFile==='function') files.push(demoFile(tk));
+    else md.links.forEach(function(l){ if(!l.trim()) return; var pl=parseLink(l); if(!pl){ bad=true; return; } files.push(pl); });
     if(bad){ $('#serr').textContent=L("That doesn't look like a link."); return; }
     if(!files.length){ $('#serr').textContent=L('Paste a link first.'); return; }
     var lv=last(tk); if(changesAsked(tk) && lv) lv.comments.forEach(function(c,ci){ if(md.fixes&&md.fixes[ci]) c.fixed=true; });

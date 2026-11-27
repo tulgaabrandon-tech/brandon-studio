@@ -255,3 +255,9 @@ select.input{padding-right:34px;background-position:calc(100% - 18px) 50%,calc(1
 /* avatars: plain Spectrum circles */
 .av,.av-lg,.av-xl,.person .av-lg,.av:hover,.av-lg:hover,.av-xl:hover,.person:hover .av-lg{border-radius:50%!important;clip-path:none!important;box-shadow:none;transform:none;background-image:none}
 .avs > *{clip-path:none!important;border-radius:50%!important;border:2px solid var(--surface);padding:0;background:none}
+
+/* presentation demo: the sample file shown in place of a Drive link */
+.demo-file{display:flex;align-items:center;gap:14px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.demo-file img{width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:none}
+.demo-file div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.demo-file b{font-size:14px}

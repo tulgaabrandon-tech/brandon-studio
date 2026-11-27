@@ -75,3 +75,15 @@ window.addEventListener('message', function(e){
 });
 // A presentation clicker sends Page Up / Page Down: pass those to the slides even when a demo window has focus
 window.addEventListener('keydown', function(e){ if(window.BO_BRIDGE && (e.key==='PageDown'||e.key==='PageUp')){ e.preventDefault(); try{ window.parent.postMessage({bo:'key', k:e.key}, '*'); }catch(x){} } }, true);
+// Presentation only: a made-up file to attach instead of a real Drive link. Drawn here, in the project's colour, marked as a sample.
+function demoFile(t){
+  var p=project(t.project), c=p.color||'#DA1F34', title=String(t.title||'').replace(/[<>&"]/g,'');
+  var sw=[c,'#1F1F1F','#F2EDE4','#C9A44C','#8DB580'].map(function(col,i){ return '<rect x="'+(90+i*190)+'" y="430" width="160" height="160" rx="18" fill="'+col+'"/>'; }).join('');
+  var url=svg(1200,800,'<rect width="1200" height="800" fill="#FBFAF7"/><rect x="0" y="0" width="1200" height="110" fill="'+c+'"/>'+
+    '<text x="90" y="72" font-family="Arial,Helvetica" font-weight="700" font-size="34" fill="#fff">'+String(p.client||'').replace(/[<>&"]/g,'')+'</text>'+
+    '<text x="90" y="250" font-family="Arial Black,Arial" font-weight="900" font-size="150" fill="#1F1F1F">Aa</text>'+
+    '<text x="330" y="205" font-family="Arial,Helvetica" font-weight="700" font-size="40" fill="#1F1F1F">'+title.slice(0,34)+'</text>'+
+    '<text x="330" y="255" font-family="Arial,Helvetica" font-size="28" fill="#6B6B6B">Өнгө, үсгийн хуудас · v'+(t.versions.length+1)+'</text>'+sw+
+    '<rect x="890" y="690" width="230" height="56" rx="28" fill="#1F1F1F"/><text x="1005" y="727" text-anchor="middle" font-family="Arial,Helvetica" font-weight="700" font-size="24" fill="#fff">ЖИШЭЭ ФАЙЛ</text>');
+  return {kind:'image', url:url, name:'жишээ_файл_v'+(t.versions.length+1)+'.png'};
+}
