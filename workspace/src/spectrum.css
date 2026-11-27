@@ -221,3 +221,37 @@ select.input{padding-right:34px;background-position:calc(100% - 18px) 50%,calc(1
   .bnav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bnav button[aria-current]{background:var(--s-gray-800);color:var(--s-gray-25)}
 }
+
+/* finance: one row. Spectrum tabs on the left, the period picker on the right */
+.fin-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:20px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.fin-tabs{display:flex;gap:4px;margin:0;flex-wrap:wrap;background:none;padding:0;box-shadow:none;border-radius:0}
+.fin-tabs button{position:relative;height:40px;padding:0 10px;border-radius:0;background:none;box-shadow:none;font-size:14px;font-weight:600;color:var(--muted)}
+.fin-tabs button:hover{color:var(--ink)}
+.fin-tabs button[aria-selected="true"]{color:var(--ink);font-weight:700;background:none;box-shadow:none}
+.fin-tabs button[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:2px;border-radius:1px;background:var(--ink)}
+.fin-tabs button:focus-visible{outline-offset:-2px}
+.per-pick{position:relative;display:flex;align-items:center;gap:2px;padding-bottom:4px}
+.per-btn{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px 0 12px;border-radius:8px;border:2px solid var(--line-2);background:var(--surface);font-size:14px;color:var(--ink);transition:border-color .13s var(--ease)}
+.per-btn:hover{border-color:var(--field)}
+.per-btn[aria-expanded="true"]{border-color:var(--s-gray-800)}
+.per-btn .i{width:16px;height:16px;color:var(--muted)}
+.per-btn b{font-weight:700;white-space:nowrap}
+.per-pop{position:absolute;right:0;top:calc(100% + 6px);z-index:35;width:280px;padding:6px;border-radius:10px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-pop);animation:pop .13s var(--ease) both}
+.per-g{padding:8px 10px 4px;font-size:12px;font-weight:600;color:var(--muted)}
+.per-it{display:flex;align-items:center;gap:8px;width:100%;height:32px;padding:0 10px 0 6px;border-radius:8px;font-size:14px;text-align:left;color:var(--ink)}
+.per-it:hover,.per-it:focus-visible{background:var(--sunk);outline:none}
+.per-it[aria-checked="true"]{font-weight:700}
+.per-ck{width:18px;display:inline-flex;color:var(--s-blue)}
+.per-ck .i{width:16px;height:16px;stroke-width:2.2}
+.per-sep{height:1px;background:var(--line);margin:6px 4px}
+.per-custom{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 6px 6px}
+.per-custom label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.per-custom .input{width:100%;min-width:0;padding:4px 6px;font-size:13px}
+.per-custom .btn{grid-column:1/-1;justify-self:end}
+@media (max-width:899px){.fin-top{flex-direction:column;align-items:stretch}.fin-tabs{overflow-x:auto;flex-wrap:nowrap}.per-pick{align-self:flex-start}.per-pop{left:0;right:auto}}
+.fin-head .ph-tools{display:flex;align-items:center;gap:12px}
+.fin-head .per-pick{padding:0}
+.fin-top{align-items:stretch}
+/* avatars: plain Spectrum circles */
+.av,.av-lg,.av-xl,.person .av-lg,.av:hover,.av-lg:hover,.av-xl:hover,.person:hover .av-lg{border-radius:50%!important;clip-path:none!important;box-shadow:none;transform:none;background-image:none}
+.avs > *{clip-path:none!important;border-radius:50%!important;border:2px solid var(--surface);padding:0;background:none}

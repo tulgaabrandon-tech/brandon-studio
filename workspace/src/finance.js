@@ -136,9 +136,8 @@ function vFinance(){
   var y=FIN.month.slice(0,4), m=FIN.month, tabs=[['overview',F('Тойм','Overview')],['upload',F('Оруулах','Upload')],['tx',F('Гүйлгээ','Transactions')],['sales',F('Ажил, борлуулалт','Jobs and sales')],['clients',F('Харилцагч','Clients')],['reports',F('Тайлан','Reports')],['payroll',F('Цалин','Payroll')],['plan',F('Төлөвлөгөө','Plan')]];
   var dt=fromIso(m+'-01');
   var h='<header class="fin-head"><div><div class="eyebrow">'+esc(F('Санхүү','Finance'))+'</div><h1 class="display">'+esc(F('Мөнгө','Money'))+'</h1></div>'+
-    '<div class="ph-tools"><button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
-  h+='<nav class="seg fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav>';
-  h+=FIN.tab==='payroll'||FIN.tab==='plan'?'':perNav();
+    '<div class="ph-tools">'+(FIN.tab==='payroll'||FIN.tab==='plan'?'':perNav())+'<button class="btn ghost sm" data-act="flock">'+ICON.lock+esc(F('Түгжих','Lock'))+'</button></div></header>';
+  h+='<div class="fin-top"><nav class="fin-tabs" role="tablist">'+tabs.map(function(t){ return '<button role="tab" data-act="ftab" data-t="'+t[0]+'" aria-selected="'+(FIN.tab===t[0])+'">'+esc(t[1])+'</button>'; }).join('')+'</nav></div>';
   var V={overview:finOverview, upload:finUpload, tx:finTx, sales:finSales, clients:finClientView, reports:finReports, payroll:finPayroll, plan:finPlan};
   return h+'<div class="fin-pane" data-key="'+FIN.tab+'-'+(FIN.per||'m')+'">'+(V[FIN.tab]||finOverview)()+'</div>';
 }
@@ -306,6 +305,7 @@ function finAction(a,b,id){
   if(a.indexOf('fup')===0) return fupAction(a,b);
   if(jobsAction(a,b)) return true;
   var md=S.modal;
+  if(a==='fmonth' && FIN.per==='custom' && FIN.tab!=='payroll'){ var pr=perRange(), span=pr[2]*(+b.dataset.d); FIN.from=mShift(pr[0],span); FIN.to=mShift(pr[1],span); render(); return true; }
   if(a==='fmonth'){ var step={month:1,quarter:3,half:6,year:12}[FIN.per||'month']||1, ps=FIN.tab==='payroll'?1:step, dd=fromIso(FIN.month+'-01'); dd.setMonth(dd.getMonth()+(+b.dataset.d)*ps); FIN.month=iso(dd).slice(0,7); render(); return true; }
   if(a==='ftab'){ FIN.tab=b.dataset.t; if(FIN.tab!=='tx') FIN.filter='all'; render(); return true; }
   if(a==='flock'){ lockFinance(); render(); return true; }

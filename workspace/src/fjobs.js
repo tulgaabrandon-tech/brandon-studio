@@ -26,16 +26,36 @@ function perLabel(){
 function inPer(dateStr){ var r=perRange(), m=monthOf(dateStr); return m>=r[0] && m<=r[1]; }
 function perSeg(){ return '<div class="seg" role="group" aria-label="'+esc(F('Хугацаа','Period'))+'">'+[['month',F('Сар','Month')],['quarter',F('Улирал','Quarter')],['half',F('Хагас жил','Half year')],['year',F('Жил','Year')],['custom',F('Өөрөө сонгох','Custom')]].map(function(o){ return '<button data-act="fper" data-v="'+o[0]+'" aria-pressed="'+((FIN.per||'month')===o[0])+'">'+esc(o[1])+'</button>'; }).join('')+'</div>'; }
 
+// One period picker instead of a second row of tabs: arrows step, the button opens presets and a custom range
+function mShift(m,n){ var d0=fromIso(m+'-01'); d0.setMonth(d0.getMonth()+n); return iso(d0).slice(0,7); }
 function perNav(){
-  var p=FIN.per||'month', unit={month:F('сар','month'),quarter:F('улирал','quarter'),half:F('хагас жил','half year'),year:F('жил','year')}[p];
-  var nav=p==='custom'
-    ? '<div class="per-range"><label class="sr" for="pfrom">'+esc(F('Эхлэх сар','From month'))+'</label><input class="input sm" type="month" id="pfrom" value="'+esc(FIN.from||FIN.month)+'"><span>-</span><label class="sr" for="pto">'+esc(F('Дуусах сар','To month'))+'</label><input class="input sm" type="month" id="pto" value="'+esc(FIN.to||FIN.month)+'"></div>'
-    : '<div class="plan-nav"><button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх ','Previous ')+unit)+'">'+ICON.back+'</button><b class="fmonth">'+esc(perLabel())+'</b><button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараагийн ','Next ')+unit)+'" style="transform:scaleX(-1)">'+ICON.back+'</button></div>';
-  return '<div class="per-bar">'+perSeg()+nav+'</div>';
+  var p=FIN.per||'month', unit={month:F('сар','month'),quarter:F('улирал','quarter'),half:F('хагас жил','half year'),year:F('жил','year'),custom:F('хугацаа','range')}[p];
+  var cur=iso(TODAY).slice(0,7), r=perRange();
+  var item=function(act,v,label,on){ return '<button class="per-it" role="menuitemradio" aria-checked="'+(on?'true':'false')+'" data-act="'+act+'" data-v="'+v+'"><span class="per-ck">'+(on?ICON.check:'')+'</span>'+esc(label)+'</button>'; };
+  var h='<div class="per-pick">';
+  h+='<button class="icon-btn" data-act="fmonth" data-d="-1" aria-label="'+esc(F('Өмнөх ','Previous ')+unit)+'">'+ICON.back+'</button>';
+  h+='<button class="per-btn" data-act="fperopen" aria-haspopup="true" aria-expanded="'+(FIN.perOpen?'true':'false')+'">'+ICON.cal+'<b class="fmonth">'+esc(perLabel())+'</b>'+ICON.down+'</button>';
+  h+='<button class="icon-btn" data-act="fmonth" data-d="1" aria-label="'+esc(F('Дараах ','Next ')+unit)+'">'+ICON.back.replace('M15 6l-6 6 6 6','M9 6l6 6-6 6')+'</button>';
+  if(FIN.perOpen){
+    h+='<div class="per-pop" role="menu" aria-label="'+esc(F('Хугацаа','Period'))+'">';
+    h+='<div class="per-g">'+esc(F('Хугацааны нэгж','Period length'))+'</div>'+
+      [['month',F('Сар','Month')],['quarter',F('Улирал','Quarter')],['half',F('Хагас жил','Half year')],['year',F('Жил','Year')]].map(function(x){ return item('fper',x[0],x[1],p===x[0]); }).join('');
+    h+='<div class="per-sep"></div><div class="per-g">'+esc(F('Түргэн сонголт','Quick picks'))+'</div>'+
+      [['this-month',F('Энэ сар','This month')],['last-month',F('Өнгөрсөн сар','Last month')],['this-quarter',F('Энэ улирал','This quarter')],['this-year',F('Энэ жил','This year')],['last-year',F('Өнгөрсөн жил','Last year')]].map(function(x){
+        var on=false;
+        if(x[0]==='this-month') on=p==='month'&&FIN.month===cur; else if(x[0]==='last-month') on=p==='month'&&FIN.month===mShift(cur,-1);
+        else if(x[0]==='this-quarter') on=p==='quarter'&&Math.ceil(+FIN.month.slice(5)/3)===Math.ceil(+cur.slice(5)/3)&&FIN.month.slice(0,4)===cur.slice(0,4);
+        else if(x[0]==='this-year') on=p==='year'&&FIN.month.slice(0,4)===cur.slice(0,4); else on=p==='year'&&+FIN.month.slice(0,4)===+cur.slice(0,4)-1;
+        return item('fperpre',x[0],x[1],on); }).join('');
+    h+='<div class="per-sep"></div><div class="per-g">'+esc(F('Өөрөө сонгох','Custom range'))+'</div>'+
+      '<div class="per-custom"><label><span>'+esc(F('Эхлэх','From'))+'</span><input class="input sm" type="month" id="pfrom" value="'+esc(p==='custom'?(FIN.from||r[0]):r[0])+'"></label><label><span>'+esc(F('Дуусах','To'))+'</span><input class="input sm" type="month" id="pto" value="'+esc(p==='custom'?(FIN.to||r[1]):r[1])+'"></label>'+
+      '<button class="btn sm primary" data-act="fperapply">'+esc(F('Хэрэглэх','Apply'))+'</button></div>';
+    h+='</div>';
+  }
+  return h+'</div>';
 }
-document.addEventListener('change', function(e){
-  if(e.target.id==='pfrom'||e.target.id==='pto'){ if(e.target.value){ if(e.target.id==='pfrom') FIN.from=e.target.value; else FIN.to=e.target.value; render(); } }
-});
+document.addEventListener('click', function(e){ if(FIN.perOpen && !e.target.closest('.per-pick')){ FIN.perOpen=false; render(); } });
+document.addEventListener('keydown', function(e){ if(FIN.perOpen && e.key==='Escape'){ e.stopImmediatePropagation(); FIN.perOpen=false; render(); var b=document.querySelector('.per-btn'); if(b) b.focus(); } }, true);
 // ---------- matching a description to a client's job ----------
 var CLIENT_ALIAS={'pizza hut':['пицца','pizza'],'emart':['имарт','emart','e-mart'],'mobicom':['мобиком','mobicom'],'max group':['макс','max'],'unitel':['юнител','unitel'],'kakumi':['какуми','kakumi'],'hairan':['хайран','hairan'],'milkman':['милкмэн','milkman'],'pinuta':['пинута','pinuta'],'pmc':['pmc'],'sisu':['sisu','сису'],'paradox':['paradox','парадокс','юү кэй эс']};
 function clientTokens(name){
@@ -109,7 +129,13 @@ function linkModal(){
     '<div class="m-a"><button class="btn ghost" data-act="close">'+esc(L('Cancel'))+'</button><button class="btn primary" data-act="flinkgo">'+esc(F('Сонгосныг холбох','Link the ticked ones'))+'</button></div>';
 }
 function jobsAction(a,b){
-  if(a==='fper'){ var r0=perRange(); FIN.per=b.dataset.v; if(FIN.per==='custom'){ FIN.from=FIN.from||r0[0]; FIN.to=FIN.to||r0[1]; } render(); return true; }
+  if(a==='fperopen'){ FIN.perOpen=!FIN.perOpen; render(); var f=document.querySelector('.per-it[aria-checked=true]')||document.querySelector('.per-it'); if(FIN.perOpen&&f) f.focus(); return true; }
+  if(a==='fper'){ if(FIN.per==='custom') FIN.month=perRange()[1]; FIN.per=b.dataset.v; FIN.perOpen=false; render(); return true; }
+  if(a==='fperpre'){ var c=iso(TODAY).slice(0,7), v=b.dataset.v;
+    if(v==='this-month'){ FIN.per='month'; FIN.month=c; } else if(v==='last-month'){ FIN.per='month'; FIN.month=mShift(c,-1); }
+    else if(v==='this-quarter'){ FIN.per='quarter'; FIN.month=c; } else if(v==='this-year'){ FIN.per='year'; FIN.month=c; } else { FIN.per='year'; FIN.month=(+c.slice(0,4)-1)+'-12'; }
+    FIN.perOpen=false; render(); return true; }
+  if(a==='fperapply'){ var fv=(document.getElementById('pfrom')||{}).value, tv=(document.getElementById('pto')||{}).value; if(!fv||!tv) return true; if(tv<fv){ var sw=fv; fv=tv; tv=sw; } FIN.per='custom'; FIN.from=fv; FIN.to=tv; FIN.perOpen=false; render(); return true; }
   if(a==='fclientf'){ FIN.clientF=b.dataset.c||''; FIN.tab='sales'; render(); return true; }
   if(a==='flinksug'){ openModal({kind:'flink'}); return true; }
   if(a==='flinkgo'){ var sug=costSuggestions(), n=0; Array.prototype.forEach.call(document.querySelectorAll('[data-lnk]'),function(c){ if(c.checked){ var x=sug[+c.dataset.lnk]; x.t.deal=x.d; fpersist('fin_tx',x.t); n++; } }); S.modal=null; render(); toast(F(n+' зардал холбогдлоо',n+' costs linked')); return true; }
