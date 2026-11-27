@@ -55,6 +55,8 @@ function startDemo(){
     {id:'jerry', name:'Jerry', role:'video', color:'#1F7A5A'}, {id:'tumku', name:'Tumku', role:'video', color:'#8A6D00'}
   ];
   var s=sampleSet(); S.projects=s.projects; S.tasks=s.tasks; S.ann=s.ann; S.events=s.events;
+  // in the presentation keep each screen to the work itself: no announcements, tips or stat cards
+  if(window.BO_BRIDGE){ S.ann=[]; S.hintDone=true; document.body.classList.add('bo-simple'); }
   render();
   // inside the crew presentation: open straight as one person
   if(window.BO_AS) setTimeout(function(){ if(window.BO_BARE) S.hidePanels=true; enterAs(window.BO_AS); if(window.BO_WS) setTimeout(function(){ wsGo(window.BO_WS); if(window.BO_SCROLL) setTimeout(function(){ var el=document.querySelector(window.BO_SCROLL), cv=document.getElementById('canvas'); if(el&&cv){ cv.style.scrollBehavior='auto'; cv.scrollTop=el.getBoundingClientRect().top-cv.getBoundingClientRect().top+cv.scrollTop-16; } }, 120); }, 30); }, 0);

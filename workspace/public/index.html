@@ -1268,6 +1268,13 @@ select.input{padding-right:34px;background-position:calc(100% - 18px) 50%,calc(1
 .demo-file div{display:flex;flex-direction:column;gap:2px;min-width:0}
 .demo-file b{font-size:14px}
 
+/* presentation demo windows: only the work */
+.bo-simple .stats,.bo-simple .annform,.bo-simple .anns{display:none!important}
+.bo-simple .fab-w{display:none!important}
+.bo-simple,.bo-simple *{scrollbar-width:none}
+.bo-simple ::-webkit-scrollbar{display:none}
+.bo-simple .ann-sec{display:none!important}
+
 </style>
 </head>
 <body>
@@ -3007,7 +3014,7 @@ function weekBlock(editable){
     }).join('')+(editable&&!S.readonly?'<button class="dadd" data-act="newevent" data-date="'+di+'" aria-label="'+esc(L('Add to planner')+' '+md(x))+'">+</button>':'')+'</div>';
   }).join('')+'</div>';
 }
-function hinted(){ try{ return localStorage.getItem('bo.hint.'+S.me)==='1'; }catch(e){ return !!S.hintDone; } }
+function hinted(){ if(window.BO_BRIDGE) return true; try{ return localStorage.getItem('bo.hint.'+S.me)==='1'; }catch(e){ return !!S.hintDone; } }
 function row(t){
   var p=project(t.project), due=dueLabel(t.due), vb=S.readonly?null:verb(t);
   var right = vb ? '<button class="btn'+(vb.act==='submit'?' primary':'')+'" data-act="'+vb.act+'" data-id="'+esc(t.id)+'">'+esc(vb.label)+'</button>'
@@ -3155,8 +3162,8 @@ function vDash(){
 // ================= Agency (PM) =================
 function vAgency(){
   var h='<header><div class="eyebrow">'+esc(today())+'</div><h1 class="display">'+esc(L('Agency'))+'</h1><p class="lede">'+esc(L('Tell everyone something, and plan the week in one place.'))+'</p></header>';
-  h+='<div class="sec"><h3>'+esc(L('Announcements'))+'</h3></div>';
-  if(!S.readonly) h+='<div class="card"><form data-form="ann" class="annform"><label class="sr" for="at">'+esc(L('Title'))+'</label><input class="input" id="at" placeholder="'+esc(L('Title, e.g. Office closed Friday'))+'"><label class="sr" for="ax">'+esc(L('Message'))+'</label><textarea class="input" id="ax" placeholder="'+esc(L('Message. Everyone sees it at the top of their page until they tap Got it.'))+'"></textarea><div class="annform-a"><div class="chips" role="group" aria-label="'+esc(L('Who sees it'))+'">'+[['all','Everyone'],['designer','Designers'],['video','Video team']].map(function(o){ return '<button type="button" class="pick" data-act="aud" data-a="'+o[0]+'" aria-pressed="'+(S.aud===o[0])+'">'+esc(L(o[1]))+'</button>'; }).join('')+'</div><button class="btn primary" type="submit">'+ICON.mega+esc(L('Announce'))+'</button></div><p class="err" id="aerr" role="alert"></p></form></div>';
+  h+='<div class="sec ann-sec"><h3>'+esc(L('Announcements'))+'</h3></div>';
+  if(!S.readonly) h+='<div class="card ann-sec"><form data-form="ann" class="annform"><label class="sr" for="at">'+esc(L('Title'))+'</label><input class="input" id="at" placeholder="'+esc(L('Title, e.g. Office closed Friday'))+'"><label class="sr" for="ax">'+esc(L('Message'))+'</label><textarea class="input" id="ax" placeholder="'+esc(L('Message. Everyone sees it at the top of their page until they tap Got it.'))+'"></textarea><div class="annform-a"><div class="chips" role="group" aria-label="'+esc(L('Who sees it'))+'">'+[['all','Everyone'],['designer','Designers'],['video','Video team']].map(function(o){ return '<button type="button" class="pick" data-act="aud" data-a="'+o[0]+'" aria-pressed="'+(S.aud===o[0])+'">'+esc(L(o[1]))+'</button>'; }).join('')+'</div><button class="btn primary" type="submit">'+ICON.mega+esc(L('Announce'))+'</button></div><p class="err" id="aerr" role="alert"></p></form></div>';
   var anns=S.ann.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
   if(anns.length) h+='<div class="rows" style="margin-top:12px">'+anns.map(function(a){
     var aud=S.people.filter(function(p){ return p.id!==a.by && (a.aud==='all'||a.aud===p.role); });

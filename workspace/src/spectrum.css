@@ -261,3 +261,10 @@ select.input{padding-right:34px;background-position:calc(100% - 18px) 50%,calc(1
 .demo-file img{width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:none}
 .demo-file div{display:flex;flex-direction:column;gap:2px;min-width:0}
 .demo-file b{font-size:14px}
+
+/* presentation demo windows: only the work */
+.bo-simple .stats,.bo-simple .annform,.bo-simple .anns{display:none!important}
+.bo-simple .fab-w{display:none!important}
+.bo-simple,.bo-simple *{scrollbar-width:none}
+.bo-simple ::-webkit-scrollbar{display:none}
+.bo-simple .ann-sec{display:none!important}
