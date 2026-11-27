@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BrandOn Studio · Танилцуулга</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400..900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E8273D;--red-d:#DA1F34;--ink:#F5F5F7;--mute:#9A9AA0;--dim:#5C5C62;--line:rgba(255,255,255,.1);--blue:#5681FF;--green:#2DBA77;--orange:#F08A2E;
+  --ease:cubic-bezier(.16,1,.3,1);font-family:"Source Sans 3","Adobe Clean",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#view{position:fixed;inset:0;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center}
+.slide{position:absolute;inset:0;padding:110px 140px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:scale(1.03);transition:opacity .9s var(--ease),transform 1.2s var(--ease),visibility 0s .9s}
+.slide.on{opacity:1;visibility:visible;transform:none;transition:opacity .9s var(--ease),transform 1.2s var(--ease),visibility 0s}
+.slide.past{transform:scale(.97)}
+.center{align-items:center;justify-content:center;text-align:center}
+/* reveal: each .rv rises in after the slide arrives; data-step ones wait for a click */
+.rv{opacity:0;transform:translateY(34px);filter:blur(8px);transition:opacity 1s var(--ease),transform 1.2s var(--ease),filter 1s var(--ease);transition-delay:0s}
+.slide.on .rv:not([data-step]),.slide.on .rv.shown{opacity:1;transform:none;filter:none;transition-delay:calc(var(--d,0) * 1s + .25s)}
+.slide.on .rv.shown{transition-delay:calc(var(--d,0) * 1s)}
+.gone{opacity:0!important;transform:translateY(-30px)!important;filter:blur(10px)!important;transition-delay:0s!important}
+/* type */
+.eye{font-size:26px;font-weight:600;letter-spacing:.02em;color:var(--mute)}
+.mega{font-size:220px;line-height:.92;font-weight:900;letter-spacing:-.045em}
+.huge{font-size:150px;line-height:.95;font-weight:900;letter-spacing:-.04em}
+.big{font-size:108px;line-height:1;font-weight:900;letter-spacing:-.035em}
+.h{font-size:80px;line-height:1.02;font-weight:900;letter-spacing:-.03em}
+.sub{font-size:38px;line-height:1.35;font-weight:500;color:var(--mute);max-width:1300px}
+.grad{background:linear-gradient(180deg,#fff 30%,#8c8c92);-webkit-background-clip:text;background-clip:text;color:transparent}
+.redg{background:linear-gradient(100deg,#ff6b5c,var(--red) 45%,#b3172a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.r{color:var(--red)}
+.glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:0;transition:opacity 2s var(--ease)}
+.slide.on .glow{opacity:1}
+/* cold open */
+.q2{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 160px}
+/* chaos */
+.chaos{position:absolute;inset:0;pointer-events:none}
+.chaos span{position:absolute;font-weight:900;letter-spacing:-.03em;color:#fff;opacity:0;transition:opacity 1.2s var(--ease),transform 2.4s var(--ease),filter 1.2s}
+.slide.on .chaos span{opacity:var(--o);transform:translate(var(--x2),var(--y2)) rotate(var(--rt))}
+.chaos.fall span{opacity:0!important;filter:blur(14px);transform:translate(var(--x2),calc(var(--y2) + 240px)) rotate(var(--rt))!important}
+.bubble{position:absolute;padding:16px 24px;border-radius:24px;background:#1c1c1e;color:#ddd;font-size:24px;font-weight:500;opacity:0;transform:scale(.8);transition:all 1s var(--ease)}
+.slide.on .bubble{opacity:.92;transform:none;transition-delay:calc(var(--d) * 1s)}
+.chaos.fall ~ .bubble{opacity:0!important;transform:translateY(200px)!important;filter:blur(10px);transition-delay:0s!important}
+/* reveal mark */
+.mark{width:220px;height:220px;filter:drop-shadow(0 0 60px rgba(232,39,61,.55))}
+.mark path{stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset 2s var(--ease) .3s}
+.slide.on .mark path{stroke-dashoffset:0}
+.slide.on .mark path:nth-child(2){transition-delay:.9s}
+/* cards */
+.ws{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;margin-top:70px}
+.wc{position:relative;padding:34px 30px 36px;border-radius:30px;background:linear-gradient(180deg,#161618,#0d0d0e);border:1px solid var(--line);min-height:420px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.wc::before{content:"";position:absolute;inset:-1px;border-radius:30px;padding:1px;background:linear-gradient(160deg,var(--c),transparent 55%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8}
+.wc .k{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:26px;font-weight:800;background:#232326;border:1px solid #333;color:#fff}
+.wc b{font-size:44px;font-weight:900;letter-spacing:-.02em}
+.wc p{font-size:25px;line-height:1.4;color:var(--mute)}
+.wc .who{margin-top:auto;font-size:20px;font-weight:600;color:var(--c)}
+/* flow */
+.flow{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:120px}
+.flow .line{position:absolute;left:10%;right:10%;top:44px;height:4px;border-radius:2px;background:#222}
+.flow .line i{position:absolute;inset:0;border-radius:2px;background:linear-gradient(90deg,#ff6b5c,var(--red));transform-origin:left;transform:scaleX(0);transition:transform 2.6s var(--ease) .6s}
+.slide.on .flow .line i{transform:scaleX(1)}
+.st{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px;padding:0 16px}
+.st .dot{width:92px;height:92px;border-radius:50%;background:#111;border:4px solid #2a2a2c;display:grid;place-items:center;font-size:34px;font-weight:900;transition:all .8s var(--ease);transition-delay:calc(var(--d)*1s + .4s)}
+.slide.on .st .dot{border-color:var(--red);background:#1a0a0c;box-shadow:0 0 40px rgba(232,39,61,.35)}
+.st b{font-size:46px;font-weight:900;letter-spacing:-.02em}
+.st p{font-size:25px;line-height:1.4;color:var(--mute);max-width:300px}
+.st .tag{font-size:19px;font-weight:700;padding:6px 14px;border-radius:999px;background:#1d1d20;color:#cfcfd4}
+/* live windows */
+.live{display:inline-flex;align-items:center;gap:12px;font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--red)}
+.live i{width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(232,39,61,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,39,61,.6)}70%{box-shadow:0 0 0 16px rgba(232,39,61,0)}100%{box-shadow:0 0 0 0 rgba(232,39,61,0)}}
+.win{position:relative;border-radius:22px;background:#1a1a1c;border:1px solid #2c2c2f;box-shadow:0 40px 120px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.03);overflow:hidden;display:flex;flex-direction:column}
+.win-h{height:46px;flex:none;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid #2c2c2f;font-size:19px;font-weight:600;color:#cfcfd4}
+.win-h .dots{display:flex;gap:8px}.win-h .dots i{width:12px;height:12px;border-radius:50%;background:#3a3a3d}
+.win-h .av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
+.win-h .role{color:var(--dim);font-weight:500}
+.win-b{position:relative;flex:1;overflow:hidden;background:#f3f3f3}
+.win-b iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0;background:#f3f3f3}
+.win-b .ld{position:absolute;inset:0;display:grid;place-items:center;color:#8f8f8f;font-size:20px;font-weight:600}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:34px;flex:1;min-height:0}
+.steps{display:flex;gap:16px;margin-top:28px}
+.steps div{flex:1;display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:18px;background:#111113;border:1px solid var(--line);font-size:22px;line-height:1.35;color:#d4d4d8}
+.steps strong{color:#fff}
+.steps b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:18px;font-weight:800}
+.row-h{display:flex;align-items:flex-end;justify-content:space-between;gap:30px}
+.ghost-btn{font-size:20px;font-weight:700;color:#cfcfd4;padding:12px 20px;border-radius:999px;border:1px solid #333;transition:background .2s}
+.ghost-btn:hover{background:#1c1c1f}
+.note{font-size:20px;color:var(--dim);font-weight:500}
+/* keys */
+.split{display:grid;grid-template-columns:640px 1fr;gap:70px;margin-top:50px;flex:1;min-height:0}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-content:start}
+.key{display:flex;align-items:center;gap:20px;padding:18px 20px;border-radius:20px;background:#101012;border:1px solid var(--line)}
+.key kbd{min-width:84px;height:66px;padding:0 16px;border-radius:14px;display:grid;place-items:center;font-family:inherit;font-size:26px;font-weight:800;line-height:1;color:#fff;background:linear-gradient(180deg,#2c2c30,#1c1c1f);border:1px solid #3a3a3f;box-shadow:0 5px 0 #0a0a0b,inset 0 1px 0 rgba(255,255,255,.08)}
+.key span{font-size:24px;font-weight:600;color:#d4d4d8;line-height:1.25}
+/* phone */
+.phone-wrap{display:grid;grid-template-columns:1fr 470px;gap:100px;align-items:center;flex:1}
+.phone{position:relative;width:440px;height:900px;border-radius:70px;padding:16px;background:linear-gradient(160deg,#3a3a3e,#111 40%,#2a2a2e);box-shadow:0 60px 140px -30px rgba(0,0,0,.95),0 0 0 2px #444,0 0 80px rgba(232,39,61,.12)}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:56px;overflow:hidden;background:#f3f3f3}
+.phone .notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:3}
+.phone iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0}
+.bul{display:flex;flex-direction:column;gap:30px;margin-top:56px}
+.bul div{display:flex;gap:22px;align-items:baseline;font-size:36px;line-height:1.3;font-weight:600;color:#e5e5ea}
+.bul i{flex:none;width:14px;height:14px;border-radius:50%;background:var(--red);transform:translateY(-6px)}
+/* money */
+.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:70px}
+.fc{padding:38px 36px;border-radius:28px;background:#0f0f11;border:1px solid var(--line);display:flex;flex-direction:column;gap:16px;min-height:270px}
+.fc .n{font-size:64px;font-weight:900;letter-spacing:-.03em}
+.fc p{font-size:26px;line-height:1.4;color:var(--mute)}
+.lock{display:inline-flex;align-items:center;gap:14px;margin-top:50px;font-size:26px;font-weight:600;color:#cfcfd4;padding:16px 26px;border-radius:999px;border:1px solid #333;align-self:flex-start}
+/* rules */
+.rules{display:flex;flex-direction:column;gap:34px;margin-top:80px}
+.rule{display:grid;grid-template-columns:150px 1fr;align-items:baseline;gap:30px;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.rule .no{font-size:72px;font-weight:900;color:var(--red);letter-spacing:-.03em}
+.rule b{display:block;font-size:56px;font-weight:900;letter-spacing:-.02em}
+.rule p{font-size:30px;color:var(--mute);margin-top:8px}
+/* chrome */
+#bar{position:fixed;left:0;bottom:0;height:3px;background:var(--red);transition:width .8s var(--ease);z-index:20}
+#nav{position:fixed;right:22px;bottom:18px;display:flex;align-items:center;gap:8px;z-index:21;opacity:0;transition:opacity .4s}
+body:hover #nav,#nav:focus-within{opacity:1}
+#nav button{width:44px;height:44px;border-radius:50%;background:rgba(40,40,44,.8);display:grid;place-items:center;font-size:20px}
+#nav button:hover{background:rgba(70,70,76,.9)}
+#nav span{font-size:14px;color:#888;font-variant-numeric:tabular-nums;min-width:56px;text-align:center}
+#hint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);font-size:14px;color:#777;z-index:21;transition:opacity 1s;pointer-events:none}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="view"><div id="stage">
+
+<!-- 1 · cold open -->
+<section class="slide center" data-steps="1">
+  <div class="q1" style="transition:opacity .8s var(--ease),transform 1s var(--ease),filter .8s"><div class="eye rv" style="--d:0">Brand On Creative House · 2026.11.27</div>
+  <div class="mega grad rv" style="--d:.3;margin-top:40px">Нэг асуулт.</div></div>
+  <div class="q2"><div class="huge rv" data-step="1">Яг одоо манай ажил <span class="redg">хаана</span> байна?</div></div>
+</section>
+
+<!-- 2 · the problem -->
+<section class="slide center" data-steps="1">
+  <div class="chaos" id="chaos"></div>
+  <div class="bubble" style="left:150px;top:180px;--d:1.2">Тэр файлын холбоос хаана байсан бэ?</div>
+  <div class="bubble" style="right:170px;top:240px;--d:1.6">Засварын хувилбар аль нь вэ?</div>
+  <div class="bubble" style="left:260px;bottom:200px;--d:2">Маргааш зураг авалт хэдэн цагт?</div>
+  <div class="bubble" style="right:240px;bottom:250px;--d:2.4">Хэн энэ ажлыг хийж байгаа юм?</div>
+  <div class="q2"><div><div class="big rv" data-step="1">Ажил олон газар тарсан.</div><div class="sub rv" data-step="1" style="--d:.3;margin:34px auto 0">Бриф нэг газар, файл өөр газар, засвар гурав дахь газар. Хэн юу хийж байгааг асууж байж л мэднэ.</div></div></div>
+</section>
+
+<!-- 3 · reveal -->
+<section class="slide center">
+  <div class="glow" style="width:900px;height:900px;left:510px;top:60px;background:radial-gradient(circle,rgba(232,39,61,.45),transparent 65%)"></div>
+  <svg class="mark rv" style="--d:0" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#E8273D" stroke-width="15" stroke-linecap="butt"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#E8273D" stroke-width="15"/></svg>
+  <div class="mega grad rv" style="--d:1;margin-top:60px">BrandOn Studio</div>
+  <div class="sub rv" style="--d:1.6;margin-top:36px;font-size:46px;color:#d4d4d8">Агентлагийн бүх ажил. <b style="color:#fff">Нэг дор.</b></div>
+  <div class="eye rv" style="--d:2.1;margin-top:30px">Төсөл · Даалгавар · Хяналт · Хуваарь · Санхүү</div>
+</section>
+
+<!-- 4 · five workspaces -->
+<section class="slide">
+  <div class="eye rv" style="--d:0">Бүтэц</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Таван ажлын орчин.</div>
+  <div class="sub rv" style="--d:.25;margin-top:22px">Хүн бүр зөвхөн өөрт хэрэгтэйгээ харна. Гар дээрх 1-5 товчоор шууд солино.</div>
+  <div class="ws">
+    <div class="wc rv" style="--d:.4;--c:#F5F5F7"><span class="k">1</span><b>Өнөөдөр</b><p>Таны ширээн дээр юу байгаа. Дараагийн алхам үргэлж хамгийн дээр.</p><span class="who">Бүх хүн</span></div>
+    <div class="wc rv" style="--d:.55;--c:#E8273D"><span class="k">2</span><b>Хянах</b><p>Ирсэн ажил дараалалд. Зураг дээр нь тэмдэглээд батлах эсвэл буцаах.</p><span class="who">Төслийн менежер</span></div>
+    <div class="wc rv" style="--d:.7;--c:#5681FF"><span class="k">3</span><b>Үйлдвэрлэл</b><p>Бүх төсөл харилцагчаар. Явц, эцсийн хугацаа, хэн юу хийж байгаа.</p><span class="who">Менежер, удирдлага</span></div>
+    <div class="wc rv" style="--d:.85;--c:#F08A2E"><span class="k">4</span><b>Төлөвлөлт</b><p>Багийн хуанли, зураг авалт, уулзалт, чөлөө, зар.</p><span class="who">Төслийн менежер</span></div>
+    <div class="wc rv" style="--d:1;--c:#2DBA77"><span class="k">5</span><b>Мөнгө</b><p>Банкны хуулга, мөнгөн урсгал, НӨАТ, ажил бүрийн ашиг.</p><span class="who">Зөвхөн эрхтэй хүн</span></div>
+  </div>
+</section>
+
+<!-- 5 · one flow -->
+<section class="slide">
+  <div class="eye rv" style="--d:0">Хэрхэн ажилладаг вэ</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Нэг урсгал. Таван алхам.</div>
+  <div class="flow">
+    <div class="line"><i></i></div>
+    <div class="st rv" style="--d:.5"><span class="dot">1</span><b>Бриф</b><p>Менежер ажил үүсгэж, хүн, хугацаа, брифийг өгнө.</p><span class="tag">PM</span></div>
+    <div class="st rv" style="--d:.9"><span class="dot">2</span><b>Хийх</b><p>Дизайнер "Эхлэх" дарна. Хүн бүр хэн юу хийж байгааг харна.</p><span class="tag">Дизайнер, видео</span></div>
+    <div class="st rv" style="--d:1.3"><span class="dot">3</span><b>Илгээх</b><p>Drive холбоосоо буулгаад илгээнэ. Telegram хэрэггүй.</p><span class="tag">Дизайнер, видео</span></div>
+    <div class="st rv" style="--d:1.7"><span class="dot">4</span><b>Хянах</b><p>Менежер ажлыг томоор нээж, засах газар дээр нь шууд тэмдэглэнэ.</p><span class="tag">PM</span></div>
+    <div class="st rv" style="--d:2.1"><span class="dot">5</span><b>Батлах</b><p>Нэг товчоор батлах эсвэл засвартай нь буцаана.</p><span class="tag">PM</span></div>
+  </div>
+</section>
+
+<!-- 6 · live: PM and designer side by side -->
+<section class="slide" style="padding:80px 110px 70px" data-live="duo">
+  <div class="row-h rv" style="--d:0">
+    <div><span class="live"><i></i>LIVE</span><div class="h" style="margin-top:12px">Шууд үзье.</div></div>
+    <div style="display:flex;align-items:center;gap:20px"><span class="note">Туршилтын өгөгдөл. Жинхэнэ ажилд нөлөөлөхгүй.</span><button class="ghost-btn" data-reset>Дахин эхлүүлэх</button></div>
+  </div>
+  <div class="duo rv" style="--d:.25">
+    <div class="win"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төслийн менежер</span></div><div class="win-b" data-frame="suvdaa" data-ws="review" data-w="1000" data-bare="1"><div class="ld">Ачаалж байна...</div></div></div>
+    <div class="win"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#7A4FB0">K</span>Khongoroo<span class="role">График дизайнер</span></div><div class="win-b" data-frame="khongoroo" data-w="1000" data-bare="1"><div class="ld">Ачаалж байна...</div></div></div>
+  </div>
+  <div class="steps rv" style="--d:.5">
+    <div><b>1</b><span>Khongoroo "Brandbook" ажлаа <strong>Эхлэх</strong></span></div>
+    <div><b>2</b><span><strong>Ажлаа илгээх</strong>, Drive холбоос буулгана</span></div>
+    <div><b>3</b><span>Suvdaa-гийн <strong>Хянах</strong> дараалалд шууд гарна</span></div>
+    <div><b>4</b><span>Нээгээд <strong>A</strong> батлах, <strong>S</strong> засвар буцаах</span></div>
+  </div>
+</section>
+
+<!-- 7 · Adobe habits -->
+<section class="slide" style="padding-bottom:80px" data-live="keys">
+  <div class="eye rv" style="--d:0">Удирдлага</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Photoshop шиг ажилладаг.</div>
+  <div class="split">
+    <div>
+      <div class="sub rv" style="--d:.2;font-size:32px;margin-bottom:34px">Дарж сонгоно. Баруун талд нь бүх мэдээлэл. Давхар дарж нээнэ. Adobe-д дассан гар энд ч ажиллана.</div>
+      <div class="keys">
+        <div class="key rv" style="--d:.3"><kbd>⌘K</kbd><span>Юуг ч хайх</span></div>
+        <div class="key rv" style="--d:.38"><kbd>1-5</kbd><span>Орчин солих</span></div>
+        <div class="key rv" style="--d:.46"><kbd>N</kbd><span>Шинэ ажил</span></div>
+        <div class="key rv" style="--d:.54"><kbd>E</kbd><span>Сонгосныг засах</span></div>
+        <div class="key rv" style="--d:.62"><kbd>Space</kbd><span>Томоор харах</span></div>
+        <div class="key rv" style="--d:.7"><kbd>Tab</kbd><span>Самбар нуух</span></div>
+        <div class="key rv" style="--d:.78"><kbd>⌘Z</kbd><span>Буцаах</span></div>
+        <div class="key rv" style="--d:.86"><kbd>?</kbd><span>Бүх товчлол</span></div>
+      </div>
+    </div>
+    <div class="win rv" style="--d:.4"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#B5532A">R</span>Reka<span class="role">Үйлдвэрлэл</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="reka" data-ws="production" data-w="1440"><div class="ld">Ачаалж байна...</div></div></div>
+  </div>
+</section>
+
+<!-- 8 · planning -->
+<section class="slide" style="padding-bottom:80px" data-live="plan">
+  <div class="row-h">
+    <div><div class="eye rv" style="--d:0">Төлөвлөлт</div><div class="h rv" style="--d:.1;margin-top:14px;white-space:nowrap">Бүх баг. Нэг хуанли.</div></div>
+    <div class="sub rv" style="--d:.2;font-size:30px;max-width:720px;text-align:right">Уулзалт, зураг авалт, хугацаа, чөлөө. Зар тавихад хүн бүр "Ойлголоо" дарж уншсанаа мэдэгдэнэ.</div>
+  </div>
+  <div class="win rv" style="--d:.35;margin-top:44px;flex:1"><div class="win-h"><span class="dots"><i></i><i></i><i></i></span><span class="av" style="background:#DA1F34">S</span>Suvdaa<span class="role">Төлөвлөлт</span><span class="live" style="margin-left:auto;font-size:15px"><i style="width:10px;height:10px"></i>LIVE</span></div><div class="win-b" data-frame="suvdaa-plan" data-as="suvdaa" data-ws="planning" data-w="1500" data-bare="1" data-scroll=".plan-h"><div class="ld">Ачаалж байна...</div></div></div>
+</section>
+
+<!-- 9 · phone -->
+<section class="slide" data-live="phone">
+  <div class="glow" style="width:800px;height:800px;right:60px;top:140px;background:radial-gradient(circle,rgba(232,39,61,.22),transparent 65%)"></div>
+  <div class="phone-wrap">
+    <div>
+      <div class="eye rv" style="--d:0">Утсан дээр</div>
+      <div class="huge rv" style="--d:.1;margin-top:14px">Халаасанд.</div>
+      <div class="bul">
+        <div class="rv" style="--d:.4"><i></i>Зураг авалт дээрээс ч ажлаа илгээнэ.</div>
+        <div class="rv" style="--d:.55"><i></i>Нэг гараар: сонгосон ажил доороос гарч ирнэ.</div>
+        <div class="rv" style="--d:.7"><i></i>Компьютер дээрхтэй яг адилхан, бүрэн ажиллана.</div>
+      </div>
+    </div>
+    <div class="phone rv" style="--d:.3"><div class="scr"><span class="notch"></span><div class="win-b" style="position:absolute;inset:0" data-frame="jerry" data-phone="1"><div class="ld">Ачаалж байна...</div></div></div></div>
+  </div>
+</section>
+
+<!-- 10 · one more thing: money -->
+<section class="slide" data-steps="1">
+  <div class="q2 rv om" style="--d:0"><div class="huge grad">Бас нэг зүйл...</div></div>
+  <div class="rv" data-step="1" style="display:flex;flex-direction:column;flex:1">
+    <div class="eye">Мөнгө</div>
+    <div class="huge" style="margin-top:14px">Санхүү. <span class="redg">Тодорхой.</span></div>
+    <div class="fin">
+      <div class="fc"><span class="n">Excel</span><p>Банкны хуулгаа долоо хоног бүр оруулна. Давхардсан гүйлгээг өөрөө шалгаж, ангиллыг санал болгоно.</p></div>
+      <div class="fc"><span class="n">НӨАТ</span><p>Харилцагч бүрийн төлбөр, НӨАТ шивсэн эсэх. Нийлүүлэгч бидэнд шивсэн эсэх.</p></div>
+      <div class="fc"><span class="n">Ашиг</span><p>Гэрээ ба бодит орлого, өөрчилсөн, цуцалсан гэрээ. Ажил бүрийн зардлын дараах цэвэр ашиг.</p></div>
+    </div>
+    <div class="sub" style="font-size:30px;margin-top:40px">Мөнгөн урсгал, ашиг алдагдал: сар, улирал, хагас жил, жилээр.</div>
+    <div class="lock"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Зөвхөн эрхтэй хүмүүст. Тусдаа кодоор түгжээтэй.</div>
+  </div>
+</section>
+
+<!-- 11 · from today -->
+<section class="slide">
+  <div class="eye rv" style="--d:0">Өнөөдрөөс</div>
+  <div class="big rv" style="--d:.1;margin-top:14px">Гурван дүрэм.</div>
+  <div class="rules">
+    <div class="rule rv" style="--d:.35"><span class="no">01</span><div><b>Бүх ажил энд илгээгдэнэ.</b><p>Drive холбоосоор. Telegram-аар файл явуулахгүй.</p></div></div>
+    <div class="rule rv" style="--d:.55"><span class="no">02</span><div><b>Хуваарь, зар энд.</b><p>Өглөө бүр "Өнөөдөр"-өө нээ. Зар уншаад "Ойлголоо" дар.</p></div></div>
+    <div class="rule rv" style="--d:.75"><span class="no">03</span><div><b>Ажлын байдал энд.</b><p>"Эхлэх" дарахад бүгд харна. Хэн юу хийж байгааг асуух шаардлагагүй.</p></div></div>
+  </div>
+</section>
+
+<!-- 12 · close -->
+<section class="slide center">
+  <div class="glow" style="width:1000px;height:1000px;left:460px;top:40px;background:radial-gradient(circle,rgba(232,39,61,.35),transparent 65%)"></div>
+  <svg class="mark rv" style="--d:0;width:150px;height:150px" viewBox="0 0 100 100" aria-hidden="true"><path d="M71.2 36.8 A30 30 0 1 1 28.8 36.8" fill="none" stroke="#E8273D" stroke-width="15"/><path d="M37.3 30.8 A30 30 0 0 1 62.7 30.8" fill="none" stroke="#E8273D" stroke-width="15"/></svg>
+  <div class="mega grad rv" style="--d:.5;margin-top:50px">BrandOn Studio</div>
+  <div class="sub rv" style="--d:1;margin-top:30px;font-size:46px;color:#d4d4d8">Өнөөдрөөс ашиглаж эхэлнэ.</div>
+  <div class="eye rv" style="--d:1.6;margin-top:70px;font-size:32px">Асуулт байна уу?</div>
+</section>
+
+</div></div>
+<div id="bar"></div>
+<div id="hint">→ дараах · ← өмнөх · F бүтэн дэлгэц</div>
+<div id="nav"><button data-go="-1" aria-label="Өмнөх">‹</button><span id="cnt"></span><button data-go="1" aria-label="Дараах">›</button><button data-fs aria-label="Бүтэн дэлгэц">⤢</button></div>
+
+<script type="text/plain" id="bo-app">%%APP%%</script>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide')), cur=0, step=0;
+  var stage=document.getElementById('stage');
+  function fit(){ var s=Math.min(innerWidth/1920, innerHeight/1080); stage.style.transform='translate(-50%,-50%) scale('+s+')'; }
+  addEventListener('resize', fit); fit();
+
+  // ----- the problem slide: scattered app names -----
+  var words=[['Telegram',170,120,90],['Drive',130,1240,70],['Excel',150,1340,600],['Утас',120,140,560],['Messenger',84,700,40],['Gmail',80,820,860],['Viber',90,560,330],['PDF',72,1600,380],['Final_v3.pdf',62,980,300],['Final_FINAL_2.ai',56,300,880],['Zoom',70,1580,900],['Sheets',66,60,330]];
+  var ch=document.getElementById('chaos');
+  words.forEach(function(w,i){ var s=document.createElement('span'); s.textContent=w[0];
+    var x=w[2], y=w[3];
+    s.style.cssText='left:'+x+'px;top:'+y+'px;font-size:'+w[1]+'px;--o:'+(0.08+((i*7)%10)/40)+';--x2:'+(((i%3)-1)*40)+'px;--y2:'+(((i%4)-1.5)*24)+'px;--rt:'+(((i%5)-2)*3)+'deg;transition-delay:'+(i*0.08)+'s';
+    ch.appendChild(s); });
+
+  // ----- live app copies: one app, many windows, all kept in sync -----
+  var APP=null, frames=[], log=[];
+  function appHtml(){
+    if(APP) return APP;
+    var b=atob(document.getElementById('bo-app').textContent.trim()), u=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u[i]=b.charCodeAt(i);
+    return APP=new TextDecoder().decode(u);
+  }
+  function mount(box){
+    if(box.querySelector('iframe')) return;
+    var as=box.dataset.as||box.dataset.frame, ws=box.dataset.ws||'', phone=!!box.dataset.phone;
+    var W=phone?390:(+box.dataset.w||1280), f=document.createElement('iframe');
+    var inj='<script>window.BO_BRIDGE=1;window.BO_AS='+JSON.stringify(as)+';window.BO_WS='+JSON.stringify(ws)+';window.BO_BARE='+(box.dataset.bare?1:0)+';window.BO_SCROLL='+JSON.stringify(box.dataset.scroll||'')+';try{Object.defineProperty(window,"claude",{value:undefined,configurable:true});}catch(e){}<\/script>';
+    f.srcdoc=appHtml().replace('<head>','<head>'+inj);
+    f.title=as+' (live demo)';
+    function size(){ var r=box.getBoundingClientRect(), sc=stage.getBoundingClientRect().width/1920, bw=r.width/sc, bh=r.height/sc, k=bw/W; f.style.width=W+'px'; f.style.height=(bh/k)+'px'; f.style.transform='scale('+k+')'; }
+    box.appendChild(f); size(); addEventListener('resize', size); box._size=size;
+    f.addEventListener('load', function(){ var ld=box.querySelector('.ld'); if(ld) ld.remove(); setTimeout(function(){ log.forEach(function(m){ try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }); }, 400); });
+    frames.push(f);
+  }
+  addEventListener('message', function(e){
+    var m=e.data; if(m && m.bo==='key'){ if(m.k==='PageDown') next(); else prev(); return; }
+    if(!m || m.bo!=='sync') return;
+    log.push(m);
+    frames.forEach(function(f){ if(f.contentWindow && f.contentWindow!==e.source){ try{ f.contentWindow.postMessage(m,'*'); }catch(x){} } });
+  });
+  document.querySelectorAll('[data-reset]').forEach(function(b){ b.addEventListener('click', function(){ log=[]; frames.forEach(function(f){ f.srcdoc=f.srcdoc; }); }); });
+
+  // ----- navigation with builds -----
+  function steps(s){ return +(s.dataset.steps||0); }
+  function applySteps(s, n){
+    s.querySelectorAll('[data-step]').forEach(function(el){ el.classList.toggle('shown', +el.dataset.step<=n); });
+    if(s.querySelector('.q1')) s.querySelector('.q1').classList.toggle('gone', n>=1);
+    if(s.querySelector('.om')) s.querySelector('.om').classList.toggle('gone', n>=1);
+    var c=s.querySelector('.chaos'); if(c) c.classList.toggle('fall', n>=1);
+  }
+  function show(i, st){
+    i=Math.max(0, Math.min(slides.length-1, i));
+    slides.forEach(function(s,k){ s.classList.toggle('on', k===i); s.classList.toggle('past', k<i); });
+    cur=i; step=st||0; applySteps(slides[i], step);
+    slides[i].querySelectorAll('[data-frame]').forEach(mount);
+    // warm up the next live slide so it is ready when we get there
+    var nx=slides[i+1]; if(nx) setTimeout(function(){ nx.querySelectorAll('[data-frame]').forEach(mount); }, 1200);
+    setTimeout(function(){ slides[i].querySelectorAll('[data-frame]').forEach(function(b){ if(b._size) b._size(); }); }, 50);
+    document.getElementById('bar').style.width=((i+1)/slides.length*100)+'%';
+    document.getElementById('cnt').textContent=(i+1)+' / '+slides.length;
+    try{ history.replaceState(null,'','#'+(i+1)); }catch(e){}
+  }
+  function next(){ var s=slides[cur]; if(step<steps(s)){ step++; applySteps(s, step); } else show(cur+1); }
+  function prev(){ var s=slides[cur]; if(step>0){ step--; applySteps(s, step); } else { var p=cur-1; if(p>=0) show(p, steps(slides[p])); } }
+  addEventListener('keydown', function(e){
+    if(e.target.closest && e.target.closest('input,textarea,select')) return;
+    if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){ e.preventDefault(); next(); }
+    else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){ e.preventDefault(); prev(); }
+    else if(e.key==='Home') show(0); else if(e.key==='End') show(slides.length-1);
+    else if(e.key==='f'||e.key==='F') fs();
+  });
+  function fs(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }catch(e){} }
+  document.getElementById('nav').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return; if(b.dataset.fs!=null) fs(); else if(+b.dataset.go>0) next(); else prev(); b.blur(); });
+  // clicking the empty stage advances; clicks inside the live windows stay there
+  document.getElementById('view').addEventListener('click', function(e){ if(e.target.closest('.win,.phone,button,a')) return; next(); });
+  setTimeout(function(){ document.getElementById('hint').style.opacity=0; }, 6000);
+  var h=+(location.hash||'').slice(1); show(h>0?h-1:0);
+})();
+</script>
+</body>
+</html>

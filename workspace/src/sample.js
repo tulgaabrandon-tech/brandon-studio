@@ -56,5 +56,22 @@ function startDemo(){
   ];
   var s=sampleSet(); S.projects=s.projects; S.tasks=s.tasks; S.ann=s.ann; S.events=s.events;
   render();
+  // inside the crew presentation: open straight as one person
+  if(window.BO_AS) setTimeout(function(){ if(window.BO_BARE) S.hidePanels=true; enterAs(window.BO_AS); if(window.BO_WS) setTimeout(function(){ wsGo(window.BO_WS); if(window.BO_SCROLL) setTimeout(function(){ var el=document.querySelector(window.BO_SCROLL), cv=document.getElementById('canvas'); if(el&&cv){ cv.style.scrollBehavior='auto'; cv.scrollTop=el.getBoundingClientRect().top-cv.getBoundingClientRect().top+cv.scrollTop-16; } }, 120); }, 30); }, 0);
 }
-
+// Presentation bridge: when several demo copies sit in one page (window.BO_BRIDGE), each change is relayed
+// through the page to the others, so the PM and the designer see the same work move. Demo mode only, never live data.
+function demoSend(col, obj, del){
+  try{ window.parent.postMessage({bo:'sync', from:window.BO_AS||'', col:col, id:obj.id, del:!!del, obj:del?null:JSON.parse(JSON.stringify(obj))}, '*'); }catch(e){}
+}
+window.addEventListener('message', function(e){
+  var m=e.data; if(!m || m.bo!=='sync' || S.mode!=='demo' || !window.BO_BRIDGE || COLS.indexOf(m.col)<0) return;
+  var arr=S[m.col], cur=arr.filter(function(x){ return x.id===m.id; })[0];
+  if(m.del){ S[m.col]=arr.filter(function(x){ return x.id!==m.id; }); }
+  else if(cur){ Object.keys(cur).forEach(function(k){ delete cur[k]; }); Object.assign(cur, m.obj); }
+  else arr.push(m.obj);
+  if(m.col==='tasks' && m.obj && !m.del && m.obj.status==='review' && isPM() && project(m.obj.project).pm===S.me) toast(L('{name} sent work for review',{name:person(m.obj.who).name}));
+  render();
+});
+// A presentation clicker sends Page Up / Page Down: pass those to the slides even when a demo window has focus
+window.addEventListener('keydown', function(e){ if(window.BO_BRIDGE && (e.key==='PageDown'||e.key==='PageUp')){ e.preventDefault(); try{ window.parent.postMessage({bo:'key', k:e.key}, '*'); }catch(x){} } }, true);

@@ -65,7 +65,7 @@ function render(){
   var entering = Date.now()<(S.enterUntil||0);
   if(S.view==='review'){ document.body.classList.remove('framed'); morph(root,vReview()); renderModal(); renderPalette(); return; }
   var u=me(), pm=isPM(), h='';
-  if(S.mode==='demo') h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
+  if(S.mode==='demo' && !window.BO_BRIDGE) h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
   if(S.slow) h+='<div class="demo-bar warn">'+esc(L("Can't reach the data yet. Check your connection."))+'</div>';
   h+='<header class="topbar"><div class="bar-in"><button class="brand" data-act="go" data-v="'+home()+'" aria-label="BrandOn Studio"><span class="mark">'+LOGO+'</span><b>BrandOn <span>Studio</span></b></button>';

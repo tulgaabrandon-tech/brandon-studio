@@ -1574,17 +1574,20 @@ function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function body(o){ var c=clone(o); delete c.id; return c; }
 function newId(prefix){ return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function persist(col, obj){
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function') demoSend(col, obj, false);
   if(S.mode!=='live') return;
   var path=col+'/'+obj.id, data=body(obj);
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).set(data); }).catch(saveFailed);
 }
 function patch(col, id, data){
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function'){ var o=(S[col]||[]).filter(function(x){ return x.id===id; })[0]; if(o) demoSend(col, o, false); }
   if(S.mode!=='live') return;
   var path=col+'/'+id;
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).update(data); }).catch(saveFailed);
 }
 function destroy(col, id){
   S[col]=S[col].filter(function(x){ return x.id!==id; });
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function') demoSend(col, {id:id}, true);
   if(S.mode!=='live') return;
   var path=col+'/'+id;
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).delete(); }).catch(saveFailed);
@@ -1674,6 +1677,8 @@ function maybeSeed(){
 }
 function boot(){
   render();
+  // embedded in the crew presentation: always sample data, never the real database
+  if(window.BO_BRIDGE && typeof startDemo==='function'){ startDemo(); return; }
   if(CFG.supabaseUrl && window.supabase){ bootHosted(); return; }
   if(window.BO_HOSTED){ S.mode='setup'; render(); return; }
   var c=window.claude;
@@ -2867,7 +2872,7 @@ function render(){
   var entering = Date.now()<(S.enterUntil||0);
   if(S.view==='review'){ document.body.classList.remove('framed'); morph(root,vReview()); renderModal(); renderPalette(); return; }
   var u=me(), pm=isPM(), h='';
-  if(S.mode==='demo') h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
+  if(S.mode==='demo' && !window.BO_BRIDGE) h+='<div class="demo-bar">'+esc(L('Demo mode. Changes are not saved.'))+'</div>';
   if(S.readonly) h+='<div class="demo-bar warn">'+esc(L("You can view this, but you can't make changes. Ask Suvdaa or Reka for access."))+'</div>';
   if(S.slow) h+='<div class="demo-bar warn">'+esc(L("Can't reach the data yet. Check your connection."))+'</div>';
   h+='<header class="topbar"><div class="bar-in"><button class="brand" data-act="go" data-v="'+home()+'" aria-label="BrandOn Studio"><span class="mark">'+LOGO+'</span><b>BrandOn <span>Studio</span></b></button>';
@@ -3258,7 +3263,7 @@ Object.assign(MN, {
   'Switch workspace':'Ажлын орчин солих', 'Edit the selection':'Сонгосныг засах', 'Open the selection':'Сонгосныг нээх', 'Select all':'Бүгдийг сонгох',
   'Clear the selection':'Сонголт цэвэрлэх', 'Undo':'Буцаах', 'Move the selection':'Сонголтыг зөөх', 'Pick a person':'Хүн сонгох',
   'Approve':'Батлах', 'Send back':'Буцаах', 'Mark a spot':'Цэг тэмдэглэх', 'Versions':'Хувилбарууд', 'Search or jump to':'Хайх, шууд очих',
-  'Keyboard shortcuts':'Товчлуурууд', 'in the review viewer':'хянах харагч дотор',
+  '{name} sent work for review':'{name} ажлаа хянуулахаар илгээлээ', 'Keyboard shortcuts':'Товчлуурууд', 'in the review viewer':'хянах харагч дотор',
   'Properties':'Шинж', 'Actions':'Үйлдэл', '{n} messages':'{n} мессеж', 'No messages yet.':'Мессеж алга.', 'Use the bar at the bottom to change them together.':'Доод талын мөрөөр бүгдийг зэрэг өөрчилнө.', 'd':' хоног', 'new':'шинэ',
   'Workspace':'Ажлын орчин', 'Panels':'Самбар', 'Approve, send back, mark (viewer)':'Батлах, буцаах, тэмдэглэх (харагч)', 'New':'Шинэ'
 });

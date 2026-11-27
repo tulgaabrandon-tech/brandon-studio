@@ -43,17 +43,20 @@ function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function body(o){ var c=clone(o); delete c.id; return c; }
 function newId(prefix){ return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function persist(col, obj){
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function') demoSend(col, obj, false);
   if(S.mode!=='live') return;
   var path=col+'/'+obj.id, data=body(obj);
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).set(data); }).catch(saveFailed);
 }
 function patch(col, id, data){
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function'){ var o=(S[col]||[]).filter(function(x){ return x.id===id; })[0]; if(o) demoSend(col, o, false); }
   if(S.mode!=='live') return;
   var path=col+'/'+id;
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).update(data); }).catch(saveFailed);
 }
 function destroy(col, id){
   S[col]=S[col].filter(function(x){ return x.id!==id; });
+  if(S.mode==='demo' && window.BO_BRIDGE && typeof demoSend==='function') demoSend(col, {id:id}, true);
   if(S.mode!=='live') return;
   var path=col+'/'+id;
   chains[path]=(chains[path]||Promise.resolve()).then(function(){ return DB.doc(path).delete(); }).catch(saveFailed);
@@ -143,6 +146,8 @@ function maybeSeed(){
 }
 function boot(){
   render();
+  // embedded in the crew presentation: always sample data, never the real database
+  if(window.BO_BRIDGE && typeof startDemo==='function'){ startDemo(); return; }
   if(CFG.supabaseUrl && window.supabase){ bootHosted(); return; }
   if(window.BO_HOSTED){ S.mode='setup'; render(); return; }
   var c=window.claude;

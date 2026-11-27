@@ -30,7 +30,7 @@ Object.assign(MN, {
   'Switch workspace':'Ажлын орчин солих', 'Edit the selection':'Сонгосныг засах', 'Open the selection':'Сонгосныг нээх', 'Select all':'Бүгдийг сонгох',
   'Clear the selection':'Сонголт цэвэрлэх', 'Undo':'Буцаах', 'Move the selection':'Сонголтыг зөөх', 'Pick a person':'Хүн сонгох',
   'Approve':'Батлах', 'Send back':'Буцаах', 'Mark a spot':'Цэг тэмдэглэх', 'Versions':'Хувилбарууд', 'Search or jump to':'Хайх, шууд очих',
-  'Keyboard shortcuts':'Товчлуурууд', 'in the review viewer':'хянах харагч дотор',
+  '{name} sent work for review':'{name} ажлаа хянуулахаар илгээлээ', 'Keyboard shortcuts':'Товчлуурууд', 'in the review viewer':'хянах харагч дотор',
   'Properties':'Шинж', 'Actions':'Үйлдэл', '{n} messages':'{n} мессеж', 'No messages yet.':'Мессеж алга.', 'Use the bar at the bottom to change them together.':'Доод талын мөрөөр бүгдийг зэрэг өөрчилнө.', 'd':' хоног', 'new':'шинэ',
   'Workspace':'Ажлын орчин', 'Panels':'Самбар', 'Approve, send back, mark (viewer)':'Батлах, буцаах, тэмдэглэх (харагч)', 'New':'Шинэ'
 });
