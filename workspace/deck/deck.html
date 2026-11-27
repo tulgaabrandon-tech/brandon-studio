@@ -408,6 +408,15 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 #tgcap{font-size:21px;line-height:1.45;font-weight:400;color:#e5e5ea;transition:opacity .35s ease}
 #tgcap.out{opacity:0}
 .tg-title{font-size:50px;white-space:nowrap;margin-top:14px}
+
+/* closing lockup: same as the reveal, half the size, on dark */
+.lk-static{--fs:80px}
+.lk-static .lk-mark,.lk-static .lk-brand{opacity:1;transform:none;animation:none}
+.lk-static .lk-studio{max-width:none;animation:none}
+.lk-static .lk-studio span{transform:none;animation:none;color:#C9C9CF}
+.lk-static .lk-brand{color:#fff}
+.slide > *:not(.glow):not(.q2){position:relative;z-index:1}
+.end-note{margin-top:64px;font-size:20px;font-weight:400;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -648,10 +657,12 @@ body{font-family:"Geologica",system-ui,sans-serif;font-optical-sizing:auto}
 <!-- 12 · close -->
 <section class="slide center">
   <div class="glow" style="width:1000px;height:1000px;left:460px;top:40px;background:radial-gradient(circle,rgba(232,39,61,.35),transparent 65%)"></div>
-  <svg class="mark rv" style="--d:0;width:150px;height:150px" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg>
-  <div class="mega grad rv" style="--d:.5">BrandOn Studio</div>
-  <div class="lead rv" style="--d:1">Тун удахгүй ашиглаж эхэлнэ</div>
-  <div class="eye rv q-end" style="--d:1.6">Асуулт байна уу?</div>
+  <div class="lockup lk-static rv" style="--d:0">
+    <svg class="lk-mark" viewBox="84.93 56.69 171.38 171.39" aria-hidden="true"><path fill="#da1f34" d="M142.82,97.45c-7.1-8.43-11.61-19.11-12.3-30.82,11.96-6.35,25.61-9.94,40.1-9.94s28.33,3.65,40.35,10.08c-.73,11.7-5.26,22.37-12.39,30.78-8.11-5.07-17.7-8-27.97-8s-19.72,2.89-27.79,7.89Z"/><path fill="#da1f34" d="M256.31,142.39c0,47.33-38.37,85.69-85.69,85.69s-85.69-38.37-85.69-85.69c0-23.17,9.2-44.2,24.14-59.62,4.17,10.61,11.67,19.54,21.21,25.51-7.79,9.2-12.49,21.11-12.49,34.12,0,29.18,23.65,52.83,52.83,52.83s52.83-23.65,52.83-52.83c0-12.95-4.66-24.82-12.4-34.01,9.57-5.93,17.1-14.83,21.31-25.42,14.83,15.4,23.95,36.35,23.95,59.42Z"/></svg>
+    <span class="lk-brand">BrandOn</span><span class="lk-studio"><span>&nbsp;Studio</span></span>
+  </div>
+  <div class="lead rv" style="--d:.6">Тун удахгүй ашиглаж эхэлнэ</div>
+  <div class="end-note rv" style="--d:1.2">Санал хүсэлт, одоо болон хөгжүүлэлтийн явцад нээлттэй шүү.</div>
 </section>
 
 </div></div>
